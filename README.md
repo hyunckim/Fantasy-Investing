@@ -15,8 +15,11 @@ This app will have the following functionality:
 Bonus features:
 - [ ] Leaderboard for best performing investor
 
-
 ### Wireframes
+
+[View Wireframes][wireframes]
+
+[wireframes]: ./docs/wireframes
 
 ### Technologies & Technical Challenges
 
@@ -46,7 +49,6 @@ James Tae:
 -	Back end and front end auth
 -	Adding portfolio functionality (create, update, delete for watchlists)
 -	Showing the performance of portfolio with graphics
-
 
 Hyun Chul Kim:
 - Fetching company data from yahoo finance module and showing it on company page
@@ -87,5 +89,3 @@ By the end of day we will have:
 -	Better looking welcome page (James)
 - Improved visuals on graphs (Bo)
 - Extra styling on portfolio and company pages (Hyun)
-
-### Plan for getting users and reviews
