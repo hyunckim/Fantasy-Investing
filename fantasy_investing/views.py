@@ -3,17 +3,21 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from snippets.models import Snippet
-from snippets.serializers import SnippetSerializer
+from fantasy_investing.models import Company
+from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
 
 @csrf_exempt
 
-def stock_detail(request, pk):
-    try:
-        stock = Stock.objects.get(pk=pk)
-    except Stock.DoesNotExist:
-        return HttpResponse(status=404)
+def company_detail(request, ticker):
 
-    if request.method == 'GET':
-        
+    response = Share(ticker)
+    if response.get_name():
+
+        if request.method == 'GET':
+            company = Company(ticker, response.get_name(), response.get_price())
+            serializer = CompanySerializer(company)
+            return JsonResponse(serializer.data)
+
+    else:
+        return HttpResponse(status=404)

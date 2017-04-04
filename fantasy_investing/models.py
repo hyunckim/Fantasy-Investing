@@ -12,3 +12,9 @@ class Stock(models.Model):
     purchase_date = models.DateField(auto_now=True)
     number_of_shares = models.IntegerField(default=0)
     portfolio = models.ForeignKey(Portfolio, default = 1, on_delete=models.CASCADE)
+
+class Company(object):
+    def __init__(self, ticker, title, price):
+        self.ticker = ticker
+        self.title = title
+        self.price = price
