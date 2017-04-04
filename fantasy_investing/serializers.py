@@ -4,7 +4,7 @@ from fantasy_investing.models import Stock, Portfolio
 class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'stock_set')
 
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
