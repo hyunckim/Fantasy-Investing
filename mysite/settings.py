@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'fantasy_investing.apps.FantasyInvestingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
