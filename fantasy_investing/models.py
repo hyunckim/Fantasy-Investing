@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User 
 
 class Portfolio(models.Model):
 	title = models.CharField(max_length=250);
@@ -10,3 +11,7 @@ class Stock(models.Model):
     purchase_date = models.DateField(auto_now=True)
     number_of_shares = models.IntegerField(default=0)
     portfolio = models.ForeignKey(Portfolio, default = 1, on_delete=models.CASCADE)
+
+class Investor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    balance = models.IntegerField(default=100000)

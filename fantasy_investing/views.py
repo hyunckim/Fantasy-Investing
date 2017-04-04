@@ -1,26 +1,59 @@
+from django.http import HttpResponse
+
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
-from django.views.generic import View
-from .forms import UserForm
+from django.contrib.auth.models import User
+from fantasy_investing.serializers import UserRegistrationSerializer, UserLoginSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+# from django.http import HttpResponse, JsonResponse
+from rest_framework.parsers import JSONParser
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import CreateModelMixin
+from .utils import AtomicMixin
 
-class UserFormView(View):
-    # form_class = UserForm
-    # template_name = 'fantasy_investing/login_form.html'
 
-    def get(self, request):
-        username = request.GET['username']
-        password = request.GET
+class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
 
-
-        form = self.form_class(None)
-        return render(request, self.template_name, {'form': form})
+    serializer_class = UserRegistrationSerializer
+    authentication_classes = ()
 
     def post(self, request):
-        user = {}
-        user['username'] = request.POST['username']
-        user['password'] = request.POST['password']
-        user['email'] = request.POST['email']
-        user['balance'] = request.POST['balance']
+        """User registration view."""
+        return self.create(request)
 
-        if user.save()
-            return render()
+class UserLoginView(APIView):
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            serializer = UserLoginSerializer(user)
+            if user.is_active:
+                login(request, user)
+                return Response(serializer.data)
+        return HttpResponse(status=422)
+
+
+
+
+    # def post(self, request):
+    #     data = JSONParser().parse(request)
+    #     serializer = UserSerializer(data=data)
+    #     if serializer.is_valid():
+    #         serializer('username', 'first_name', 'last_name').save()
+    #         # login_user(request)
+    #         return Response(serializer.data)
+    #     return Response(serializers.errors, status=422)
+
+# class UserLoginView(APIView):
+#
+#     def post(self, request):
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             return Response(serializer.data)
+#         return Response(serializers.errors, status=401)
