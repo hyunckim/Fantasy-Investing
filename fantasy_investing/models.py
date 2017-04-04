@@ -2,6 +2,9 @@ from django.db import models
 
 # Create your models here.
 
+class Portfolio(models.Model):
+	title = models.CharField=(250);
+	user = models.ForeignKey(User, on_delete=model.CASCADE)
 class Stock(models.Model):
     ticker = models.CharField(max_length=10)
     purchase_price = models.FloatField(blank=False, default=0)
