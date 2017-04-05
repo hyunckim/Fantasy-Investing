@@ -1,6 +1,6 @@
 export const fetchCompany = (ticker) => (
   $.ajax({
     method: "GET",
-    url: `/api/company/${ticker}`
+    url: `/fantasy_investing/company/${ticker}`
   })
 );
