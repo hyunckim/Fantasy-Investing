@@ -14012,17 +14012,53 @@ var Company = function (_React$Component) {
       this.props.fetchCompany();
     }
   }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (!this.props.company && nextProps.company) {
+        this.props.fetchCompany();
+      } else if (this.props.params.ticker !== nextProps.params.ticker) {
+        nextProps.fetchCompany();
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var company = void 0;
+      var title = void 0;
+      var price = void 0;
+      var earning_share = void 0;
+      var percent_change = void 0;
+      var ticker = void 0;
+      var volume = void 0;
+      var prev_close = void 0;
+      var dividend = void 0;
+      var year_high = void 0;
+      var year_low = void 0;
+
       if (this.props.company) {
-        company = this.props.company.title;
+        title = this.props.company.title;
+        price = this.props.company.price;
+        earning_share = this.props.company.earning_share;
+        percent_change = this.props.company.percent_change;
+        ticker = this.props.company.ticker;
+        volume = this.props.company.volume;
+        prev_close = this.props.company.prev_close;
+        dividend = this.props.company.dividend;
+        year_high = this.props.company.year_high;
+        year_low = this.props.company.year_low;
       }
 
       return _react2.default.createElement(
         'div',
         null,
-        company
+        title,
+        price,
+        earning_share,
+        percent_change,
+        ticker,
+        prev_close,
+        dividend,
+        year_high,
+        year_low
       );
     }
   }]);
