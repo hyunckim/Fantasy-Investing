@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from fantasy_investing.serializers import UserRegistrationSerializer, UserLoginSerializer
 from rest_framework.views import APIView
@@ -18,6 +18,17 @@ from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
 import datetime
 
+def auth(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        serializers = UserLoginSerializer(user)
+        if user.is_active:
+            login(request, user)
+            return Response(serializer.data)
+    return HttpResponse(status=422)
+
 
 class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
 
@@ -28,30 +39,16 @@ class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
         self.create(request)
         # investor = Investor.objects.get(u/ser=user)
         # return [user, investor.balance]
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            serializers = UserLoginSerializer(user)
-            if user.is_active:
-                login(request, user)
-                return Response(serializer.data)
-        return HttpResponse(status=422)
+        return auth(request)
 
-        return user
-
-class UserLoginView(APIView):
+class UserSessionView(APIView):
 
     def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            serializer = UserLoginSerializer(user)
-            if user.is_active:
-                login(request, user)
-                return Response(serializer.data)
-        return HttpResponse(status=422)
+        return auth(request)
+
+    def delete(self, request):
+        if request.user:
+            logout(request)
 
 @csrf_exempt
 
