@@ -1,12 +1,19 @@
 const path = require('path');
+const webpack = require('webpack');
+const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   context: __dirname,
   entry: './frontend/fantasy_investing.jsx',
   output: {
-    path: path.resolve(__dirname, 'app', 'assets', 'javascripts'),
-    filename: 'bundle.js'
+      path: path.resolve('.'),
+      filename: "bundle.js"
   },
+
+  plugins: [
+    new BundleTracker({filename: './webpack-stats.json'})
+  ],
+
   resolve: {
     extensions: ['.js', '.jsx', '*']
   },
