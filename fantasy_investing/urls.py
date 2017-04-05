@@ -19,5 +19,7 @@ from fantasy_investing import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^company/(?P<ticker>\w+)$', views.company_detail)
+    url(r'^register/$', views.UserRegisterView.as_view(), name='register'),
+    url(r'^login/$', views.UserLoginView.as_view(), name='login'),
+    url(r'^company/(?P<ticker>\w+)$', views.company_detail),
 ]
