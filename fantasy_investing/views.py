@@ -11,6 +11,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin
 from .utils import AtomicMixin
+from fantasy_investing.models import Investor
 
 
 class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
@@ -19,8 +20,20 @@ class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
     authentication_classes = ()
 
     def post(self, request):
-        """User registration view."""
-        return self.create(request)
+        self.create(request)
+        # investor = Investor.objects.get(u/ser=user)
+        # return [user, investor.balance]
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            serializers = UserLoginSerializer(user)
+            if user.is_active:
+                login(request, user)
+                return Response(serializer.data)
+        return HttpResponse(status=422)
+
+        return user
 
 class UserLoginView(APIView):
 
@@ -34,26 +47,3 @@ class UserLoginView(APIView):
                 login(request, user)
                 return Response(serializer.data)
         return HttpResponse(status=422)
-
-
-
-
-    # def post(self, request):
-    #     data = JSONParser().parse(request)
-    #     serializer = UserSerializer(data=data)
-    #     if serializer.is_valid():
-    #         serializer('username', 'first_name', 'last_name').save()
-    #         # login_user(request)
-    #         return Response(serializer.data)
-    #     return Response(serializers.errors, status=422)
-
-# class UserLoginView(APIView):
-#
-#     def post(self, request):
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return Response(serializer.data)
-#         return Response(serializers.errors, status=401)
