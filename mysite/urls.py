@@ -19,7 +19,7 @@ from fantasy_investing import views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^admins/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^$', TemplateView.as_view(template_name='base.html')),
     url(r'^', include('fantasy_investing.urls')),
 ]
