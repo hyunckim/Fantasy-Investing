@@ -8,13 +8,12 @@ class Company extends React.Component {
 
   render() {
     let company;
-
     if (this.props.company) {
       company = this.props.company.title;
     }
 
     return (
-      <div>{ company }</div>
+      <div>I am working!</div>
     );
   }
 }

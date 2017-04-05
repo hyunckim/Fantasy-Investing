@@ -6,9 +6,11 @@ const mapStateToProps = state => ({
   company: state.company
 });
 
-const mapDispatchToProps = ({ params }) => dispatch => ({
-  fetchCompany:() => dispatch(fetchCompany(params.ticker))
-});
+const mapDispatchToProps = (dispatch, { params }) => {
+  return ({
+    fetchCompany:() => dispatch(fetchCompany(params.ticker))
+  });
+};
 
 export default connect(
   mapStateToProps,

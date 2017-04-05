@@ -6,7 +6,7 @@ import CompanyContainer from './company/company_container';
 
 const Root = ({ store }) => {
   return (
-    <Provider>
+    <Provider store={ store }>
       <Router history={ hashHistory }>
         <Route path="/" component={ App } >
           <Route path="company/:ticker" component={ CompanyContainer } />
