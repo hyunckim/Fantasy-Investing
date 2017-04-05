@@ -4,6 +4,7 @@ from django.db import models
 
 class Portfolio(models.Model):
 	title = models.CharField(max_length=250);
+	pass
 	# user = models.ForeignKey(User, on_delete=model.CASCADE)
 
 class Stock(models.Model):
