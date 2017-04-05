@@ -13877,6 +13877,10 @@ var _app = __webpack_require__(157);
 
 var _app2 = _interopRequireDefault(_app);
 
+var _company_container = __webpack_require__(159);
+
+var _company_container2 = _interopRequireDefault(_company_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Root = function Root(_ref) {
@@ -13884,11 +13888,15 @@ var Root = function Root(_ref) {
 
   return _react2.default.createElement(
     _reactRedux.Provider,
-    null,
+    { store: store },
     _react2.default.createElement(
       _reactRouter.Router,
       { history: _reactRouter.hashHistory },
-      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _app2.default })
+      _react2.default.createElement(
+        _reactRouter.Route,
+        { path: '/', component: _app2.default },
+        _react2.default.createElement(_reactRouter.Route, { path: 'company/:ticker', component: _company_container2.default })
+      )
     )
   );
 };
@@ -13958,15 +13966,107 @@ var App = function App(_ref) {
   return _react2.default.createElement(
     'div',
     null,
-    'It\'s working!! I\'m going to cry...'
+    children
   );
 };
 
 exports.default = App;
 
 /***/ }),
-/* 158 */,
-/* 159 */,
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Company = function (_React$Component) {
+  _inherits(Company, _React$Component);
+
+  function Company(props) {
+    _classCallCheck(this, Company);
+
+    return _possibleConstructorReturn(this, (Company.__proto__ || Object.getPrototypeOf(Company)).call(this, props));
+  }
+
+  _createClass(Company, [{
+    key: 'render',
+    value: function render() {
+      var company = void 0;
+      if (this.props.company) {
+        company = this.props.company.title;
+      }
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        'I am working!'
+      );
+    }
+  }]);
+
+  return Company;
+}(_react2.default.Component);
+
+exports.default = Company;
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactRedux = __webpack_require__(137);
+
+var _company_actions = __webpack_require__(89);
+
+var _company = __webpack_require__(158);
+
+var _company2 = _interopRequireDefault(_company);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    company: state.company
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref) {
+  var params = _ref.params;
+
+  return {
+    fetchCompany: function fetchCompany() {
+      return dispatch((0, _company_actions.fetchCompany)(params.ticker));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_company2.default);
+
+/***/ }),
 /* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14153,7 +14253,7 @@ Object.defineProperty(exports, "__esModule", {
 var fetchCompany = exports.fetchCompany = function fetchCompany(ticker) {
   return $.ajax({
     method: "GET",
-    url: "/api/company/" + ticker
+    url: "/fantasy_investing/company/" + ticker
   });
 };
 
