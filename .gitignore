@@ -1,8 +1,7 @@
-<<<<<<< HEAD
-=======
+
 .DS_Store
 
 node_modules
 
->>>>>>> master
 __pycache__/
+*.pyc 
