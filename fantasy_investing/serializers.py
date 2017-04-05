@@ -19,7 +19,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(**validated_data)
         user.set_password(validated_data['password'])
-        user.save()
+        investor = Investor(user=user, balance=100000)
+        if user.save():
+            investor.save()
         return user
 
 class UserLoginSerializer(serializers.Serializer):
@@ -28,4 +30,4 @@ class UserLoginSerializer(serializers.Serializer):
 class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investor
-        fields = ('id', 'username', 'first_name', 'last_name', 'balance')
+        fields = ('id', 'balance', 'user')
