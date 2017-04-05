@@ -21,5 +21,4 @@ from fantasy_investing import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^portfolio/(?P<pk>[0-9]+)/$', views.portfolio_detail)
-
 ]
