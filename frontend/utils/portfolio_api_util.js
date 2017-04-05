@@ -5,6 +5,13 @@ export const fetchPortfolio = (id) => (
   })
 );
 
+export const fetchPortfolios = (portfolio) => (
+    $.ajax({
+        method: 'GET',
+        url: `/api/users/${portfolio}`
+    })
+);
+
 export const updatePortfolio = (user) => (
   $.ajax({
     method: 'PATCH',

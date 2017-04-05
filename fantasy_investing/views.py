@@ -12,7 +12,7 @@ from fantasy_investing.models import Portfolio
 def portfolio_detail(request, pk):
     try:
         portfolio = Portfolio.objects.get(pk=pk)
-    except Portfolio.DoesNotExist:
+    except Portfolio.DoesNotExist:  
         return HttpResponse(status=404)
 
     if request.method == "GET":
