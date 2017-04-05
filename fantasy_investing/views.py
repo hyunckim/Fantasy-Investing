@@ -18,7 +18,6 @@ class Company(object):
         response  = company.get_historical(start_date, end_date)
         past_year_info = []
 
-
         for date in response:
             past_year_info.append([date['Date'], date['Close']])
 
