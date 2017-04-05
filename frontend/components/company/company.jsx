@@ -6,6 +6,10 @@ class Company extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.props.fetchCompany();
+  }
+
   render() {
     let company;
     if (this.props.company) {
@@ -13,7 +17,7 @@ class Company extends React.Component {
     }
 
     return (
-      <div>I am working!</div>
+      <div>Am I working?</div>
     );
   }
 }
