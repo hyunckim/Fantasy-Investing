@@ -5,6 +5,8 @@ const CompanyReducer = (state = {}, action) => {
   switch(action.type) {
     case RECEIVE_COMPANY:
       return action.company;
+    default:
+      return state;
   }
 };
 
