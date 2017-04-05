@@ -1,11 +1,9 @@
 import React from 'react';
 
-const App = () => {
+const App = ({ children }) => {
   return (
   <div>
-    <p>
       It's working!! I'm going to cry...
-    </p>
   </div>
   );
 };
