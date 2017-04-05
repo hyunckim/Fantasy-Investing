@@ -54,6 +54,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mysite.urls'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+   'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -137,3 +146,7 @@ WEBPACK_LOADER = {
 	'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
 	}
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request'
+)
