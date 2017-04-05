@@ -17,7 +17,7 @@ class Company extends React.Component {
     }
 
     return (
-      <div>Am I working?</div>
+      <div>{ company }</div>
     );
   }
 }

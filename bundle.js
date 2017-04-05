@@ -8878,7 +8878,7 @@ var RECEIVE_COMPANY = exports.RECEIVE_COMPANY = "RECEIVE_COMPANY";
 var fetchCompany = exports.fetchCompany = function fetchCompany(ticker) {
   return function (dispatch) {
     return CompanyAPIUtil.fetchCompany(ticker).then(function (company) {
-      return dispatch(receiveCompany);
+      return dispatch(receiveCompany(company));
     });
   };
 };
@@ -14022,7 +14022,7 @@ var Company = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        'Am I working?'
+        company
       );
     }
   }]);
@@ -14258,7 +14258,7 @@ Object.defineProperty(exports, "__esModule", {
 var fetchCompany = exports.fetchCompany = function fetchCompany(ticker) {
   return $.ajax({
     method: "GET",
-    url: "/fantasy_investing/company/" + ticker
+    url: "/company/" + ticker
   });
 };
 
