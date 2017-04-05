@@ -6,17 +6,14 @@ module.exports = {
   context: __dirname,
   entry: './frontend/fantasy_investing.jsx',
   output: {
-    path: path.resolve('./'),
-    filename: 'bundle.js'
+      path: path.resolve('.'),
+      filename: "bundle.js"
   },
+
   plugins: [
-    new BundleTracker({filename: './webpack-stats.json'}),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery'
-    })
+    new BundleTracker({filename: './webpack-stats.json'})
   ],
+
   resolve: {
     extensions: ['.js', '.jsx', '*']
   },
