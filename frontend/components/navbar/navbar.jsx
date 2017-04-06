@@ -10,7 +10,6 @@ class NavBar extends React.Component {
     this.handleGuestClick = this.handleGuestClick.bind(this);
     this.handlePortfolioButton = this.handlePortfolioButton.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
-    this.state = this.props.filters;
   }
 
   handleSignUpClick(e) {

@@ -22,6 +22,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         investor = Investor(user=user, balance=100000)
         user.save()
         investor.save()
+        p = Potfolio(title="Current holdings", main=True, user=user)
+        p.save()
         return user
 
 class InvestorSerializer(serializers.ModelSerializer):
