@@ -14,7 +14,7 @@ const ErrorsReducer = (state = _nullErrors, action) => {
       return merge({}, _nullErrors, { session });
     case REMOVE_SESSION_ERRORS:
       let newState = merge({}, state);
-      newState.errors = [];
+      newState.session = [];
       return newState;
     default:
       return state;
