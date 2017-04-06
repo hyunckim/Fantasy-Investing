@@ -4,7 +4,7 @@ import SessionForm from './session_form';
 
 const mapStateToProps = (state) => ({
   loggedIn: Boolean(state.currentUser),
-  errors: Object.keys(state.errors.session).map(id => state.errors.session[id])
+  errors: state.errors.session
 });
 
 const mapDispatchToProps = (dispatch, { location }) => {

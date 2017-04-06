@@ -20,17 +20,22 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.set_password(validated_data['password'])
         investor = Investor(user=user, balance=100000)
-        if user.save():
-            investor.save()
+        user.save()
+        investor.save()
         return user
-
-class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=15)
 
 class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investor
-        fields = ('id', 'balance', 'user')
+        fields = '__all__'
+
+class UserLoginSerializer(serializers.ModelSerializer):
+
+    investor = InvestorSerializer()
+
+    class Meta:
+        model = User
+        fields = ('username', 'investor')
 
 class CompanySerializer(serializers.Serializer):
     ticker = serializers.CharField(max_length=10)

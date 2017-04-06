@@ -49,8 +49,8 @@ class NavBar extends React.Component {
 
   handleSearchSubmit(e) {
     e.preventDefault();
-    this.props.updateFilter("ticker", this.state.ticker);
-    hashHistory.push(`/company/${this.state.ticker}`);
+    let ticker = this.state.ticker.toUpperCase();
+    hashHistory.push(`/company/${ticker}`);
     this.setState({["ticker"]: ""});
   }
 
@@ -71,8 +71,7 @@ class NavBar extends React.Component {
             <label className="header-search-label"> Select Company by ticker
               <input className="search-input"
                 placeholder="Type ticker"
-                onChange={this.handleFilterChange("ticker")}
-                value={this.state.ticker}/>
+                onChange={this.handleFilterChange("ticker")}/>
               <button className='header-search-button'
                 onClick={this.handleSearchSubmit}>
                 <i className="fa fa-search" aria-hidden="true"></i>

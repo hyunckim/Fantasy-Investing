@@ -17,6 +17,7 @@ from rest_framework.renderers import JSONRenderer
 from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
 import datetime
+from fantasy_investing.models import Investor
 
 # @csrf_exempt
 
@@ -29,7 +30,7 @@ def auth(request):
         if user.is_active:
             login(request, user)
             return Response(serializer.data)
-    return HttpResponse(status=422)
+    return HttpResponse("Invalid credentials", status=422)
 
 
 class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
@@ -53,7 +54,7 @@ class UserSessionView(APIView):
             logout(request)
             return HttpResponse(status=200)
         else:
-            return HttpResponse(status=404)
+            return HttpResponse("There is no user to log out", status=404)
 
 class Company(object):
     def __init__(self, ticker):
