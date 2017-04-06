@@ -18,6 +18,9 @@ from yahoo_finance import Share
 from fantasy_investing.serializers import PortfolioSerializer
 from fantasy_investing.models import Portfolio
 import datetime
+from fantasy_investing.models import Investor
+
+# @csrf_exempt
 
 
 # Create your views here.
@@ -27,11 +30,11 @@ def auth(request):
     password = request.POST['password']
     user = authenticate(username=username, password=password)
     if user is not None:
-        serializers = UserLoginSerializer(user)
+        serializer = UserLoginSerializer(user)
         if user.is_active:
             login(request, user)
             return Response(serializer.data)
-    return HttpResponse(status=422)
+    return HttpResponse("Invalid credentials", status=422)
 
 
 class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
@@ -53,18 +56,22 @@ class UserSessionView(APIView):
     def delete(self, request):
         if request.user:
             logout(request)
-
-@csrf_exempt
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse("There is no user to log out", status=404)
 
 def portfolio_index(request):
     try:
-        portfolio_list = Portfolio.objects.all()
+        portfolio_list = Portfolio.objects.filter(user = request.user)
     except Portfolio.DoesNotExist:  
         return HttpResponse(status=404)
     
     if request.method == "GET":
-        serializer = PortfolioSerializer(portfolio_list)
-        return JsonResponse(serializer.data)
+        portfolios = []
+        for portfolio in portfolio_list:
+           portfolios.append(PortfolioSerializer(portfolio))
+           return JsonResponse(portfolios, safe=False)
+        return JsonResponse(portfolios, safe=False)
 
 def portfolio_detail(request, pk):
     try:
@@ -100,8 +107,11 @@ class Company(object):
         self.dividend = company.get_dividend_yield()
         self.earning_share = company.get_earnings_share()
         self.past_year_info = past_year_info
-
-
+        self.EPS_next_quarter = company.get_EPS_estimate_next_quarter()
+        self.EPS_next_year = company.get_EPS_estimate_next_year()
+        self.EPS_estimate_curr_year = company.get_price_EPS_estimate_current_year()
+        self.EPS_estimate_next_year = company.get_price_EPS_estimate_next_year()
+        self.earnings_growth_ratio = company.get_price_earnings_growth_ratio()
 
 def company_detail(request, ticker):
 

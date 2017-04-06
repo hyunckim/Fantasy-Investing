@@ -1,7 +1,16 @@
-export const fetchPortfolios = (portfolio) => (
+export const fetchPortfolios = () => (
     $.ajax({
         method: 'GET',
-        url: `/fantasy_investing/portfolio`
+        url: `/portfolio`
+
     })
 );
+
+export const fetchPortfolio = (portfolio) => (
+    $.ajax({
+        method: 'GET',
+        url: `/portfolio/${portfolio.id}`,
+    })
+);
+
 

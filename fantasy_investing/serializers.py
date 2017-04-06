@@ -4,7 +4,7 @@ from fantasy_investing.models import Stock, Portfolio, Investor, User
 class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
-        fields = ('id', 'title', 'stock_set')
+        fields = ('id', 'title', 'main, stock_set')
 
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,17 +20,24 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.set_password(validated_data['password'])
         investor = Investor(user=user, balance=100000)
-        if user.save():
-            investor.save()
+        user.save()
+        investor.save()
+        p = Portfolio(title="Current holdings", main=True, user=user)
+        p.save()
         return user
-
-class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=15)
 
 class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investor
-        fields = ('id', 'balance', 'user')
+        fields = '__all__'
+
+class UserLoginSerializer(serializers.ModelSerializer):
+
+    investor = InvestorSerializer()
+
+    class Meta:
+        model = User
+        fields = ('username', 'investor')
 
 class CompanySerializer(serializers.Serializer):
     ticker = serializers.CharField(max_length=10)
@@ -45,3 +52,8 @@ class CompanySerializer(serializers.Serializer):
     dividend = serializers.FloatField(default=0)
     earning_share = serializers.FloatField(default=0)
     past_year_info = serializers.ListField(default=[])
+    EPS_next_quarter = serializers.CharField(max_length=10)
+    EPS_next_year = serializers.CharField(max_length=10)
+    EPS_estimate_curr_year = serializers.CharField(max_length=10)
+    EPS_estimate_next_year = serializers.CharField(max_length=10)
+    earnings_growth_ratio = serializers.CharField(max_length=10)

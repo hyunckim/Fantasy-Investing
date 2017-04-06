@@ -3,18 +3,17 @@ import { RECEIVE_SESSION_ERRORS, REMOVE_SESSION_ERRORS } from
 import merge from 'lodash/merge';
 
 const _nullErrors = Object.freeze({
-  session: {}
+  session: []
 });
 
 const ErrorsReducer = (state = _nullErrors, action) => {
   Object.freeze(state);
-  let newState = merge({}, state);
   switch (action.type) {
     case RECEIVE_SESSION_ERRORS:
-      const sessionErrors = action.errors;
-      newState.session = sessionErrors;
-      return newState;
+      const session = action.errors;
+      return merge({}, _nullErrors, { session });
     case REMOVE_SESSION_ERRORS:
+      let newState = merge({}, state);
       newState.session = [];
       return newState;
     default:

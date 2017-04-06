@@ -6,14 +6,21 @@ class Company extends React.Component {
     super(props);
   }
 
-  render() {
-    let company;
-    if (this.props.company) {
-      company = this.props.company.title;
-    }
+  componentDidMount() {
+    this.props.fetchCompany();
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.company && nextProps.company) {
+      this.props.fetchCompany();
+    } else if ( this.props.params.ticker !== nextProps.params.ticker ) {
+      nextProps.fetchCompany();
+    }
+  }
+
+  render() {
     return (
-      <div>I am working!</div>
+      <div>hi</div>
     );
   }
 }
