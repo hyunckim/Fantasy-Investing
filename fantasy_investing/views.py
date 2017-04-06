@@ -56,6 +56,15 @@ class UserSessionView(APIView):
 
 @csrf_exempt
 
+def portfolio_index(request):
+    try:
+        portfolio_list = Portfolio.objects.all()
+    except Portfolio.DoesNotExist:  
+        return HttpResponse(status=404)
+    
+    if request.method == "GET":
+        serializer = PortfolioSerializer(portfolio_list)
+        return JsonResponse(serializer.data)
 
 def portfolio_detail(request, pk):
     try:
