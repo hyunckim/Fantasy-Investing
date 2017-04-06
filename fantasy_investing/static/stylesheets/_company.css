@@ -41,3 +41,11 @@
 .company-graph {
   border: 1px solid green;
 }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
