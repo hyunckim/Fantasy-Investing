@@ -21,39 +21,69 @@ class Company extends React.Component {
   render() {
     let title;
     let price;
-    let earning_share;
-    let percent_change;
+    let earningShare;
+    let percentChange;
     let ticker;
     let volume;
-    let prev_close;
+    let prevClose;
     let dividend;
-    let year_high;
-    let year_low;
+    let yearHigh;
+    let yearLow;
 
     if (this.props.company) {
       title = this.props.company.title;
       price = this.props.company.price;
-      earning_share = this.props.company.earning_share;
-      percent_change = this.props.company.percent_change;
+      earningShare = this.props.company.earning_share;
+      percentChange = this.props.company.percent_change;
       ticker = this.props.company.ticker;
       volume = this.props.company.volume;
-      prev_close = this.props.company.prev_close;
-      dividend = this.props.company.dividend;
-      year_high = this.props.company.year_high;
-      year_low = this.props.company.year_low;
+      prevClose = this.props.company.prev_close;
+      if (this.props.company.dividend === null) {
+        dividend = "N/A";
+      } else {
+        dividend = this.props.company.dividend;
+      }
+      yearHigh = this.props.company.year_high;
+      yearLow = this.props.company.year_low;
     }
 
     return (
-      <div>
-        { title }
-        { price }
-        { earning_share }
-        { percent_change }
-        { ticker }
-        { prev_close }
-        { dividend }
-        { year_high }
-        { year_low }
+      <div className="company-content">
+        <div className="company-info">
+          <span className="company-title">{ title } { ticker }</span>
+          <span className="company-price">{ price } ({ percentChange })</span>
+        </div>
+        <div className="company-summary">
+          <div className="company-detail">
+            <div className="company-nums">
+              <span>Earning Share</span>
+              <span>{ earningShare }</span>
+            </div>
+            <div className="company-nums">
+              <span>Previous Close</span>
+              <span>{ prevClose }</span>
+            </div>
+            <div className="company-nums">
+              <span>Dividend</span>
+              <span>{ dividend }</span>
+            </div>
+            <div className="company-nums">
+              <span>Yr. High</span>
+              <span>{ yearHigh }</span>
+            </div>
+            <div className="company-nums">
+              <span>Yr. Low</span>
+              <span>{ yearLow }</span>
+            </div>
+            <div className="company-nums">
+              <span>Volume</span>
+              <span>{ volume }</span>
+            </div>
+          </div>
+          <div className="company-graph">
+
+          </div>
+        </div>
       </div>
     );
   }

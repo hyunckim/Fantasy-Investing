@@ -14007,12 +14007,12 @@ var Company = function (_React$Component) {
   }
 
   _createClass(Company, [{
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       this.props.fetchCompany();
     }
   }, {
-    key: 'componentWillReceiveProps',
+    key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
       if (!this.props.company && nextProps.company) {
         this.props.fetchCompany();
@@ -14021,44 +14021,151 @@ var Company = function (_React$Component) {
       }
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var title = void 0;
       var price = void 0;
-      var earning_share = void 0;
-      var percent_change = void 0;
+      var earningShare = void 0;
+      var percentChange = void 0;
       var ticker = void 0;
       var volume = void 0;
-      var prev_close = void 0;
+      var prevClose = void 0;
       var dividend = void 0;
-      var year_high = void 0;
-      var year_low = void 0;
+      var yearHigh = void 0;
+      var yearLow = void 0;
 
       if (this.props.company) {
         title = this.props.company.title;
         price = this.props.company.price;
-        earning_share = this.props.company.earning_share;
-        percent_change = this.props.company.percent_change;
+        earningShare = this.props.company.earning_share;
+        percentChange = this.props.company.percent_change;
         ticker = this.props.company.ticker;
         volume = this.props.company.volume;
-        prev_close = this.props.company.prev_close;
-        dividend = this.props.company.dividend;
-        year_high = this.props.company.year_high;
-        year_low = this.props.company.year_low;
+        prevClose = this.props.company.prev_close;
+        if (this.props.company.dividend === null) {
+          dividend = "N/A";
+        } else {
+          dividend = this.props.company.dividend;
+        }
+        yearHigh = this.props.company.year_high;
+        yearLow = this.props.company.year_low;
       }
 
       return _react2.default.createElement(
-        'div',
-        null,
-        title,
-        price,
-        earning_share,
-        percent_change,
-        ticker,
-        prev_close,
-        dividend,
-        year_high,
-        year_low
+        "div",
+        { className: "company-content" },
+        _react2.default.createElement(
+          "div",
+          { className: "company-info" },
+          _react2.default.createElement(
+            "span",
+            { className: "company-title" },
+            title,
+            " ",
+            ticker
+          ),
+          _react2.default.createElement(
+            "span",
+            { className: "company-price" },
+            price,
+            " (",
+            percentChange,
+            ")"
+          )
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "company-summary" },
+          _react2.default.createElement(
+            "div",
+            { className: "company-detail" },
+            _react2.default.createElement(
+              "div",
+              { className: "company-nums" },
+              _react2.default.createElement(
+                "span",
+                null,
+                "Earning Share"
+              ),
+              _react2.default.createElement(
+                "span",
+                null,
+                earningShare
+              )
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "company-nums" },
+              _react2.default.createElement(
+                "span",
+                null,
+                "Previous Close"
+              ),
+              _react2.default.createElement(
+                "span",
+                null,
+                prevClose
+              )
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "company-nums" },
+              _react2.default.createElement(
+                "span",
+                null,
+                "Dividend"
+              ),
+              _react2.default.createElement(
+                "span",
+                null,
+                dividend
+              )
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "company-nums" },
+              _react2.default.createElement(
+                "span",
+                null,
+                "Yr. High"
+              ),
+              _react2.default.createElement(
+                "span",
+                null,
+                yearHigh
+              )
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "company-nums" },
+              _react2.default.createElement(
+                "span",
+                null,
+                "Yr. Low"
+              ),
+              _react2.default.createElement(
+                "span",
+                null,
+                yearLow
+              )
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "company-nums" },
+              _react2.default.createElement(
+                "span",
+                null,
+                "Volume"
+              ),
+              _react2.default.createElement(
+                "span",
+                null,
+                volume
+              )
+            )
+          ),
+          _react2.default.createElement("div", { className: "company-graph" })
+        )
       );
     }
   }]);
