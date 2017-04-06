@@ -4,7 +4,7 @@ import * as CompanyAPIUtil from '../util/company_api_util';
 
 export const fetchCompany = ticker => dispatch => (
   CompanyAPIUtil.fetchCompany(ticker)
-    .then(company => dispatch(receiveCompany))
+    .then(company => dispatch(receiveCompany(company)))
 );
 
 const receiveCompany = company => ({
