@@ -8878,7 +8878,7 @@ var RECEIVE_COMPANY = exports.RECEIVE_COMPANY = "RECEIVE_COMPANY";
 var fetchCompany = exports.fetchCompany = function fetchCompany(ticker) {
   return function (dispatch) {
     return CompanyAPIUtil.fetchCompany(ticker).then(function (company) {
-      return dispatch(receiveCompany);
+      return dispatch(receiveCompany(company));
     });
   };
 };
@@ -13974,58 +13974,10 @@ exports.default = App;
 
 /***/ }),
 /* 158 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(5);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Company = function (_React$Component) {
-  _inherits(Company, _React$Component);
-
-  function Company(props) {
-    _classCallCheck(this, Company);
-
-    return _possibleConstructorReturn(this, (Company.__proto__ || Object.getPrototypeOf(Company)).call(this, props));
-  }
-
-  _createClass(Company, [{
-    key: 'render',
-    value: function render() {
-      var company = void 0;
-      if (this.props.company) {
-        company = this.props.company.title;
-      }
-
-      return _react2.default.createElement(
-        'div',
-        null,
-        'I am working!'
-      );
-    }
-  }]);
-
-  return Company;
-}(_react2.default.Component);
-
-exports.default = Company;
+throw new Error("Module build failed: Duplicate declaration \"margin\"\n\n\u001b[0m \u001b[90m 73 | \u001b[39m      \u001b[90m// Adds the svg canvas\u001b[39m\n \u001b[90m 74 | \u001b[39m      let svg \u001b[33m=\u001b[39m d3\u001b[33m.\u001b[39mselect(\u001b[32m'svg'\u001b[39m)\u001b[33m,\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 75 | \u001b[39m        margin \u001b[33m=\u001b[39m {top\u001b[33m:\u001b[39m \u001b[35m20\u001b[39m\u001b[33m,\u001b[39m right\u001b[33m:\u001b[39m \u001b[35m20\u001b[39m\u001b[33m,\u001b[39m bottom\u001b[33m:\u001b[39m \u001b[35m30\u001b[39m\u001b[33m,\u001b[39m left\u001b[33m:\u001b[39m \u001b[35m50\u001b[39m}\u001b[33m,\u001b[39m\n \u001b[90m    | \u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 76 | \u001b[39m        width\u001b[33m=\u001b[39m svg\u001b[33m.\u001b[39mattr(\u001b[32m\"width\"\u001b[39m) \u001b[33m-\u001b[39m margin\u001b[33m.\u001b[39mleft \u001b[33m-\u001b[39m margin\u001b[33m.\u001b[39mright\u001b[33m,\u001b[39m\n \u001b[90m 77 | \u001b[39m        height \u001b[33m=\u001b[39m svg\u001b[33m.\u001b[39mattr(\u001b[32m\"height\"\u001b[39m)\n \u001b[90m 78 | \u001b[39m          \u001b[33m.\u001b[39mattr(\u001b[32m'width'\u001b[39m\u001b[33m,\u001b[39m width \u001b[33m+\u001b[39m margin\u001b[33m.\u001b[39mleft \u001b[33m+\u001b[39m margin\u001b[33m.\u001b[39mright)\u001b[0m\n");
 
 /***/ }),
 /* 159 */
@@ -14253,7 +14205,7 @@ Object.defineProperty(exports, "__esModule", {
 var fetchCompany = exports.fetchCompany = function fetchCompany(ticker) {
   return $.ajax({
     method: "GET",
-    url: "/fantasy_investing/company/" + ticker
+    url: "/company/" + ticker
   });
 };
 

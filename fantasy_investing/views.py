@@ -76,8 +76,11 @@ class Company(object):
         self.dividend = company.get_dividend_yield()
         self.earning_share = company.get_earnings_share()
         self.past_year_info = past_year_info
-
-
+        self.EPS_next_quarter = company.get_EPS_estimate_next_quarter()
+        self.EPS_next_year = company.get_EPS_estimate_next_year()
+        self.EPS_estimate_curr_year = company.get_price_EPS_estimate_current_year()
+        self.EPS_estimate_next_year = company.get_price_EPS_estimate_next_year()
+        self.earnings_growth_ratio = company.get_price_earnings_growth_ratio()
 
 def company_detail(request, ticker):
 
