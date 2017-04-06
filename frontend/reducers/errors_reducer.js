@@ -3,7 +3,7 @@ import { RECEIVE_SESSION_ERRORS, REMOVE_SESSION_ERRORS } from
 import merge from 'lodash/merge';
 
 const _nullErrors = Object.freeze({
-  session: {}
+  session: []
 });
 
 const ErrorsReducer = (state = _nullErrors, action) => {

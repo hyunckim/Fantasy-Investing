@@ -10,8 +10,12 @@ window.logout = logout;
 
 document.addEventListener('DOMContentLoaded',() => {
   let store;
-
-  store = configureStore();
+  if (window.currentUser) {
+    const preloadedState = { currentUser: window.currentUser };
+    store = configureStore(preloadedState);
+  } else {
+    store = configureStore();
+  }
 
   window.store = store;
 

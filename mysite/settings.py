@@ -146,7 +146,3 @@ WEBPACK_LOADER = {
 	'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
 	}
 }
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.request'
-)
