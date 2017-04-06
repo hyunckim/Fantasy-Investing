@@ -71,7 +71,7 @@ class SessionForm extends React.Component {
 		let firstName = "";
 		let lastName = "";
 		let submitText = "Log In";
-		let message = "Log in to Roomsurfing";
+		let message = "Log in to Fantasy Investing";
 		let redirectMessage = "Don't have an account?";
 
 		if (this.props.formType === "signup") {

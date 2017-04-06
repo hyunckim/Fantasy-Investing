@@ -1,0 +1,9 @@
+.header {
+  display: flex;
+  border: 1px solid black;
+  height: 100px;
+}
+
+.main-nav {
+  display: flex;
+}
