@@ -1,8 +1,10 @@
 {% load render_bundle from webpack_loader %}
+{% load staticfiles %}
 
 <html>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_company.css' %}" />
     <title>Fantasy Investing</title>
   </head>
   <body>
