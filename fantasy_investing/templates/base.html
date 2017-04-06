@@ -4,14 +4,18 @@
 <html>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
     <link rel="stylesheet" type="text/css"
       href="{% static 'stylesheets/reset.css' %}" />
     <link rel="stylesheet" type="text/css"
       href="{% static 'stylesheets/_navbar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_company.css' %}" />
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <title>Fantasy Investing</title>
   </head>
   <body>
     <div id="root">I am root</div>
     {% render_bundle 'main' %}
-  </body>
+  </body>s
 </html>

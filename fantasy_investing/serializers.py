@@ -52,3 +52,8 @@ class CompanySerializer(serializers.Serializer):
     dividend = serializers.FloatField(default=0)
     earning_share = serializers.FloatField(default=0)
     past_year_info = serializers.ListField(default=[])
+    EPS_next_quarter = serializers.CharField(max_length=10)
+    EPS_next_year = serializers.CharField(max_length=10)
+    EPS_estimate_curr_year = serializers.CharField(max_length=10)
+    EPS_estimate_next_year = serializers.CharField(max_length=10)
+    earnings_growth_ratio = serializers.CharField(max_length=10)
