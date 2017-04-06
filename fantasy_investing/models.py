@@ -4,8 +4,7 @@ from django.db.models.signals import post_save
 
 class Portfolio(models.Model):
 	title = models.CharField(max_length=250);
-	pass
-	# user = models.ForeignKey(User, on_delete=model.CASCADE)
+	# user = models.ForeignKey(User, on_delete=model.CASCADE);
 
 class Stock(models.Model):
     ticker = models.CharField(max_length=10)
