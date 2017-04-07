@@ -1,15 +1,20 @@
 from rest_framework import serializers
 from fantasy_investing.models import Stock, Portfolio, Investor, User
+from yahoo_finance import Share
 
-class PortfolioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Portfolio
-        fields = ('id', 'title')
+
+# class PortfolioIndexSerializer(serializers.Serializer):
+#     portfolios = serializers.ListField(default=[])
 
 class StockSerializer(serializers.ModelSerializer):
+
+    current_price = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+
     class Meta:
         model = Stock
-        fields = ('ticker', 'purchase_price', 'purchase_date', 'number_of_shares', 'portfolio')
+        # fields = ('ticker', 'purchase_price', 'purchase_date', 'number_of_shares')
+        fields = '__all__'
 
     def create(self, validated_data):
         stock = Stock.objects.create(**validated_data)
@@ -23,6 +28,23 @@ class StockSerializer(serializers.ModelSerializer):
         instance.number_of_shares = validated_data.get('number_of_shares', instance.number_of_shares)
         instance.save()
         return instance
+
+    def get_current_price(self, obj):
+        stock = Share(obj.ticker)
+        return float(stock.get_price())
+
+    def get_title(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_name()
+
+class PortfolioSerializer(serializers.ModelSerializer):
+    stocks = StockSerializer(
+        source="get_stocks",
+        many=True
+    )
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'title', 'main', 'stocks')
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:

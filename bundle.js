@@ -26170,7 +26170,56 @@ var receiveCompany = function receiveCompany(company) {
 };
 
 /***/ }),
-/* 95 */,
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchPortfolio = exports.fetchPortfolios = exports.receivePortfolios = exports.RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIO = undefined;
+
+var _portfolio_api_util = __webpack_require__(181);
+
+var PortfolioAPIUtil = _interopRequireWildcard(_portfolio_api_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var RECEIVE_PORTFOLIO = exports.RECEIVE_PORTFOLIO = "RECEIVE_PORTFOLIO";
+var RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIOS = "RECEIVE_PORTFOLIOS";
+
+var receivePortfolios = exports.receivePortfolios = function receivePortfolios(portfolios) {
+  return {
+    type: RECEIVE_PORTFOLIOS,
+    portfolios: portfolios
+  };
+};
+var receivePortfolio = function receivePortfolio(portfolio) {
+  return {
+    type: RECEIVE_PORTFOLIO,
+    portfolio: portfolio
+  };
+};
+
+var fetchPortfolios = exports.fetchPortfolios = function fetchPortfolios() {
+  return function (dispatch) {
+    return PortfolioAPIUtil.fetchPortfolios().then(function (portfolios) {
+      return dispatch(receivePortfolios(portfolios));
+    });
+  };
+};
+
+var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(portfolioId) {
+  return function (dispatch) {
+    return PortfolioAPIUtil.fetchPortfolio(portfolioId).then(function (portfolio) {
+      return dispatch(receivePortfolio(portfolio));
+    });
+  };
+};
+
+/***/ }),
 /* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31776,6 +31825,10 @@ var _session_form_container = __webpack_require__(170);
 
 var _session_form_container2 = _interopRequireDefault(_session_form_container);
 
+var _portfolio_container = __webpack_require__(168);
+
+var _portfolio_container2 = _interopRequireDefault(_portfolio_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Root = function Root(_ref) {
@@ -31809,7 +31862,8 @@ var Root = function Root(_ref) {
         _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _session_form_container2.default,
           onEnter: _redirectIfLoggedIn }),
         _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _session_form_container2.default,
-          onEnter: _redirectIfLoggedIn })
+          onEnter: _redirectIfLoggedIn }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/portfolio', component: _portfolio_container2.default })
       )
     )
   );
@@ -31944,6 +31998,7 @@ var Company = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+
       var title = void 0;
       var price = void 0;
       var earningShare = void 0;
@@ -32054,19 +32109,23 @@ var Company = function (_React$Component) {
           'div',
           { className: 'company-info' },
           _react2.default.createElement(
-            'span',
-            { className: 'company-title' },
-            title,
-            ' ',
-            ticker
-          ),
-          _react2.default.createElement(
-            'span',
-            { className: 'company-price' },
-            price,
-            ' (',
-            percentChange,
-            ')'
+            'div',
+            { className: 'company-name-price' },
+            _react2.default.createElement(
+              'span',
+              { className: 'company-title' },
+              title,
+              ' ',
+              ticker
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'company-price' },
+              price,
+              ' (',
+              percentChange,
+              ')'
+            )
           ),
           _react2.default.createElement(_trade2.default, null)
         ),
@@ -32444,8 +32503,200 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_navbar2.default);
 
 /***/ }),
-/* 167 */,
-/* 168 */,
+/* 167 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _stock_api_util = __webpack_require__(402);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Portfolio = function (_React$Component) {
+  _inherits(Portfolio, _React$Component);
+
+  function Portfolio(props) {
+    _classCallCheck(this, Portfolio);
+
+    return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+  }
+
+  _createClass(Portfolio, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.fetchPortfolios();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var portfolioTable = void 0;
+      if (this.props.portfolio[0]) {
+        var stocks = this.props.portfolio[0].stocks.map(function (stock, idx) {
+          return _react2.default.createElement(
+            'tr',
+            { key: idx },
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.ticker
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.title
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.number_of_shares
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              ' ',
+              stock.current_price,
+              ' '
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.current_price * stock.number_of_shares
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              ' ',
+              stock.purchase_price
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.purchase_price * stock.number_of_shares
+            )
+          );
+        });
+
+        portfolioTable = _react2.default.createElement(
+          'table',
+          null,
+          _react2.default.createElement(
+            'tbody',
+            null,
+            _react2.default.createElement(
+              'tr',
+              null,
+              _react2.default.createElement(
+                'th',
+                null,
+                'Symbol'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Title'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Quantity'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Price'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Value'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Unit Cost'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Cost Basis'
+              )
+            ),
+            stocks
+          )
+        );
+      }
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        portfolioTable
+      );
+    }
+  }]);
+
+  return Portfolio;
+}(_react2.default.Component);
+
+exports.default = Portfolio;
+
+/***/ }),
+/* 168 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactRedux = __webpack_require__(36);
+
+var _portfolio_actions = __webpack_require__(95);
+
+var _portfolio = __webpack_require__(167);
+
+var _portfolio2 = _interopRequireDefault(_portfolio);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    currentUser: state.currentUser,
+    portfolio: Object.keys(state.portfolio).map(function (id) {
+      return state.portfolio[id];
+    })
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    fetchPortfolios: function fetchPortfolios() {
+      return dispatch((0, _portfolio_actions.fetchPortfolios)());
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_portfolio2.default);
+
+/***/ }),
 /* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -32953,7 +33204,38 @@ var ErrorsReducer = function ErrorsReducer() {
 exports.default = ErrorsReducer;
 
 /***/ }),
-/* 177 */,
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _portfolio_actions = __webpack_require__(95);
+
+var _lodash = __webpack_require__(66);
+
+var PortfolioReducer = function PortfolioReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    var newState = void 0;
+    switch (action.type) {
+        case _portfolio_actions.RECEIVE_PORTFOLIOS:
+            return action.portfolios;
+        case _portfolio_actions.RECEIVE_PORTFOLIO:
+            return (0, _lodash.merge)({}, state, action.portfolio);
+        default:
+            return state;
+    }
+};
+
+exports.default = PortfolioReducer;
+
+/***/ }),
 /* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -32974,6 +33256,10 @@ var _session_reducer = __webpack_require__(179);
 
 var _session_reducer2 = _interopRequireDefault(_session_reducer);
 
+var _portfolio_reducer = __webpack_require__(177);
+
+var _portfolio_reducer2 = _interopRequireDefault(_portfolio_reducer);
+
 var _errors_reducer = __webpack_require__(176);
 
 var _errors_reducer2 = _interopRequireDefault(_errors_reducer);
@@ -32983,6 +33269,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var rootReducer = (0, _redux.combineReducers)({
   company: _company_reducer2.default,
   currentUser: _session_reducer2.default,
+  portfolio: _portfolio_reducer2.default,
   errors: _errors_reducer2.default
 });
 
@@ -33036,7 +33323,31 @@ var fetchCompany = exports.fetchCompany = function fetchCompany(ticker) {
 };
 
 /***/ }),
-/* 181 */,
+/* 181 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var fetchPortfolios = exports.fetchPortfolios = function fetchPortfolios() {
+    return $.ajax({
+        method: 'GET',
+        url: '/portfolio'
+
+    });
+};
+
+var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(portfolio) {
+    return $.ajax({
+        method: 'GET',
+        url: '/portfolio/' + portfolio.id
+    });
+};
+
+/***/ }),
 /* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51413,6 +51724,47 @@ function symbolObservablePonyfill(root) {
 	}
 
 	return result;
+};
+
+/***/ }),
+/* 402 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var createStock = exports.createStock = function createStock(stock) {
+  return $.ajax({
+    method: "POST",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var updateStock = exports.updateStock = function updateStock(stock) {
+  return $.ajax({
+    method: "PATCH",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var deleteStock = exports.deleteStock = function deleteStock(stockId) {
+  return $.ajax({
+    method: 'DELETE',
+    url: 'api/stocks',
+    data: { stockId: stockId }
+  });
+};
+
+var fetchStockPrice = exports.fetchStockPrice = function fetchStockPrice(ticker) {
+  return $.ajax({
+    method: "GET",
+    url: "api/stocks/" + ticker
+  });
 };
 
 /***/ })

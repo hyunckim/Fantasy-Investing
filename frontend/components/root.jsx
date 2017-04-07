@@ -4,7 +4,7 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import App from './app';
 import CompanyContainer from './company/company_container';
 import SessionFormContainer from './session_form/session_form_container';
-
+import PortfolioContainer from './portfolio/portfolio_container';
 const Root = ({ store }) => {
 
   const _redirectIfLoggedIn = (nextState, replace) => {
@@ -30,6 +30,7 @@ const Root = ({ store }) => {
             onEnter={_redirectIfLoggedIn}/>
           <Route path="/signup" component={ SessionFormContainer }
             onEnter={_redirectIfLoggedIn}/>
+          <Route path="/portfolio" component={ PortfolioContainer } />
         </Route>
       </Router>
     </Provider>
