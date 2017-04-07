@@ -20,6 +20,7 @@ from fantasy_investing.serializers import PortfolioSerializer
 from fantasy_investing.models import Portfolio
 import datetime
 from fantasy_investing.models import Investor
+import pdb
 
 import pdb
 
@@ -64,9 +65,9 @@ class UserSessionView(APIView):
 def portfolio_index(request):
     try:
         portfolio_list = Portfolio.objects.filter(user = request.user)
-    except portfolio_list.DoesNotExist:  
+    except portfolio_list.DoesNotExist:
         return HttpResponse(status=404)
-    
+
     if request.method == "GET":
         serializer = PortfolioSerializer(portfolio_list, many=True)
         return JsonResponse(serializer.data, safe=False)
@@ -74,12 +75,12 @@ def portfolio_index(request):
 def portfolio_detail(request, pk):
     try:
         portfolio = Portfolio.objects.get(pk=pk)
-    except portfolio.DoesNotExist:  
+    except portfolio.DoesNotExist:
         return HttpResponse(status=404)
     if request.method == "GET":
         serializer = PortfolioSerializer(portfolio)
         return JsonResponse(serializer.data)
-        
+
 class Company(object):
     def __init__(self, ticker):
         company = Share(ticker)

@@ -33137,7 +33137,6 @@ var PortfolioReducer = function PortfolioReducer() {
     var newState = void 0;
     switch (action.type) {
         case _portfolio_actions.RECEIVE_PORTFOLIOS:
-            debugger;
             return action.portfolios;
         case _portfolio_actions.RECEIVE_PORTFOLIO:
             return (0, _lodash.merge)({}, state, action.portfolio);
