@@ -30,7 +30,7 @@ const Root = ({ store }) => {
             onEnter={_redirectIfLoggedIn}/>
           <Route path="/signup" component={ SessionFormContainer }
             onEnter={_redirectIfLoggedIn}/>
-          <Route path="portfolio" component={ PortfolioContainer } />
+          <Route path="/portfolio" component={ PortfolioContainer } />
         </Route>
       </Router>
     </Provider>

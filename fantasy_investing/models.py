@@ -7,6 +7,11 @@ class Portfolio(models.Model):
     main = models.BooleanField(null=False, default=False)
     user = models.ForeignKey(User, default=1)
 
+    def get_stocks(self):
+        stocks = Stock.objects.filter(portfolio=self)
+        return stocks
+
+
 class Stock(models.Model):
     ticker = models.CharField(max_length=10)
     purchase_price = models.FloatField(default=0)
