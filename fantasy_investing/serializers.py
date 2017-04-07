@@ -22,6 +22,10 @@ class StockSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class StockPriceSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=20)
+    price = serializers.FloatField(default=0)
+
 class PortfolioSerializer(serializers.ModelSerializer):
     stocks = StockSerializer(
         source="get_stocks",

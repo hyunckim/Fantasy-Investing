@@ -31863,7 +31863,7 @@ var Root = function Root(_ref) {
           onEnter: _redirectIfLoggedIn }),
         _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _session_form_container2.default,
           onEnter: _redirectIfLoggedIn }),
-        _react2.default.createElement(_reactRouter.Route, { path: 'portfolio', component: _portfolio_container2.default })
+        _react2.default.createElement(_reactRouter.Route, { path: '/portfolio', component: _portfolio_container2.default })
       )
     )
   );
@@ -32510,7 +32510,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -32518,6 +32518,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _stock_api_util = __webpack_require__(401);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32528,41 +32530,134 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Portfolio = function (_React$Component) {
-    _inherits(Portfolio, _React$Component);
+  _inherits(Portfolio, _React$Component);
 
-    function Portfolio(props) {
-        _classCallCheck(this, Portfolio);
+  function Portfolio(props) {
+    _classCallCheck(this, Portfolio);
 
-        return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+    return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+  }
+
+  _createClass(Portfolio, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.fetchPortfolios();
     }
+  }, {
+    key: 'render',
+    value: function render() {
+      var portfolioTable = void 0;
+      if (this.props.portfolio[0]) {
+        var stocks = this.props.portfolio[0].stocks.map(function (stock, idx) {
+          var title = undefined;
+          var current_price = void 0;
+          (0, _stock_api_util.fetchStockPrice)(stock.ticker).then(function (response) {
+            title = response.title;
+            current_price = response.price;
+          });
+          return _react2.default.createElement(
+            'tr',
+            { key: idx },
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.ticker
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              title
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.number_of_shares
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              ' ',
+              current_price,
+              ' '
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              ' current_price * number_of_shares '
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              ' ',
+              stock.purchase_price
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.purchase_price * stock.number_of_shares
+            )
+          );
+        });
 
-    _createClass(Portfolio, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.props.fetchPortfolios();
-        }
-    }, {
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            console.log('CDM');
-            console.log('currentUser');
-            console.log(this.props.currentUser);
-            this.props.fetchPortfolios();
-            console.log(this.props);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var portfolios = this.props.portfolio;
-            return _react2.default.createElement(
-                'div',
+        portfolioTable = _react2.default.createElement(
+          'table',
+          null,
+          _react2.default.createElement(
+            'tbody',
+            null,
+            _react2.default.createElement(
+              'tr',
+              null,
+              _react2.default.createElement(
+                'th',
                 null,
-                'hi'
-            );
-        }
-    }]);
+                'Symbol'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Title'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Quantity'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Price'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Value'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Unit Cost'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Cost Basis'
+              )
+            ),
+            stocks
+          )
+        );
+      }
 
-    return Portfolio;
+      return _react2.default.createElement(
+        'div',
+        null,
+        portfolioTable
+      );
+    }
+  }]);
+
+  return Portfolio;
 }(_react2.default.Component);
 
 exports.default = Portfolio;
@@ -32575,7 +32670,7 @@ exports.default = Portfolio;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _reactRedux = __webpack_require__(36);
@@ -32589,22 +32684,20 @@ var _portfolio2 = _interopRequireDefault(_portfolio);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
-    console.log('state');
-    console.log(state);
-    return {
-        currentUser: state.currentUser,
-        portfolio: state.portfolio
-    };
+  return {
+    currentUser: state.currentUser,
+    portfolio: Object.keys(state.portfolio).map(function (id) {
+      return state.portfolio[id];
+    })
+  };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
-    console.log('ownProps');
-    console.log(ownProps);
-    return {
-        fetchPortfolios: function fetchPortfolios() {
-            return dispatch((0, _portfolio_actions.fetchPortfolios)());
-        }
-    };
+  return {
+    fetchPortfolios: function fetchPortfolios() {
+      return dispatch((0, _portfolio_actions.fetchPortfolios)());
+    }
+  };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_portfolio2.default);
@@ -51636,6 +51729,47 @@ function symbolObservablePonyfill(root) {
 	}
 
 	return result;
+};
+
+/***/ }),
+/* 401 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var createStock = exports.createStock = function createStock(stock) {
+  return $.ajax({
+    method: "POST",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var updateStock = exports.updateStock = function updateStock(stock) {
+  return $.ajax({
+    method: "PATCH",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var deleteStock = exports.deleteStock = function deleteStock(stockId) {
+  return $.ajax({
+    method: 'DELETE',
+    url: 'api/stocks',
+    data: { stockId: stockId }
+  });
+};
+
+var fetchStockPrice = exports.fetchStockPrice = function fetchStockPrice(ticker) {
+  return $.ajax({
+    method: "GET",
+    url: "api/stocks/" + ticker
+  });
 };
 
 /***/ })
