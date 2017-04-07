@@ -63,8 +63,9 @@ class Company(object):
         response  = company.get_historical(start_date, end_date)
         past_year_info = []
 
-        for date in response:
-            past_year_info.append([date['Date'], date['Close']])
+        for element in response:
+            date = datetime.datetime.strptime(element['Date'], '%Y-%m-%d').strftime('%d-%b-%y')
+            past_year_info.append({ 'date': date, 'close': element['Close'] })
 
         self.ticker = ticker
         self.title = company.get_name()
