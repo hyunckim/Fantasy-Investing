@@ -26,9 +26,9 @@ class TradeForm extends React.Component {
         action = this.props.createStock;
       }
       action(purchaseInfo).then(hashHistory.push("/portfolio"));
+
     } else {
       this.props.receiveStockErrors("You have insufficient balance for this trade");
-      
     }
   }
 
@@ -41,8 +41,22 @@ class TradeForm extends React.Component {
         number_of_shares: existingPosition.number_of_shares - this.props.number_of_shares
       };
       this.props.updateStock(saleInfo).then(hashHistory.push("/portfolio"));
+      this.updateBalance(this.state.action, price);
     } else if (this.state.number_of_shares === existingPosition.number_of_shares) {
       this.props.deleteStock(this.stock.id);
+      this.updateBalance(this.state.action, price);
+    } else {
+      this.props.receiveStockErrors("You are trying to sell more shares than you have");
+    }
+  }
+
+  updateBalance(action, price) {
+    if (action === "Buy") {
+      let newBalance = this.props.balance - (price * this.state.number_of_shares);
+      this.props.updateInvestor( {id: this.investor.id, balance: newBalance});
+    } else {
+      let newBalance = this.props.balance + (price * this.state.number_of_shares);
+      this.props.updateInvestor( {id: this.investor.id, balance: newBalance});
     }
   }
 
@@ -86,5 +100,6 @@ class TradeForm extends React.Component {
       </form>
     );
   }
-
 }
+
+export default TradeForm;

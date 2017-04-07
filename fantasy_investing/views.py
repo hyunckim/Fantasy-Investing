@@ -3,7 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from fantasy_investing.serializers import UserRegistrationSerializer, UserLoginSerializer, StockSerializer
+from fantasy_investing.serializers import UserRegistrationSerializer, \
+    UserLoginSerializer, StockSerializer, InvestorSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -64,9 +65,9 @@ class UserSessionView(APIView):
 def portfolio_index(request):
     try:
         portfolio_list = Portfolio.objects.filter(user = request.user)
-    except portfolio_list.DoesNotExist:  
+    except portfolio_list.DoesNotExist:
         return HttpResponse(status=404)
-    
+
     if request.method == "GET":
         serializer = PortfolioSerializer(portfolio_list, many=True)
         return JsonResponse(serializer.data, safe=False)
@@ -74,12 +75,12 @@ def portfolio_index(request):
 def portfolio_detail(request, pk):
     try:
         portfolio = Portfolio.objects.get(pk=pk)
-    except portfolio.DoesNotExist:  
+    except portfolio.DoesNotExist:
         return HttpResponse(status=404)
     if request.method == "GET":
         serializer = PortfolioSerializer(portfolio)
         return JsonResponse(serializer.data)
-        
+
 class Company(object):
     def __init__(self, ticker):
         company = Share(ticker)
@@ -141,3 +142,10 @@ class StockView(CreateModelMixin, GenericAPIView):
             return HttpResponse(status=200)
         else:
             return HttpResponse("Stock is not in your portfolio", status=404)
+
+class InvestorView(CreateModelMixin, GenericAPIView):
+
+    serializer_class = InvestorSerializer
+
+    def patch(self, request):
+        return self.update(request)

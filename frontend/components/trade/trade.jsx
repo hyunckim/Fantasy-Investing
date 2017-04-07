@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import TradeFormContainer from '../trade_form_container';
+import TradeFormContainer from './trade_form_container';
 
 const customStyles = {
   content : {

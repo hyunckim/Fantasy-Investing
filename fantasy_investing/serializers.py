@@ -11,7 +11,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'main', 'stock_set')
 
 # class PortfolioIndexSerializer(serializers.Serializer):
-#     portfolios = serializers.ListField(default=[])  
+#     portfolios = serializers.ListField(default=[])
 
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,6 +50,14 @@ class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investor
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        instance.ticker = validated_data.get('ticker', instance.ticker)
+        instance.purchase_price = validated_data.get('purchase_price', instance.purchase_price)
+        instance.purchase_date = validated_data.get('purchase_date', instance.purchase_date)
+        instance.number_of_shares = validated_data.get('number_of_shares', instance.number_of_shares)
+        instance.save()
+        return instance
 
 class UserLoginSerializer(serializers.ModelSerializer):
 
