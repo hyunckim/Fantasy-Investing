@@ -24,8 +24,6 @@ class StockSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
-
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

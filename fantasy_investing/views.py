@@ -106,3 +106,11 @@ class StockView(CreateModelMixin, GenericAPIView):
 
     def patch(self, request):
         return self.update(request)
+
+    def delete(self, request):
+        s = Stock.objects.get(pk=request.DELETE['id'])
+        if s:
+            Stock.objects.delete(s)
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse("Stock is not in your portfolio", status=404)
