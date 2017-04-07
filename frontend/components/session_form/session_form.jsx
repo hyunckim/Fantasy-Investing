@@ -95,39 +95,43 @@ class SessionForm extends React.Component {
 		}
 
 		return (
-      <div className="login-form-container">
-				<form onSubmit={this.handleSubmit} className="login-form-box">
-					<div className="session-form-message-container">
-						<p className="session-form-message">{message}</p>
-					</div>
-					{this.renderErrors()}
+			<div className="login-form-container">
+				<div className='login-form'>
+					<form onSubmit={this.handleSubmit} className="login-form-box">
+						<div className="session-form-message-container">
+							<p className="session-form-message">{message}</p>
+						</div>
+						{this.renderErrors()}
 
-					<div className="first-last-names">
-						{firstName}
-						{lastName}
-					</div>
+						<div className="first-last-names">
+							{firstName}
+							{lastName}
+						</div>
 
-					<div className="login-form-info">
-						<input type="text"
-							placeholder="Username"
-							value={this.state.username}
-							onChange={this.update("username")}
-							className="email-input" />
-						<input type="password"
-							placeholder="Password"
-							value={this.state.password}
-							onChange={this.update("password")}
-							className="password-input" />
-						<input type="submit" value={submitText} className="submit-button"/>
-					</div>
-					<div className="bottom-message-form">
-						<p className="redirect-message">{redirectMessage}</p>
-						{this.navButton()}
-					</div>
-				</form>
+						<div className="login-form-info">
+							<input type="text"
+								placeholder="Username"
+								value={this.state.username}
+								onChange={this.update("username")}
+								className="email-input" />
+							<input type="password"
+								placeholder="Password"
+								value={this.state.password}
+								onChange={this.update("password")}
+								className="password-input" />
+							<input type="submit" value={submitText} className="submit-button" />
+						</div>
+						<div className="bottom-message-form">
+							<p className="redirect-message">{redirectMessage}</p>
+							{this.navButton()}
+						</div>
+					</form>
+				</div>
+
+
 			</div>
 		);
-    }
+	}
 	}
 
 export default withRouter(SessionForm);

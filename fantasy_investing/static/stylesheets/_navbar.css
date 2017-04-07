@@ -1,9 +1,41 @@
-.header {
-  display: flex;
-  border: 1px solid black;
-  height: 100px;
+#main-nav {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 56px;
+  background-color: transparent;
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
 }
 
-.main-nav {
+.logo {
+  justify-content: flex-start;
+}
+
+.auth {
   display: flex;
+  justify-content: flex-end;
+}
+
+.signup-button,
+.login-button,
+.logout-button,
+.demo-button {
+  color: white;
+  font-size: 18px;
+  margin-right: 24px;
+}
+
+.right-navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.left-navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }

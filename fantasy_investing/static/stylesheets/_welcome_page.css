@@ -1,0 +1,59 @@
+html{
+        background: #2c2c2c;
+
+}
+
+.welcome-page {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+    height: 100%;
+    width: 100%;
+    margin-top: -46px;
+    background:#4F6E7C;
+    
+    
+
+}
+
+.background-pic {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 80vh;
+    background-image: url(../images/background.jpg);
+    background-size: cover;
+    justify-content: center;
+    line-height: 300px;
+}
+
+h1 {
+    font-size: 48px;
+    color: white;
+    margin-top: 10%;
+    margin-left: 5%;
+    line-height: 46px;
+}
+
+h2 {
+    font-size: 36px;
+    color: white;
+    text-align: right;
+    margin-right: 5%;
+}
+
+
+.content {
+    margin: 0 15%;
+    color: #2C2C2C;
+}
+.content h3 {
+    margin-top: 100px;
+        font-size: 36px;
+    text-align: center;
+}
+.content p {
+    margin-top: 100px;
+    color: #F6F2F3;
+    line-height: 30px;
+}
+
+
