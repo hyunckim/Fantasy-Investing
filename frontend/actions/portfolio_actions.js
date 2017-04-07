@@ -12,8 +12,8 @@ const receivePortfolio = (portfolio) => ({
   portfolio
 });
 
-export const fetchPortfolios = (user) => (dispatch) => (
-  PortfolioAPIUtil.fetchPortfolios(user)
+export const fetchPortfolios = () => (dispatch) => (
+  PortfolioAPIUtil.fetchPortfolios()
   .then((portfolios) => dispatch(receivePortfolios(portfolios)))
 );
 

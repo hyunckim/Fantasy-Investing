@@ -15,7 +15,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     console.log('ownProps');
     console.log(ownProps);
     return ({
-        fetchPortfolios: (user) => dispatch(fetchPortfolios(user))
+        fetchPortfolios: () => dispatch(fetchPortfolios())
     });
 };
 

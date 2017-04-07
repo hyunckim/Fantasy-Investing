@@ -9101,9 +9101,9 @@ var receivePortfolio = function receivePortfolio(portfolio) {
   };
 };
 
-var fetchPortfolios = exports.fetchPortfolios = function fetchPortfolios(user) {
+var fetchPortfolios = exports.fetchPortfolios = function fetchPortfolios() {
   return function (dispatch) {
-    return PortfolioAPIUtil.fetchPortfolios(user).then(function (portfolios) {
+    return PortfolioAPIUtil.fetchPortfolios().then(function (portfolios) {
       return dispatch(receivePortfolios(portfolios));
     });
   };
@@ -31605,9 +31605,13 @@ var Portfolio = function (_React$Component) {
     }
 
     _createClass(Portfolio, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.fetchPortfolios();
+        }
+    }, {
         key: 'componentWillMount',
         value: function componentWillMount() {
-            debugger;
             console.log('CDM');
             console.log('currentUser');
             console.log(this.props.currentUser);
@@ -31617,7 +31621,6 @@ var Portfolio = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            debugger;
             var portfolios = this.props.portfolio;
             return _react2.default.createElement(
                 'div',
@@ -31666,8 +31669,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     console.log('ownProps');
     console.log(ownProps);
     return {
-        fetchPortfolios: function fetchPortfolios(user) {
-            return dispatch((0, _portfolio_actions.fetchPortfolios)(user));
+        fetchPortfolios: function fetchPortfolios() {
+            return dispatch((0, _portfolio_actions.fetchPortfolios)());
         }
     };
 };
@@ -32064,6 +32067,7 @@ var PortfolioReducer = function PortfolioReducer() {
     var newState = void 0;
     switch (action.type) {
         case _portfolio_actions.RECEIVE_PORTFOLIOS:
+            debugger;
             return action.portfolios;
         case _portfolio_actions.RECEIVE_PORTFOLIO:
             return (0, _lodash.merge)({}, state, action.portfolio);

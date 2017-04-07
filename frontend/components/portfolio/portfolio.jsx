@@ -5,8 +5,10 @@ class Portfolio extends React.Component {
         super(props);
  
     }
+    componentDidMount() {
+        this.props.fetchPortfolios();
+    }
     componentWillMount() {
-        debugger;
         console.log('CDM');
         console.log('currentUser');
         console.log(this.props.currentUser);
@@ -14,7 +16,6 @@ class Portfolio extends React.Component {
         console.log(this.props);
     }
     render() {
-        debugger;
         let portfolios = this.props.portfolio;
         return (
             <div>
