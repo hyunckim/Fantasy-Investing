@@ -23,6 +23,7 @@ class Company extends React.Component {
   }
 
   render() {
+
     let title;
     let price;
     let earningShare;

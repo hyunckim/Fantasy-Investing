@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from fantasy_investing.serializers import UserRegistrationSerializer, UserLoginSerializer, StockSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-# from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin
@@ -16,10 +15,18 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
+from fantasy_investing.serializers import PortfolioSerializer
+# from fantasy_investing.serializers import PortfolioIndexSerializer
+from fantasy_investing.models import Portfolio
 import datetime
 from fantasy_investing.models import Investor
 
-# @csrf_exempt
+import pdb
+
+@csrf_exempt
+
+
+# Create your views here.
 
 def auth(request):
     username = request.POST['username']
@@ -54,6 +61,25 @@ class UserSessionView(APIView):
         else:
             return HttpResponse("There is no user to log out", status=404)
 
+def portfolio_index(request):
+    try:
+        portfolio_list = Portfolio.objects.filter(user = request.user)
+    except portfolio_list.DoesNotExist:  
+        return HttpResponse(status=404)
+    
+    if request.method == "GET":
+        serializer = PortfolioSerializer(portfolio_list, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+def portfolio_detail(request, pk):
+    try:
+        portfolio = Portfolio.objects.get(pk=pk)
+    except portfolio.DoesNotExist:  
+        return HttpResponse(status=404)
+    if request.method == "GET":
+        serializer = PortfolioSerializer(portfolio)
+        return JsonResponse(serializer.data)
+        
 class Company(object):
     def __init__(self, ticker):
         company = Share(ticker)
