@@ -51300,34 +51300,9 @@ module.exports = __webpack_require__(390);
 
 /***/ }),
 /* 396 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-// import { connect } from 'react-redux';
-// import { login, logout, signup, removeErrors } from '../../actions/session_actions';
-// import SessionForm from './session_form';
-//
-// const mapStateToProps = (state) => ({
-//   loggedIn: Boolean(state.currentUser),
-//   errors: state.errors.session
-// });
-//
-// const mapDispatchToProps = (dispatch, { location }) => {
-//   const formType = location.pathname.slice(1);
-//   const processForm = (formType === 'login') ? login : signup;
-//
-//   return {
-//     processForm: user => dispatch(processForm(user)),
-//     removeErrors: () => dispatch(removeErrors()),
-//     formType
-//   };
-// };
-//
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(SessionForm);
-
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/bokats/app_academy/projects/fantasy_investing/frontend/components/trade_form/trade_form_container.js'\n    at Error (native)");
 
 /***/ })
 /******/ ]);
