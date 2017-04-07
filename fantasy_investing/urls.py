@@ -19,6 +19,8 @@ from fantasy_investing import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^portfolio$', views.portfolio_index),
+    url(r'^portfolio/(?P<pk>[0-9]+)/$', views.portfolio_detail),
     url(r'^api/users$', views.UserRegisterView.as_view(), name='register'),
     url(r'^api/session$', views.UserSessionView.as_view(), name='session'),
     url(r'^api/stocks$', views.StockView.as_view(), name='stocks'),
