@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from fantasy_investing.serializers import UserRegistrationSerializer, UserLoginSerializer
+from fantasy_investing.serializers import UserRegistrationSerializer, UserLoginSerializer, StockSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 # from django.http import HttpResponse, JsonResponse
@@ -40,8 +40,6 @@ class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
 
     def post(self, request):
         self.create(request)
-        # investor = Investor.objects.get(u/ser=user)
-        # return [user, investor.balance]
         return auth(request)
 
 class UserSessionView(APIView):
@@ -65,8 +63,9 @@ class Company(object):
         response  = company.get_historical(start_date, end_date)
         past_year_info = []
 
-        for date in response:
-            past_year_info.append([date['Date'], date['Close']])
+        for element in response:
+            date = datetime.datetime.strptime(element['Date'], '%Y-%m-%d').strftime('%d-%b-%y')
+            past_year_info.append({ 'date': date, 'close': element['Close'] })
 
         self.ticker = ticker
         self.title = company.get_name()
@@ -98,3 +97,21 @@ def company_detail(request, ticker):
 
     else:
         return HttpResponse(status=404)
+
+class StockView(CreateModelMixin, GenericAPIView):
+
+    serializer_class = StockSerializer
+
+    def post(self, request):
+        return self.create(request)
+
+    def patch(self, request):
+        return self.update(request)
+
+    def delete(self, request):
+        s = Stock.objects.get(pk=request.DELETE['id'])
+        if s:
+            Stock.objects.delete(s)
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse("Stock is not in your portfolio", status=404)

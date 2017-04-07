@@ -31188,10 +31188,295 @@ exports.default = App;
 
 /***/ }),
 /* 161 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Duplicate declaration \"margin\"\n\n\u001b[0m \u001b[90m 73 | \u001b[39m      \u001b[90m// Adds the svg canvas\u001b[39m\n \u001b[90m 74 | \u001b[39m      let svg \u001b[33m=\u001b[39m d3\u001b[33m.\u001b[39mselect(\u001b[32m'svg'\u001b[39m)\u001b[33m,\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 75 | \u001b[39m        margin \u001b[33m=\u001b[39m {top\u001b[33m:\u001b[39m \u001b[35m20\u001b[39m\u001b[33m,\u001b[39m right\u001b[33m:\u001b[39m \u001b[35m20\u001b[39m\u001b[33m,\u001b[39m bottom\u001b[33m:\u001b[39m \u001b[35m30\u001b[39m\u001b[33m,\u001b[39m left\u001b[33m:\u001b[39m \u001b[35m50\u001b[39m}\u001b[33m,\u001b[39m\n \u001b[90m    | \u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 76 | \u001b[39m        width\u001b[33m=\u001b[39m svg\u001b[33m.\u001b[39mattr(\u001b[32m\"width\"\u001b[39m) \u001b[33m-\u001b[39m margin\u001b[33m.\u001b[39mleft \u001b[33m-\u001b[39m margin\u001b[33m.\u001b[39mright\u001b[33m,\u001b[39m\n \u001b[90m 77 | \u001b[39m        height \u001b[33m=\u001b[39m svg\u001b[33m.\u001b[39mattr(\u001b[32m\"height\"\u001b[39m)\n \u001b[90m 78 | \u001b[39m          \u001b[33m.\u001b[39mattr(\u001b[32m'width'\u001b[39m\u001b[33m,\u001b[39m width \u001b[33m+\u001b[39m margin\u001b[33m.\u001b[39mleft \u001b[33m+\u001b[39m margin\u001b[33m.\u001b[39mright)\u001b[0m\n");
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _lodash = __webpack_require__(117);
+
+var _trade = __webpack_require__(389);
+
+var _trade2 = _interopRequireDefault(_trade);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Company = function (_React$Component) {
+  _inherits(Company, _React$Component);
+
+  function Company(props) {
+    _classCallCheck(this, Company);
+
+    return _possibleConstructorReturn(this, (Company.__proto__ || Object.getPrototypeOf(Company)).call(this, props));
+  }
+
+  _createClass(Company, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.fetchCompany();
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (!this.props.company && nextProps.company) {
+        d3.select("svg").remove();
+        this.props.fetchCompany();
+      } else if (this.props.params.ticker !== nextProps.params.ticker) {
+        d3.select("svg").remove();
+        nextProps.fetchCompany();
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var title = void 0;
+      var price = void 0;
+      var earningShare = void 0;
+      var percentChange = void 0;
+      var ticker = void 0;
+      var volume = void 0;
+      var prevClose = void 0;
+      var dividend = void 0;
+      var yearHigh = void 0;
+      var yearLow = void 0;
+      var past_year_info = void 0;
+      var sample = void 0;
+      var drawD3Document = function drawD3Document() {};
+
+      if (this.props.company.title !== undefined) {
+        title = this.props.company.title;
+        price = this.props.company.price;
+        earningShare = this.props.company.earning_share;
+        percentChange = this.props.company.percent_change;
+        ticker = this.props.company.ticker;
+        volume = this.props.company.volume;
+        prevClose = this.props.company.prev_close;
+        if (this.props.company.dividend === null) {
+          dividend = "N/A";
+        } else {
+          dividend = this.props.company.dividend;
+        }
+        yearHigh = this.props.company.year_high;
+        yearLow = this.props.company.year_low;
+        past_year_info = jQuery.extend(true, [], this.props.company.past_year_info);
+        // let Date = this.props.company.past_year_info.map(el => el[0]);
+        // let Close = this.props.company.past_year_info.map(el => el[1]);
+        //
+        // // Set the ranges
+        // let x = d3.time.scale().range([0, width]);
+        // let y = d3.scale.linear().range([height, 0]);
+        //
+        // // Define the axes
+        // let xAxis = d3.svg.axis().scale(x)
+        //   .orient("bottom").ticks(5);
+        //
+        // let yAxis = d3.svg.axis().scale(y)
+        //   .orient("left").ticks(5);
+        //
+        // // Define the line
+        // let valueline = d3.svg.line()
+        //   .x(function(d) { return x(d.Date); })
+        //   .y(function(d) { return y(d.Close); });
+        //
+        // // Adds the svg canvas
+        // let svg = d3.select('svg'),
+        //   margin = {top: 20, right: 20, bottom: 30, left: 50},
+        //   width= svg.attr("width") - margin.left - margin.right,
+        //   height = svg.attr("height") - margin.top - margin.bottom,
+        //   g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        var WIDTH = 700,
+            HEIGHT = 300;
+
+        var yAxisLabel = "Price ($)";
+
+        var parseDate = d3.time.format("%d-%b-%y").parse;
+
+        var margin = {
+          top: 20,
+          right: 20,
+          bottom: 30,
+          left: 50
+        },
+            width = WIDTH - margin.left - margin.right,
+            height = HEIGHT - margin.top - margin.bottom;
+
+        var x = d3.time.scale().range([0, width]);
+        var y = d3.scale.linear().range([height, 0]);
+
+        var xAxis = d3.svg.axis().scale(x).orient("bottom");
+        var yAxis = d3.svg.axis().scale(y).orient("left");
+
+        var line = d3.svg.line().interpolate("basic").x(function (d) {
+          return x(d.date);
+        }).y(function (d) {
+          return y(d.close);
+        });
+        d3.select("svg").remove();
+        var svg = d3.select("#canvas-svg").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        drawD3Document = function drawD3Document(data) {
+          var summary = jQuery.extend(true, [], data);
+          data.forEach(function (d) {
+            d.date = parseDate(d.date);
+            d.close = parseFloat(d.close).toFixed(2);
+          });
+          x.domain(d3.extent(data, function (d) {
+            return d.date;
+          }));
+          y.domain(d3.extent(data, function (d) {
+            return d.close;
+          }));
+          svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+          svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end").text(yAxisLabel);
+          svg.append("path").datum(data).attr("class", "line").attr("d", line);
+        };
+      }
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'company-content' },
+        _react2.default.createElement(
+          'div',
+          { className: 'company-info' },
+          _react2.default.createElement(
+            'span',
+            { className: 'company-title' },
+            title,
+            ' ',
+            ticker
+          ),
+          _react2.default.createElement(
+            'span',
+            { className: 'company-price' },
+            price,
+            ' (',
+            percentChange,
+            ')'
+          ),
+          _react2.default.createElement(_trade2.default, null)
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'company-summary' },
+          _react2.default.createElement(
+            'div',
+            { className: 'company-detail' },
+            _react2.default.createElement(
+              'div',
+              { className: 'company-nums' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Earning Share'
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                earningShare
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'company-nums' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Previous Close'
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                prevClose
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'company-nums' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Dividend'
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                dividend
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'company-nums' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Yr. High'
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                yearHigh
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'company-nums' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Yr. Low'
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                yearLow
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'company-nums' },
+              _react2.default.createElement(
+                'span',
+                null,
+                'Volume'
+              ),
+              _react2.default.createElement(
+                'span',
+                null,
+                volume
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { id: 'canvas-svg' },
+            drawD3Document(past_year_info)
+          ),
+          _react2.default.createElement('svg', { className: 'company-graph' })
+        )
+      );
+    }
+  }]);
+
+  return Company;
+}(_react2.default.Component);
+
+exports.default = Company;
 
 /***/ }),
 /* 162 */
@@ -49652,6 +49937,144 @@ function symbolObservablePonyfill(root) {
 
 	return result;
 };
+
+/***/ }),
+/* 389 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactModal = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"react-modal\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+var _reactModal2 = _interopRequireDefault(_reactModal);
+
+var _trade_form_container = __webpack_require__(390);
+
+var _trade_form_container2 = _interopRequireDefault(_trade_form_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
+var TradeModal = function (_React$Component) {
+  _inherits(TradeModal, _React$Component);
+
+  function TradeModal() {
+    _classCallCheck(this, TradeModal);
+
+    var _this = _possibleConstructorReturn(this, (TradeModal.__proto__ || Object.getPrototypeOf(TradeModal)).call(this));
+
+    _this.state = {
+      modalIsOpen: false
+    };
+
+    _this.openModal = _this.openModal.bind(_this);
+    _this.afterOpenModal = _this.afterOpenModal.bind(_this);
+    _this.closeModal = _this.closeModal.bind(_this);
+    return _this;
+  }
+
+  _createClass(TradeModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      _reactModal2.default.setAppElement('body');
+    }
+  }, {
+    key: 'openModal',
+    value: function openModal() {
+      this.setState({ modalIsOpen: true });
+    }
+  }, {
+    key: 'afterOpenModal',
+    value: function afterOpenModal() {}
+  }, {
+    key: 'closeModal',
+    value: function closeModal() {
+      this.setState({ modalIsOpen: false });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'button',
+          { onClick: this.openModal },
+          'Trade'
+        ),
+        _react2.default.createElement(_reactModal2.default, {
+          isOpen: this.state.modalIsOpen,
+          onAfterOpen: this.afterOpenModal,
+          onRequestClose: this.closeModal,
+          style: customStyles,
+          contentLabel: 'Example Modal'
+        })
+      );
+    }
+  }]);
+
+  return TradeModal;
+}(_react2.default.Component);
+
+exports.default = TradeModal;
+
+/***/ }),
+/* 390 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// import { connect } from 'react-redux';
+// import { login, logout, signup, removeErrors } from '../../actions/session_actions';
+// import SessionForm from './session_form';
+//
+// const mapStateToProps = (state) => ({
+//   loggedIn: Boolean(state.currentUser),
+//   errors: state.errors.session
+// });
+//
+// const mapDispatchToProps = (dispatch, { location }) => {
+//   const formType = location.pathname.slice(1);
+//   const processForm = (formType === 'login') ? login : signup;
+//
+//   return {
+//     processForm: user => dispatch(processForm(user)),
+//     removeErrors: () => dispatch(removeErrors()),
+//     formType
+//   };
+// };
+//
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(SessionForm);
+
 
 /***/ })
 /******/ ]);
