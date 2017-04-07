@@ -1,9 +1,6 @@
 import React from 'react';
-<<<<<<< HEAD
 import { merge } from  'lodash';
-=======
 import TradeModal from '../trade/trade';
->>>>>>> master
 
 class Company extends React.Component {
 
@@ -55,7 +52,6 @@ class Company extends React.Component {
       }
       yearHigh = this.props.company.year_high;
       yearLow = this.props.company.year_low;
-<<<<<<< HEAD
       past_year_info = jQuery.extend(true, [], this.props.company.past_year_info);
       // let Date = this.props.company.past_year_info.map(el => el[0]);
       // let Close = this.props.company.past_year_info.map(el => el[1]);
@@ -128,9 +124,6 @@ class Company extends React.Component {
           svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end").text(yAxisLabel);
           svg.append("path").datum(data).attr("class", "line").attr("d", line);
       };
-=======
-
->>>>>>> master
     }
 
     return (
@@ -167,17 +160,12 @@ class Company extends React.Component {
               <span>{ volume }</span>
             </div>
           </div>
-<<<<<<< HEAD
           <div id="canvas-svg">
             { drawD3Document(past_year_info) }
           </div>
-=======
           <svg className="company-graph">
 
           </svg>
-
-
->>>>>>> master
         </div>
       </div>
     );

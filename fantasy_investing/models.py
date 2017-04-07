@@ -3,14 +3,9 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 class Portfolio(models.Model):
-<<<<<<< HEAD
-	title = models.CharField(max_length=250);
-	# user = models.ForeignKey(User, on_delete=model.CASCADE);
-=======
 	title = models.CharField(max_length=250)
 	main = models.BooleanField(null=False, default=False)
 	user = models.ForeignKey(User, default=1)
->>>>>>> master
 
 class Stock(models.Model):
     ticker = models.CharField(max_length=10)

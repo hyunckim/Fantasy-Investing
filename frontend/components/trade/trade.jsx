@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import TradeFormContainer from '../trade_form/trade_form_container';
+import TradeFormContainer from './trade_form_container';
 
 const customStyles = {
   content : {
@@ -35,8 +35,6 @@ class TradeModal extends React.Component {
   }
 
   afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.refs.subtitle.style.color = '#f00';
   }
 
   closeModal() {
