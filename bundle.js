@@ -49966,6 +49966,10 @@ var _reactModal = __webpack_require__(395);
 
 var _reactModal2 = _interopRequireDefault(_reactModal);
 
+var _trade_form_container = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../trade_form_container\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+var _trade_form_container2 = _interopRequireDefault(_trade_form_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49973,8 +49977,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// import TradeFormContainer from '../trade_form/trade_form_container';
 
 var customStyles = {
   content: {
@@ -51558,27 +51560,38 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _portfolio_actions = __webpack_require__(397);
 
+var _stock_actions = __webpack_require__(403);
+
 var _lodash = __webpack_require__(259);
 
-var PortfolioReducer = function PortfolioReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-    var newState = void 0;
-    switch (action.type) {
-        case _portfolio_actions.RECEIVE_PORTFOLIOS:
-            debugger;
-            return action.portfolios;
-        case _portfolio_actions.RECEIVE_PORTFOLIO:
-            return (0, _lodash.merge)({}, state, action.portfolio);
-        default:
-            return state;
-    }
+var PortfolioReducer = function PortfolioReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  var newState = void 0;
+  switch (action.type) {
+    case _portfolio_actions.RECEIVE_PORTFOLIOS:
+      return action.portfolios;
+    case _portfolio_actions.RECEIVE_PORTFOLIO:
+      return (0, _lodash.merge)({}, state, action.portfolio);
+    case _stock_actions.RECEIVE_STOCK:
+      var newStock = _defineProperty({}, action.stock.id, action.stock);
+      var newStocks = (0, _lodash.merge)({}, state.stocks, newStock);
+      return (0, _lodash.merge)({}, state, newStocks);
+    case _stock_actions.REMOVE_STOCK:
+      var nextState = (0, _lodash.merge)({}, state);
+      delete nextState["stocks"][action.stockId];
+      return nextState;
+    default:
+      return state;
+  }
 };
 
 exports.default = PortfolioReducer;
@@ -51606,6 +51619,122 @@ var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(portfolio)
         method: 'GET',
         url: '/portfolio/' + portfolio.id
     });
+};
+
+/***/ }),
+/* 403 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.deleteStock = exports.updateStock = exports.createStock = exports.removeStockErrors = exports.receiveStockErrors = exports.removeStock = exports.receiveStock = exports.REMOVE_STOCK_ERRORS = exports.RECEIVE_STOCK_ERRORS = exports.REMOVE_STOCK = exports.RECEIVE_STOCK = undefined;
+
+var _stock_api_util = __webpack_require__(404);
+
+var StockAPIUtil = _interopRequireWildcard(_stock_api_util);
+
+var _reactRouter = __webpack_require__(356);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var RECEIVE_STOCK = exports.RECEIVE_STOCK = "RECEIVE_STOCK";
+var REMOVE_STOCK = exports.REMOVE_STOCK = "REMOVE_STOCK";
+var RECEIVE_STOCK_ERRORS = exports.RECEIVE_STOCK_ERRORS = "RECEIVE_SESSION_ERRORS";
+var REMOVE_STOCK_ERRORS = exports.REMOVE_STOCK_ERRORS = "REMOVE_SESSION_ERRORS";
+
+var receiveStock = exports.receiveStock = function receiveStock(stock) {
+  return {
+    type: RECEIVE_STOCK,
+    stock: stock
+  };
+};
+
+var removeStock = exports.removeStock = function removeStock(stock) {
+  return {
+    type: REMOVE_STOCK,
+    stock: stock
+  };
+};
+
+var receiveStockErrors = exports.receiveStockErrors = function receiveStockErrors(errors) {
+  return {
+    type: RECEIVE_STOCK_ERRORS,
+    errors: errors
+  };
+};
+
+var removeStockErrors = exports.removeStockErrors = function removeStockErrors() {
+  return {
+    type: REMOVE_STOCK_ERRORS
+  };
+};
+
+var createStock = exports.createStock = function createStock(stock) {
+  return function (dispatch) {
+    return StockAPIUtil.createStock(stock).then(function (res) {
+      return dispatch(receiveStock(res));
+    }, function (err) {
+      return dispatch(receiveStockErrors(err.responseJSON));
+    });
+  };
+};
+
+var updateStock = exports.updateStock = function updateStock(stock) {
+  return function (dispatch) {
+    return StockAPIUtil.updateStock(stock).then(function (res) {
+      return dispatch(receiveStock(res));
+    }, function (err) {
+      return dispatch(receiveStockErrors(err.responseJSON));
+    });
+  };
+};
+
+var deleteStock = exports.deleteStock = function deleteStock(stockId) {
+  return function (dispatch) {
+    return StockAPIUtil.deleteStock(stockId).then(function () {
+      return dispatch(removeStock(stockId));
+    }, function (err) {
+      return dispatch(receiveStockErrors(err.responseJSON));
+    });
+  };
+};
+
+/***/ }),
+/* 404 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var createStock = exports.createStock = function createStock(stock) {
+  return $.ajax({
+    method: "POST",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var updateStock = exports.updateStock = function updateStock(stock) {
+  return $.ajax({
+    method: "PATCH",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var deleteStock = exports.deleteStock = function deleteStock(stockId) {
+  return $.ajax({
+    method: 'DELETE',
+    url: 'api/stocks',
+    data: { stockId: stockId }
+  });
 };
 
 /***/ })

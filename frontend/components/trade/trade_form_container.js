@@ -1,24 +1,30 @@
-// import { connect } from 'react-redux';
-// import { login, logout, signup, removeErrors } from '../../actions/session_actions';
-// import SessionForm from './session_form';
-//
-// const mapStateToProps = (state) => ({
-//   loggedIn: Boolean(state.currentUser),
-//   errors: state.errors.session
-// });
-//
-// const mapDispatchToProps = (dispatch, { location }) => {
-//   const formType = location.pathname.slice(1);
-//   const processForm = (formType === 'login') ? login : signup;
-//
-//   return {
-//     processForm: user => dispatch(processForm(user)),
-//     removeErrors: () => dispatch(removeErrors()),
-//     formType
-//   };
-// };
-//
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(SessionForm);
+import { connect } from 'react-redux';
+import { createStock, updateStock, removeStock, receiveStockErrors,
+  removeStockErrors}
+  from '../../actions/stock_actions';
+import { receiveInvestor } from "../../actions/investor_actions";
+import TradeForm from './trade_form';
+
+const mapStateToProps = (state) => ({
+  balance: state.currentUser.investor.balance,
+  currentStocks: Object.keys(state.portfolio[0].stocks)
+    .map(id => state.portfolio[0].stocks[id]),
+  stock: { ticker: "", purchase_price: "", purchase_date: "", number_of_shares: "",
+    action: ""}
+});
+
+const mapDispatchToProps = (dispatch, { location }) => {
+  return {
+    createStock: stock => dispatch(createStock(stock)),
+    updateStock: stock => dispatch(updateStock(stock)),
+    deleteStock: stockId => dispatch(removeStock(stockId)),
+    removeStockErrors: () => dispatch(removeStockErrors()),
+    receiveStockErrors: errors => dispatch(receiveStockErrors(errors)),
+    updateInvestor: investor => dispatch(receiveInvestor(investor))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TradeForm);
