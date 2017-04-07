@@ -21,3 +21,10 @@ export const deleteStock = stockId => {
     data: { stockId }
   });
 };
+
+export const fetchStockPrice = ticker => (
+  $.ajax({
+    method: "GET",
+    url: `api/stocks/${ticker}`
+  })
+);

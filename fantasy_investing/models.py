@@ -5,7 +5,11 @@ from django.db.models.signals import post_save
 class Portfolio(models.Model):
     title = models.CharField(max_length=250)
     main = models.BooleanField(null=False, default=False)
-	user = models.ForeignKey(User, default=1)
+    user = models.ForeignKey(User, default=1)
+
+    def get_stocks(self):
+        stocks = Stock.objects.filter(portfolio=self)
+        return stocks
 
 class Stock(models.Model):
     ticker = models.CharField(max_length=10)

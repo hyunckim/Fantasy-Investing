@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^api/session$', views.UserSessionView.as_view(), name='session'),
     url(r'^api/stocks$', views.StockView.as_view(), name='stocks'),
     url(r'^company/(?P<ticker>\w+)$', views.company_detail),
+    url(r'^api/stocks/(?P<ticker>\w+)$', views.stock_price),
 ]
