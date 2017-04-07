@@ -8,7 +8,7 @@ class Portfolio(models.Model):
     user = models.ForeignKey(User, default=1)
 
     def get_stocks(self):
-        stocks = Stock.objects.filter(portfolio=self)
+        stocks = Stock.objects.filter(portfolio=self)        
         return stocks
 
 class Stock(models.Model):
