@@ -2,11 +2,6 @@ from rest_framework import serializers
 from fantasy_investing.models import Stock, Portfolio, Investor, User
 
 
-class StockSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Stock
-        fields = ('ticker', 'purchase_price', 'purchase_date', 'number_of_shares', 'portfolio')
-
 class PortfolioSerializer(serializers.ModelSerializer):
 
     # stocks = StockSerializer(many=True)
@@ -17,6 +12,24 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
 # class PortfolioIndexSerializer(serializers.Serializer):
 #     portfolios = serializers.ListField(default=[])  
+
+class StockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stock
+        fields = ('ticker', 'purchase_price', 'purchase_date', 'number_of_shares', 'portfolio')
+
+    def create(self, validated_data):
+        stock = Stock.objects.create(**validated_data)
+        stock.save()
+        return stock
+
+    def update(self, instance, validated_data):
+        instance.ticker = validated_data.get('ticker', instance.ticker)
+        instance.purchase_price = validated_data.get('purchase_price', instance.purchase_price)
+        instance.purchase_date = validated_data.get('purchase_date', instance.purchase_date)
+        instance.number_of_shares = validated_data.get('number_of_shares', instance.number_of_shares)
+        instance.save()
+        return instance
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
