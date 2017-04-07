@@ -129,8 +129,10 @@ class Company extends React.Component {
     return (
       <div className="company-content">
         <div className="company-info">
-          <span className="company-title">{ title } { ticker }</span>
-          <span className="company-price">{ price } ({ percentChange })</span>
+          <div className="company-name-price">
+            <span className="company-title">{ title } { ticker }</span>
+            <span className="company-price">{ price } ({ percentChange })</span>
+          </div>
           <TradeModal />
         </div>
         <div className="company-summary">

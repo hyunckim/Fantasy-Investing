@@ -32053,19 +32053,23 @@ var Company = function (_React$Component) {
           'div',
           { className: 'company-info' },
           _react2.default.createElement(
-            'span',
-            { className: 'company-title' },
-            title,
-            ' ',
-            ticker
-          ),
-          _react2.default.createElement(
-            'span',
-            { className: 'company-price' },
-            price,
-            ' (',
-            percentChange,
-            ')'
+            'div',
+            { className: 'company-name-price' },
+            _react2.default.createElement(
+              'span',
+              { className: 'company-title' },
+              title,
+              ' ',
+              ticker
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'company-price' },
+              price,
+              ' (',
+              percentChange,
+              ')'
+            )
           ),
           _react2.default.createElement(_trade2.default, null)
         ),
