@@ -31775,6 +31775,10 @@ var _session_form_container = __webpack_require__(167);
 
 var _session_form_container2 = _interopRequireDefault(_session_form_container);
 
+var _portfolio_container = __webpack_require__(399);
+
+var _portfolio_container2 = _interopRequireDefault(_portfolio_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Root = function Root(_ref) {
@@ -31808,7 +31812,8 @@ var Root = function Root(_ref) {
         _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _session_form_container2.default,
           onEnter: _redirectIfLoggedIn }),
         _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _session_form_container2.default,
-          onEnter: _redirectIfLoggedIn })
+          onEnter: _redirectIfLoggedIn }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'portfolio', component: _portfolio_container2.default })
       )
     )
   );
@@ -31901,6 +31906,8 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _lodash = __webpack_require__(118);
+
 var _trade = __webpack_require__(168);
 
 var _trade2 = _interopRequireDefault(_trade);
@@ -31931,14 +31938,17 @@ var Company = function (_React$Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (!this.props.company && nextProps.company) {
+        d3.select("svg").remove();
         this.props.fetchCompany();
       } else if (this.props.params.ticker !== nextProps.params.ticker) {
+        d3.select("svg").remove();
         nextProps.fetchCompany();
       }
     }
   }, {
     key: 'render',
     value: function render() {
+
       var title = void 0;
       var price = void 0;
       var earningShare = void 0;
@@ -31949,6 +31959,9 @@ var Company = function (_React$Component) {
       var dividend = void 0;
       var yearHigh = void 0;
       var yearLow = void 0;
+      var past_year_info = void 0;
+      var sample = void 0;
+      var drawD3Document = function drawD3Document() {};
 
       if (this.props.company.title !== undefined) {
         title = this.props.company.title;
@@ -31965,6 +31978,78 @@ var Company = function (_React$Component) {
         }
         yearHigh = this.props.company.year_high;
         yearLow = this.props.company.year_low;
+        past_year_info = jQuery.extend(true, [], this.props.company.past_year_info);
+        // let Date = this.props.company.past_year_info.map(el => el[0]);
+        // let Close = this.props.company.past_year_info.map(el => el[1]);
+        //
+        // // Set the ranges
+        // let x = d3.time.scale().range([0, width]);
+        // let y = d3.scale.linear().range([height, 0]);
+        //
+        // // Define the axes
+        // let xAxis = d3.svg.axis().scale(x)
+        //   .orient("bottom").ticks(5);
+        //
+        // let yAxis = d3.svg.axis().scale(y)
+        //   .orient("left").ticks(5);
+        //
+        // // Define the line
+        // let valueline = d3.svg.line()
+        //   .x(function(d) { return x(d.Date); })
+        //   .y(function(d) { return y(d.Close); });
+        //
+        // // Adds the svg canvas
+        // let svg = d3.select('svg'),
+        //   margin = {top: 20, right: 20, bottom: 30, left: 50},
+        //   width= svg.attr("width") - margin.left - margin.right,
+        //   height = svg.attr("height") - margin.top - margin.bottom,
+        //   g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        var WIDTH = 700,
+            HEIGHT = 300;
+
+        var yAxisLabel = "Price ($)";
+
+        var parseDate = d3.time.format("%d-%b-%y").parse;
+
+        var margin = {
+          top: 20,
+          right: 20,
+          bottom: 30,
+          left: 50
+        },
+            width = WIDTH - margin.left - margin.right,
+            height = HEIGHT - margin.top - margin.bottom;
+
+        var x = d3.time.scale().range([0, width]);
+        var y = d3.scale.linear().range([height, 0]);
+
+        var xAxis = d3.svg.axis().scale(x).orient("bottom");
+        var yAxis = d3.svg.axis().scale(y).orient("left");
+
+        var line = d3.svg.line().interpolate("basic").x(function (d) {
+          return x(d.date);
+        }).y(function (d) {
+          return y(d.close);
+        });
+        d3.select("svg").remove();
+        var svg = d3.select("#canvas-svg").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        drawD3Document = function drawD3Document(data) {
+          var summary = jQuery.extend(true, [], data);
+          data.forEach(function (d) {
+            d.date = parseDate(d.date);
+            d.close = parseFloat(d.close).toFixed(2);
+          });
+          x.domain(d3.extent(data, function (d) {
+            return d.date;
+          }));
+          y.domain(d3.extent(data, function (d) {
+            return d.close;
+          }));
+          svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+          svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end").text(yAxisLabel);
+          svg.append("path").datum(data).attr("class", "line").attr("d", line);
+        };
       }
 
       return _react2.default.createElement(
@@ -32080,6 +32165,11 @@ var Company = function (_React$Component) {
                 volume
               )
             )
+          ),
+          _react2.default.createElement(
+            'div',
+            { id: 'canvas-svg' },
+            drawD3Document(past_year_info)
           ),
           _react2.default.createElement('svg', { className: 'company-graph' })
         )
@@ -32629,7 +32719,7 @@ var _reactModal = __webpack_require__(351);
 
 var _reactModal2 = _interopRequireDefault(_reactModal);
 
-var _trade_form_container = __webpack_require__(396);
+var _trade_form_container = __webpack_require__(169);
 
 var _trade_form_container2 = _interopRequireDefault(_trade_form_container);
 
@@ -32682,10 +32772,7 @@ var TradeModal = function (_React$Component) {
     }
   }, {
     key: 'afterOpenModal',
-    value: function afterOpenModal() {
-      // references are now sync'd and can be accessed.
-      this.refs.subtitle.style.color = '#f00';
-    }
+    value: function afterOpenModal() {}
   }, {
     key: 'closeModal',
     value: function closeModal() {
@@ -32719,7 +32806,37 @@ var TradeModal = function (_React$Component) {
 exports.default = TradeModal;
 
 /***/ }),
-/* 169 */,
+/* 169 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// import { connect } from 'react-redux';
+// import { login, logout, signup, removeErrors } from '../../actions/session_actions';
+// import SessionForm from './session_form';
+//
+// const mapStateToProps = (state) => ({
+//   loggedIn: Boolean(state.currentUser),
+//   errors: state.errors.session
+// });
+//
+// const mapDispatchToProps = (dispatch, { location }) => {
+//   const formType = location.pathname.slice(1);
+//   const processForm = (formType === 'login') ? login : signup;
+//
+//   return {
+//     processForm: user => dispatch(processForm(user)),
+//     removeErrors: () => dispatch(removeErrors()),
+//     formType
+//   };
+// };
+//
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(SessionForm);
+
+
+/***/ }),
 /* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -32858,6 +32975,10 @@ var _session_reducer = __webpack_require__(174);
 
 var _session_reducer2 = _interopRequireDefault(_session_reducer);
 
+var _portfolio_reducer = __webpack_require__(400);
+
+var _portfolio_reducer2 = _interopRequireDefault(_portfolio_reducer);
+
 var _errors_reducer = __webpack_require__(172);
 
 var _errors_reducer2 = _interopRequireDefault(_errors_reducer);
@@ -32867,6 +32988,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var rootReducer = (0, _redux.combineReducers)({
   company: _company_reducer2.default,
   currentUser: _session_reducer2.default,
+  portfolio: _portfolio_reducer2.default,
   errors: _errors_reducer2.default
 });
 
@@ -51299,35 +51421,220 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 396 */
+/* 396 */,
+/* 397 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-// import { connect } from 'react-redux';
-// import { login, logout, signup, removeErrors } from '../../actions/session_actions';
-// import SessionForm from './session_form';
-//
-// const mapStateToProps = (state) => ({
-//   loggedIn: Boolean(state.currentUser),
-//   errors: state.errors.session
-// });
-//
-// const mapDispatchToProps = (dispatch, { location }) => {
-//   const formType = location.pathname.slice(1);
-//   const processForm = (formType === 'login') ? login : signup;
-//
-//   return {
-//     processForm: user => dispatch(processForm(user)),
-//     removeErrors: () => dispatch(removeErrors()),
-//     formType
-//   };
-// };
-//
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(SessionForm);
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchPortfolio = exports.fetchPortfolios = exports.receivePortfolios = exports.RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIO = undefined;
+
+var _portfolio_api_util = __webpack_require__(401);
+
+var PortfolioAPIUtil = _interopRequireWildcard(_portfolio_api_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var RECEIVE_PORTFOLIO = exports.RECEIVE_PORTFOLIO = "RECEIVE_PORTFOLIO";
+var RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIOS = "RECEIVE_PORTFOLIOS";
+
+var receivePortfolios = exports.receivePortfolios = function receivePortfolios(portfolios) {
+  return {
+    type: RECEIVE_PORTFOLIOS,
+    portfolios: portfolios
+  };
+};
+var receivePortfolio = function receivePortfolio(portfolio) {
+  return {
+    type: RECEIVE_PORTFOLIO,
+    portfolio: portfolio
+  };
+};
+
+var fetchPortfolios = exports.fetchPortfolios = function fetchPortfolios() {
+  return function (dispatch) {
+    return PortfolioAPIUtil.fetchPortfolios().then(function (portfolios) {
+      return dispatch(receivePortfolios(portfolios));
+    });
+  };
+};
+
+var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(portfolioId) {
+  return function (dispatch) {
+    return PortfolioAPIUtil.fetchPortfolio(portfolioId).then(function (portfolio) {
+      return dispatch(receivePortfolio(portfolio));
+    });
+  };
+};
+
+/***/ }),
+/* 398 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Portfolio = function (_React$Component) {
+    _inherits(Portfolio, _React$Component);
+
+    function Portfolio(props) {
+        _classCallCheck(this, Portfolio);
+
+        return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+    }
+
+    _createClass(Portfolio, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.fetchPortfolios();
+        }
+    }, {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            console.log('CDM');
+            console.log('currentUser');
+            console.log(this.props.currentUser);
+            this.props.fetchPortfolios();
+            console.log(this.props);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var portfolios = this.props.portfolio;
+            return _react2.default.createElement(
+                'div',
+                null,
+                'hi'
+            );
+        }
+    }]);
+
+    return Portfolio;
+}(_react2.default.Component);
+
+exports.default = Portfolio;
+
+/***/ }),
+/* 399 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _reactRedux = __webpack_require__(53);
+
+var _portfolio_actions = __webpack_require__(397);
+
+var _portfolio = __webpack_require__(398);
+
+var _portfolio2 = _interopRequireDefault(_portfolio);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+    console.log('state');
+    console.log(state);
+    return {
+        currentUser: state.currentUser,
+        portfolio: state.portfolio
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+    console.log('ownProps');
+    console.log(ownProps);
+    return {
+        fetchPortfolios: function fetchPortfolios() {
+            return dispatch((0, _portfolio_actions.fetchPortfolios)());
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_portfolio2.default);
+
+/***/ }),
+/* 400 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _portfolio_actions = __webpack_require__(397);
+
+var _lodash = __webpack_require__(118);
+
+var PortfolioReducer = function PortfolioReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    var newState = void 0;
+    switch (action.type) {
+        case _portfolio_actions.RECEIVE_PORTFOLIOS:
+            debugger;
+            return action.portfolios;
+        case _portfolio_actions.RECEIVE_PORTFOLIO:
+            return (0, _lodash.merge)({}, state, action.portfolio);
+        default:
+            return state;
+    }
+};
+
+exports.default = PortfolioReducer;
+
+/***/ }),
+/* 401 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var fetchPortfolios = exports.fetchPortfolios = function fetchPortfolios() {
+    return $.ajax({
+        method: 'GET',
+        url: '/portfolio'
+
+    });
+};
+
+var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(portfolio) {
+    return $.ajax({
+        method: 'GET',
+        url: '/portfolio/' + portfolio.id
+    });
+};
 
 /***/ })
 /******/ ]);

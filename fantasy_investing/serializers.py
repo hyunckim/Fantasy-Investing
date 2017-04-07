@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from fantasy_investing.models import Stock, Portfolio, Investor, User
 
+
 class PortfolioSerializer(serializers.ModelSerializer):
+
+    # stocks = StockSerializer(many=True)
+
     class Meta:
         model = Portfolio
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'main', 'stock_set')
+
+# class PortfolioIndexSerializer(serializers.Serializer):
+#     portfolios = serializers.ListField(default=[])  
 
 class StockSerializer(serializers.ModelSerializer):
     class Meta:

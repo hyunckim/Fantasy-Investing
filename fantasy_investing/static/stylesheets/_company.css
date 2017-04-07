@@ -38,14 +38,12 @@
   padding-right: 15px;
 }
 
-.company-graph {
+#canvas-svg {
   border: 1px solid green;
 }
 
-.axis path,
-.axis line {
+.line {
   fill: none;
-  stroke: grey;
-  stroke-width: 1;
-  shape-rendering: crispEdges;
+  stroke: #4682b4;
+  stroke-width: 1.5px;
 }
