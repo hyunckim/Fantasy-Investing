@@ -3,20 +3,17 @@ import { fetchPortfolios } from '../../actions/portfolio_actions';
 import Portfolio from './portfolio';
 
 const mapStateToProps = state => {
-    console.log('state');
-    console.log(state);
-    return {
-        currentUser: state.currentUser,
-        portfolio: state.portfolio
-    };
+  return ({
+    currentUser: state.currentUser,
+    portfolio: Object.keys(state.portfolio).map(id => state.portfolio[id])
+  });
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-    console.log('ownProps');
-    console.log(ownProps);
-    return ({
-        fetchPortfolios: () => dispatch(fetchPortfolios())
-    });
-};
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    fetchPortfolios: () => dispatch(fetchPortfolios())
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Portfolio);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Portfolio);
