@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 class Portfolio(models.Model):
-	title = models.CharField(max_length=250)
-	main = models.BooleanField(null=False, default=False)
+    title = models.CharField(max_length=250)
+    main = models.BooleanField(null=False, default=False)
 	user = models.ForeignKey(User, default=1)
 
 class Stock(models.Model):
