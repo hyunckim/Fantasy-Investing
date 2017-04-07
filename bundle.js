@@ -51397,7 +51397,6 @@ module.exports = __webpack_require__(390);
 /* 396 */
 /***/ (function(module, exports) {
 
-"use strict";
 throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/home/bokats/app_academy/projects/fantasy_investing/frontend/components/trade_form/trade_form_container.js'\n    at Error (native)");
 
 /***/ }),
