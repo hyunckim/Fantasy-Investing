@@ -1,4 +1,5 @@
 import React from 'react';
+import TradeModal from '../trade/trade';
 
 class Company extends React.Component {
 
@@ -46,42 +47,6 @@ class Company extends React.Component {
       yearHigh = this.props.company.year_high;
       yearLow = this.props.company.year_low;
 
-      let margin = {top: 30, right: 20, bottom: 30, left: 50},
-        width = 600 - margin.left - margin.right,
-        height = 270 - margin.top - margin.bottom;
-
-
-      let date = this.props.company.past_year_info.map(el => el[0]);
-      let close = this.props.company.past_year_info.map(el => el[1]);
-
-      // Set the ranges
-      let x = d3.time.scale().range([0, width]);
-      let y = d3.scale.linear().range([height, 0]);
-
-      // Define the axes
-      let xAxis = d3.svg.axis().scale(x)
-        .orient("bottom").ticks(5);
-
-      let yAxis = d3.svg.axis().scale(y)
-        .orient("left").ticks(5);
-
-      // Define the line
-      let valueline = d3.svg.line()
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.close); });
-
-      // Adds the svg canvas
-      let svg = d3.select('svg'),
-        margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width= svg.attr("width") - margin.left - margin.right,
-        height = svg.attr("height")
-          .attr('width', width + margin.left + margin.right)
-          .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-          .attr('transform',
-                  'translate(' + margin.left + ',' + margin.top + ')');
-
-
     }
 
 
@@ -91,6 +56,7 @@ class Company extends React.Component {
         <div className="company-info">
           <span className="company-title">{ title } { ticker }</span>
           <span className="company-price">{ price } ({ percentChange })</span>
+          <TradeModal />
         </div>
         <div className="company-summary">
           <div className="company-detail">
@@ -122,6 +88,8 @@ class Company extends React.Component {
           <svg className="company-graph">
 
           </svg>
+
+
         </div>
       </div>
     );

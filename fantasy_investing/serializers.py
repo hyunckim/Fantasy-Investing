@@ -11,6 +11,19 @@ class StockSerializer(serializers.ModelSerializer):
         model = Stock
         fields = ('ticker', 'purchase_price', 'purchase_date', 'number_of_shares', 'portfolio')
 
+    def create(self, validated_data):
+        stock = Stock.objects.create(**validated_data)
+        stock.save()
+        return stock
+
+    def update(self, instance, validated_data):
+        instance.ticker = validated_data.get('ticker', instance.ticker)
+        instance.purchase_price = validated_data.get('purchase_price', instance.purchase_price)
+        instance.purchase_date = validated_data.get('purchase_date', instance.purchase_date)
+        instance.number_of_shares = validated_data.get('number_of_shares', instance.number_of_shares)
+        instance.save()
+        return instance
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -22,7 +35,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         investor = Investor(user=user, balance=100000)
         user.save()
         investor.save()
-        p = Potfolio(title="Current holdings", main=True, user=user)
+        p = Portfolio(title="Current holdings", main=True, user=user)
         p.save()
         return user
 
