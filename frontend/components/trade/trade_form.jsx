@@ -6,7 +6,6 @@ class TradeForm extends React.Component {
     super(props);
     this.state = this.props.stock;
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.changeAction = this.changeAction.bind(this);
   }
 
   buyStock(existingPosition, price) {
@@ -80,7 +79,7 @@ class TradeForm extends React.Component {
 
   render() {
     return (
-      <form className="trade-form">
+      <form className="trade-form" onSubmit={this.handleSubmit}>
         <label> Action
           <select className="trade-action" onChange={this.update('action')}>
             <option value="Buy">Buy</option>
@@ -95,7 +94,7 @@ class TradeForm extends React.Component {
           <input className="form-shares" onChange={this.update('number_of_shares')} />
         </label>
 
-        <input type="button" className="form-submit-button"
+        <input type="submit" className="form-submit-button" value="Submit"
           onSubmit={this.handleSubmit}/>
 
       </form>

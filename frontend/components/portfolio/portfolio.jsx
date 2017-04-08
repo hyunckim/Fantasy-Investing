@@ -15,17 +15,19 @@ class Portfolio extends React.Component {
         if (this.props.portfolio[0]) {
           let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
             let title = undefined;
-            let current_price;
+
+            let currentPrice;
               fetchStockPrice(stock.ticker).then(response => {
+
                 title = response.title;
-                current_price = response.price;
+                currentPrice = response.price;
               });
             return (<tr key={idx}>
               <td>{ stock.ticker }</td>
               <td>{ title }</td>
               <td>{ stock.number_of_shares }</td>
-              <td> { current_price } </td>
-              <td> current_price * number_of_shares </td>
+              <td> { currentPrice } </td>
+              <td> currentPrice * number_of_shares </td>
               <td> {stock.purchase_price }</td>
               <td>{ stock.purchase_price * stock.number_of_shares }</td>
             </tr>);
