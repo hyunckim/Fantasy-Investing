@@ -98,9 +98,7 @@ class SessionForm extends React.Component {
 			<div className="login-form-container">
 				<div className='login-form'>
 					<form onSubmit={this.handleSubmit} className="login-form-box">
-						<div className="session-form-message-container">
-							<p className="session-form-message">{message}</p>
-						</div>
+							<div className="session-form-message">{message}</div>
 						{this.renderErrors()}
 
 						<div className="first-last-names">

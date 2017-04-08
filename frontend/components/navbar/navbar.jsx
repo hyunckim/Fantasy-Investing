@@ -56,22 +56,23 @@ class NavBar extends React.Component {
   render() {
     let logo = (
       <div className="logo-container">
-        <img className='logo' src={'./logo.png'} alt='Logo' />
+        <img className='logo' src={'https://ibb.co/k2Tdvk'} alt='Logo' />
       </div>
     );
 
     if (this.props.currentUser) {
       return (
-        <nav id="main-nav">
+        <nav id="main-nav-logged-in">
           <div className='left-nav'>
             <div className='logo'>
               {logo}
             </div>
           </div>
-          <form className="header-search">
-            <label className="header-search-label"> Select Company by ticker
+          <div className='middle-nav'>
+           <form className="header-search">
+            <label className="header-search-label"> Search Company
               <input className="search-input"
-                placeholder="Type ticker"
+                placeholder="Search Ticker Ex: MSFT"
                 onChange={this.handleFilterChange("ticker")} />
               <button className='header-search-button'
                 onClick={this.handleSearchSubmit}>
@@ -79,6 +80,7 @@ class NavBar extends React.Component {
               </button>
             </label>
           </form>
+          </div>
           <div className='right-nav'>
             <div className='auth'>
               <button

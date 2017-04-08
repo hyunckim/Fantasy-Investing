@@ -4,10 +4,12 @@ const WelcomePage = () => {
   return (
     <div className='welcome-page'>
       <div className='background-pic'>
-        <h1>
+      </div>
+
+      <div className ='background-text'>
+              <h1>
           Welcome to Fantasy Investing
         </h1>
-        <br/>
         <h2>
           Your Future in Stocks...
         </h2>
@@ -17,7 +19,6 @@ const WelcomePage = () => {
             <p>
               {placeholder}
             </p>
-
       </div>
 
 

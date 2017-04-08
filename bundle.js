@@ -32143,7 +32143,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 earningShare
               )
             ),
@@ -32157,7 +32157,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 prevClose
               )
             ),
@@ -32171,7 +32171,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 dividend
               )
             ),
@@ -32185,7 +32185,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 yearHigh
               )
             ),
@@ -32199,7 +32199,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 yearLow
               )
             ),
@@ -32213,7 +32213,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 volume
               )
             )
@@ -32378,13 +32378,13 @@ var NavBar = function (_React$Component) {
       var logo = _react2.default.createElement(
         'div',
         { className: 'logo-container' },
-        _react2.default.createElement('img', { className: 'logo', src: './logo.png', alt: 'Logo' })
+        _react2.default.createElement('img', { className: 'logo', src: 'https://ibb.co/k2Tdvk', alt: 'Logo' })
       );
 
       if (this.props.currentUser) {
         return _react2.default.createElement(
           'nav',
-          { id: 'main-nav' },
+          { id: 'main-nav-logged-in' },
           _react2.default.createElement(
             'div',
             { className: 'left-nav' },
@@ -32395,20 +32395,24 @@ var NavBar = function (_React$Component) {
             )
           ),
           _react2.default.createElement(
-            'form',
-            { className: 'header-search' },
+            'div',
+            { className: 'middle-nav' },
             _react2.default.createElement(
-              'label',
-              { className: 'header-search-label' },
-              ' Select Company by ticker',
-              _react2.default.createElement('input', { className: 'search-input',
-                placeholder: 'Type ticker',
-                onChange: this.handleFilterChange("ticker") }),
+              'form',
+              { className: 'header-search' },
               _react2.default.createElement(
-                'button',
-                { className: 'header-search-button',
-                  onClick: this.handleSearchSubmit },
-                _react2.default.createElement('i', { className: 'fa fa-search', 'aria-hidden': 'true' })
+                'label',
+                { className: 'header-search-label' },
+                ' Search Company',
+                _react2.default.createElement('input', { className: 'search-input',
+                  placeholder: 'Search Ticker Ex: MSFT',
+                  onChange: this.handleFilterChange("ticker") }),
+                _react2.default.createElement(
+                  'button',
+                  { className: 'header-search-button',
+                    onClick: this.handleSearchSubmit },
+                  _react2.default.createElement('i', { className: 'fa fa-search', 'aria-hidden': 'true' })
+                )
               )
             )
           ),
@@ -32542,7 +32546,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -32550,6 +32554,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _stock_api_util = __webpack_require__(402);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32560,41 +32566,129 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Portfolio = function (_React$Component) {
-    _inherits(Portfolio, _React$Component);
+  _inherits(Portfolio, _React$Component);
 
-    function Portfolio(props) {
-        _classCallCheck(this, Portfolio);
+  function Portfolio(props) {
+    _classCallCheck(this, Portfolio);
 
-        return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+    return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+  }
+
+  _createClass(Portfolio, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.fetchPortfolios();
     }
+  }, {
+    key: 'render',
+    value: function render() {
+      var portfolioTable = void 0;
 
-    _createClass(Portfolio, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.props.fetchPortfolios();
-        }
-    }, {
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            console.log('CDM');
-            console.log('currentUser');
-            console.log(this.props.currentUser);
-            this.props.fetchPortfolios();
-            console.log(this.props);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var portfolios = this.props.portfolio;
-            return _react2.default.createElement(
-                'div',
+      if (this.props.portfolio[0]) {
+        var stocks = this.props.portfolio[0].stocks.map(function (stock, idx) {
+          return _react2.default.createElement(
+            'tr',
+            { key: idx },
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.ticker
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.title
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.number_of_shares
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              ' ',
+              stock.current_price,
+              ' '
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.current_price * stock.number_of_shares
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              ' ',
+              stock.purchase_price
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              stock.purchase_price * stock.number_of_shares
+            )
+          );
+        });
+
+        portfolioTable = _react2.default.createElement(
+          'table',
+          null,
+          _react2.default.createElement(
+            'tbody',
+            null,
+            _react2.default.createElement(
+              'tr',
+              null,
+              _react2.default.createElement(
+                'th',
                 null,
-                'hi'
-            );
-        }
-    }]);
+                'Symbol'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Title'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Quantity'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Price'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Value'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Unit Cost'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Cost Basis'
+              )
+            ),
+            stocks
+          )
+        );
+      }
 
-    return Portfolio;
+      return _react2.default.createElement(
+        'div',
+        null,
+        portfolioTable
+      );
+    }
+  }]);
+
+  return Portfolio;
 }(_react2.default.Component);
 
 exports.default = Portfolio;
@@ -32798,12 +32892,8 @@ var SessionForm = function (_React$Component) {
 						{ onSubmit: this.handleSubmit, className: 'login-form-box' },
 						_react2.default.createElement(
 							'div',
-							{ className: 'session-form-message-container' },
-							_react2.default.createElement(
-								'p',
-								{ className: 'session-form-message' },
-								message
-							)
+							{ className: 'session-form-message' },
+							message
 						),
 						this.renderErrors(),
 						_react2.default.createElement(
@@ -33055,15 +33145,15 @@ var WelcomePage = function WelcomePage() {
   return _react2.default.createElement(
     'div',
     { className: 'welcome-page' },
+    _react2.default.createElement('div', { className: 'background-pic' }),
     _react2.default.createElement(
       'div',
-      { className: 'background-pic' },
+      { className: 'background-text' },
       _react2.default.createElement(
         'h1',
         null,
         'Welcome to Fantasy Investing'
       ),
-      _react2.default.createElement('br', null),
       _react2.default.createElement(
         'h2',
         null,
@@ -51729,6 +51819,40 @@ function symbolObservablePonyfill(root) {
 	}
 
 	return result;
+};
+
+/***/ }),
+/* 402 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var createStock = exports.createStock = function createStock(stock) {
+  return $.ajax({
+    method: "POST",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var updateStock = exports.updateStock = function updateStock(stock) {
+  return $.ajax({
+    method: "PATCH",
+    url: 'api/stocks',
+    data: { stock: stock }
+  });
+};
+
+var deleteStock = exports.deleteStock = function deleteStock(stockId) {
+  return $.ajax({
+    method: 'DELETE',
+    url: 'api/stocks',
+    data: { stockId: stockId }
+  });
 };
 
 /***/ })
