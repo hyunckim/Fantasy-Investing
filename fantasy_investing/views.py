@@ -18,7 +18,7 @@ from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
 from fantasy_investing.serializers import PortfolioSerializer
 from fantasy_investing.models import Portfolio
-from fantasy_investing.serializers import StockPriceSerializer
+# from fantasy_investing.serializers import StockPriceSerializer
 import datetime
 from fantasy_investing.models import Investor, Stock
 import pdb

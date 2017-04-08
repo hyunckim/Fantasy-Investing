@@ -3,17 +3,17 @@ import { fetchStockPrice } from '../../util/stock_api_util';
 
 class Portfolio extends React.Component {
     constructor(props) {
-        super(props);
-
+      super(props);
     }
     componentDidMount() {
-        this.props.fetchPortfolios();
+      this.props.fetchPortfolios();
     }
 
     render() {
         let portfolioTable;
         if (this.props.portfolio[0]) {
           let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
+
             let title = undefined;
 
             let currentPrice;
@@ -22,12 +22,15 @@ class Portfolio extends React.Component {
                 title = response.title;
                 currentPrice = response.price;
               });
+
             return (<tr key={idx}>
               <td>{ stock.ticker }</td>
-              <td>{ title }</td>
+              <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
-              <td> { currentPrice } </td>
-              <td> currentPrice * number_of_shares </td>
+
+              <td> { stock.current_price } </td>
+              <td>{ stock.current_price * stock.number_of_shares }</td>
+
               <td> {stock.purchase_price }</td>
               <td>{ stock.purchase_price * stock.number_of_shares }</td>
             </tr>);
