@@ -131,7 +131,7 @@ class StockView(CreateModelMixin, GenericAPIView):
         return self.create(request)
 
     def patch(self, request):
-        instance = Stock.objects.get(pk=request.POST['id'])
+        instance = Stock.objects.get(pk=request.POST.get('id', False))
         instance.ticker = request.POST.get('ticker', instance.ticker)
         instance.purchase_price = request.POST.get('purchase_price', instance.purchase_price)
         instance.purchase_date = request.POST.get('purchase_date', instance.purchase_date)
@@ -144,8 +144,7 @@ class StockView(CreateModelMixin, GenericAPIView):
             return HttpResponse("Invalid stock info", status=404)
 
     def delete(self, request):
-        print(request.GET.get("id", False))
-        s = Stock.objects.get(pk=request.GET['id'])
+        s = Stock.objects.get(pk=request.POST.get('id', False))
         if s:
             s.delete()
 

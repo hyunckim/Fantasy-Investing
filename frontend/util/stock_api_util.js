@@ -1,5 +1,4 @@
 export const createStock = stock => {
-  debugger;
   return $.ajax ({
     method: "POST",
     url: 'api/stocks',
@@ -8,10 +7,11 @@ export const createStock = stock => {
 };
 
 export const updateStock = stock => {
+  debugger;
   return $.ajax ({
     method: "PATCH",
     url: 'api/stocks',
-    data: { stock }
+    data: stock
   });
 };
 
@@ -19,13 +19,13 @@ export const deleteStock = stockId => {
   return $.ajax ({
     method: 'DELETE',
     url: 'api/stocks',
-    data: { stockId }
+    data: stockId
   });
 };
 
-export const fetchStockPrice = ticker => (
-  $.ajax({
+export const fetchStockPrice = ticker => {
+  return $.ajax({
     method: "GET",
     url: `api/stocks/${ticker}`
-  })
-);
+  });
+};

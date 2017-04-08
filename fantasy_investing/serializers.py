@@ -31,6 +31,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
         source="get_stocks",
         many=True
     )
+
     class Meta:
         model = Portfolio
         fields = ('id', 'title', 'main', 'stocks')
