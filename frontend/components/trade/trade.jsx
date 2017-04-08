@@ -36,7 +36,7 @@ class TradeModal extends React.Component {
 
   afterOpenModal() {
     // references are now sync'd and can be accessed.
-    this.refs.subtitle.style.color = '#f00';
+    // this.refs.subtitle.style.color = '#f00';
   }
 
   closeModal() {
@@ -54,8 +54,7 @@ class TradeModal extends React.Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-
-
+        <TradeFormContainer />
         </Modal>
       </div>
     );

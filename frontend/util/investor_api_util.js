@@ -4,4 +4,4 @@ export const updateBalance = investor => {
     url: 'api/users',
     data: { investor }
   });
-};
+};  

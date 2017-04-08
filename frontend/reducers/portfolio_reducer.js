@@ -10,6 +10,7 @@ const PortfolioReducer = (state = {}, action) => {
         case RECEIVE_PORTFOLIO:
           return merge({}, state, action.portfolio);
         case RECEIVE_STOCK:
+          debugger;
           let newStock = { [action.stock.id]: action.stock };
           let newStocks = merge({}, state.stocks, newStock);
           return merge({}, state, newStocks);

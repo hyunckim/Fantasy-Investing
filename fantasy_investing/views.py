@@ -20,7 +20,7 @@ from fantasy_investing.serializers import PortfolioSerializer
 from fantasy_investing.models import Portfolio
 from fantasy_investing.serializers import StockPriceSerializer
 import datetime
-from fantasy_investing.models import Investor
+from fantasy_investing.models import Investor, Stock
 import pdb
 
 @csrf_exempt
@@ -131,12 +131,24 @@ class StockView(CreateModelMixin, GenericAPIView):
         return self.create(request)
 
     def patch(self, request):
-        return self.update(request)
+        instance = Stock.objects.get(pk=request.POST['id'])
+        instance.ticker = request.POST.get('ticker', instance.ticker)
+        instance.purchase_price = request.POST.get('purchase_price', instance.purchase_price)
+        instance.purchase_date = request.POST.get('purchase_date', instance.purchase_date)
+        instance.number_of_shares = request.POST.get('number_of_shares', instance.number_of_shares)
+        serializer = StockSerializer(instance)
+        if serializer.is_valid:
+            instance.save()
+            return Response(serializer.data)
+        else:
+            return HttpResponse("Invalid stock info", status=404)
 
     def delete(self, request):
-        s = Stock.objects.get(pk=request.DELETE['id'])
+        print(request.GET.get("id", False))
+        s = Stock.objects.get(pk=request.GET['id'])
         if s:
-            Stock.objects.delete(s)
+            s.delete()
+
             return HttpResponse(status=200)
         else:
             return HttpResponse("Stock is not in your portfolio", status=404)

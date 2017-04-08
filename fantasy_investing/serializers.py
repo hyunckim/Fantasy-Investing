@@ -7,7 +7,7 @@ from fantasy_investing.models import Stock, Portfolio, Investor, User
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        fields = ('ticker', 'purchase_price', 'purchase_date', 'number_of_shares')
+        fields = ('id', 'ticker', 'purchase_price', 'purchase_date', 'number_of_shares')
 
     def create(self, validated_data):
         stock = Stock.objects.create(**validated_data)

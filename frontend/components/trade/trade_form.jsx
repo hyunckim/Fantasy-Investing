@@ -16,7 +16,8 @@ class TradeForm extends React.Component {
         purchase_price: ((existingPosition.purchase_price * existingPosition.number_of_shares)
           + (this.price * this.state.number_of_shares)) / 2,
         number_of_shares: existingPosition.number_of_shares
-          + this.state.number_of_shares
+          + this.state.number_of_shares,
+
       };
       let action = "";
       if (this.props.stocks.includes(this.state.ticker)) {
@@ -62,7 +63,7 @@ class TradeForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let price = fetchPrice();
+    let price = fetchPrice(this.state.ticker);
     let existingPosition = this.stocks[this.state.ticker];
     if (this.state.action === "Buy") {
       this.buyStock(existingPosition, price);
