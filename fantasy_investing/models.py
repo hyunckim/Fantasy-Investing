@@ -11,6 +11,7 @@ class Portfolio(models.Model):
         stocks = Stock.objects.filter(portfolio=self)        
         return stocks
 
+
 class Stock(models.Model):
     ticker = models.CharField(max_length=10)
     purchase_price = models.FloatField(default=0)

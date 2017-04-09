@@ -31958,10 +31958,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _lodash = __webpack_require__(66);
 
-var _trade = __webpack_require__(171);
-
-var _trade2 = _interopRequireDefault(_trade);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32126,8 +32122,7 @@ var Company = function (_React$Component) {
               percentChange,
               ')'
             )
-          ),
-          _react2.default.createElement(_trade2.default, null)
+          )
         ),
         _react2.default.createElement(
           'div',
@@ -32294,6 +32289,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = __webpack_require__(87);
 
+var _trade = __webpack_require__(171);
+
+var _trade2 = _interopRequireDefault(_trade);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -32410,6 +32409,7 @@ var NavBar = function (_React$Component) {
               )
             )
           ),
+          _react2.default.createElement(_trade2.default, null),
           _react2.default.createElement(
             'button',
             { className: 'portfolio-button',
@@ -32549,6 +32549,16 @@ var Portfolio = function (_React$Component) {
       var portfolioTable = void 0;
       if (this.props.portfolio[0]) {
         var stocks = this.props.portfolio[0].stocks.map(function (stock, idx) {
+
+          var title = undefined;
+
+          // let currentPrice;
+          //   fetchStockPrice(stock.ticker).then(response => {
+          //
+          //     title = response.title;
+          //     currentPrice = response.price;
+          //   });
+
           return _react2.default.createElement(
             'tr',
             { key: idx },
@@ -32750,7 +32760,7 @@ var SessionForm = function (_React$Component) {
 		key: 'redirectIfLoggedIn',
 		value: function redirectIfLoggedIn() {
 			if (this.props.loggedIn) {
-				this.props.router.push("/");
+				this.props.router.push("/portfolio");
 			}
 		}
 	}, {
@@ -33020,7 +33030,10 @@ var TradeModal = function (_React$Component) {
     }
   }, {
     key: 'afterOpenModal',
-    value: function afterOpenModal() {}
+    value: function afterOpenModal() {
+      // references are now sync'd and can be accessed.
+      // this.refs.subtitle.style.color = '#f00';
+    }
   }, {
     key: 'closeModal',
     value: function closeModal() {
@@ -33037,13 +33050,17 @@ var TradeModal = function (_React$Component) {
           { onClick: this.openModal },
           'Trade'
         ),
-        _react2.default.createElement(_reactModal2.default, {
-          isOpen: this.state.modalIsOpen,
-          onAfterOpen: this.afterOpenModal,
-          onRequestClose: this.closeModal,
-          style: customStyles,
-          contentLabel: 'Example Modal'
-        })
+        _react2.default.createElement(
+          _reactModal2.default,
+          {
+            isOpen: this.state.modalIsOpen,
+            onAfterOpen: this.afterOpenModal,
+            onRequestClose: this.closeModal,
+            style: customStyles,
+            contentLabel: 'Example Modal'
+          },
+          _react2.default.createElement(_trade_form_container2.default, null)
+        )
       );
     }
   }]);
@@ -33058,31 +33075,61 @@ exports.default = TradeModal;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-// import { connect } from 'react-redux';
-// import { login, logout, signup, removeErrors } from '../../actions/session_actions';
-// import SessionForm from './session_form';
-//
-// const mapStateToProps = (state) => ({
-//   loggedIn: Boolean(state.currentUser),
-//   errors: state.errors.session
-// });
-//
-// const mapDispatchToProps = (dispatch, { location }) => {
-//   const formType = location.pathname.slice(1);
-//   const processForm = (formType === 'login') ? login : signup;
-//
-//   return {
-//     processForm: user => dispatch(processForm(user)),
-//     removeErrors: () => dispatch(removeErrors()),
-//     formType
-//   };
-// };
-//
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(SessionForm);
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactRedux = __webpack_require__(36);
+
+var _stock_actions = __webpack_require__(406);
+
+var _investor_actions = __webpack_require__(407);
+
+var _trade_form = __webpack_require__(408);
+
+var _trade_form2 = _interopRequireDefault(_trade_form);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    balance: state.currentUser.investor.balance,
+    currentStocks: state.portfolio[0].stocks,
+    stock: { ticker: "", purchase_price: "", purchase_date: "", number_of_shares: "",
+      action: "" },
+    investor: state.currentUser.investor,
+    portfolio: state.portfolio
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref) {
+  var location = _ref.location;
+
+  return {
+    createStock: function createStock(stock) {
+      return dispatch((0, _stock_actions.createStock)(stock));
+    },
+    updateStock: function updateStock(stock) {
+      return dispatch((0, _stock_actions.updateStock)(stock));
+    },
+    deleteStock: function deleteStock(stockId) {
+      return dispatch((0, _stock_actions.deleteStock)(stockId));
+    },
+    removeStockErrors: function removeStockErrors() {
+      return dispatch((0, _stock_actions.removeStockErrors)());
+    },
+    receiveStockErrors: function receiveStockErrors(errors) {
+      return dispatch((0, _stock_actions.receiveStockErrors)(errors));
+    },
+    updateInvestor: function updateInvestor(investor) {
+      return dispatch((0, _investor_actions.updateInvestor)(investor));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_trade_form2.default);
 
 /***/ }),
 /* 173 */,
@@ -33108,7 +33155,13 @@ var _root = __webpack_require__(160);
 
 var _root2 = _interopRequireDefault(_root);
 
+var _stock_actions = __webpack_require__(406);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+window.createStock = _stock_actions.createStock;
+window.updateStock = _stock_actions.updateStock;
+window.deleteStock = _stock_actions.deleteStock;
 
 document.addEventListener('DOMContentLoaded', function () {
   var store = void 0;
@@ -33173,6 +33226,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _session_actions = __webpack_require__(39);
 
+var _stock_actions = __webpack_require__(406);
+
 var _merge = __webpack_require__(278);
 
 var _merge2 = _interopRequireDefault(_merge);
@@ -33180,7 +33235,8 @@ var _merge2 = _interopRequireDefault(_merge);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _nullErrors = Object.freeze({
-  session: []
+  session: [],
+  stock: []
 });
 
 var ErrorsReducer = function ErrorsReducer() {
@@ -33196,6 +33252,9 @@ var ErrorsReducer = function ErrorsReducer() {
       var newState = (0, _merge2.default)({}, state);
       newState.session = [];
       return newState;
+    case _stock_actions.RECEIVE_STOCK_ERRORS:
+      var stock = action.errors;
+      return (0, _merge2.default)({}, _nullErrors, { stock: stock });
     default:
       return state;
   }
@@ -33211,26 +33270,47 @@ exports.default = ErrorsReducer;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _portfolio_actions = __webpack_require__(95);
 
+var _stock_actions = __webpack_require__(406);
+
 var _lodash = __webpack_require__(66);
 
 var PortfolioReducer = function PortfolioReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
 
-    var newState = void 0;
-    switch (action.type) {
-        case _portfolio_actions.RECEIVE_PORTFOLIOS:
-            return action.portfolios;
-        case _portfolio_actions.RECEIVE_PORTFOLIO:
-            return (0, _lodash.merge)({}, state, action.portfolio);
-        default:
-            return state;
-    }
+  var nextState = (0, _lodash.merge)({}, state);
+  switch (action.type) {
+    case _portfolio_actions.RECEIVE_PORTFOLIOS:
+      return action.portfolios;
+    case _portfolio_actions.RECEIVE_PORTFOLIO:
+      return (0, _lodash.merge)({}, state, action.portfolio);
+    case _stock_actions.CREATE_STOCK:
+      nextState[0].stocks.push(action.stock);
+      return nextState;
+    case _stock_actions.UPDATE_STOCK:
+      for (var i = 0; i < state[0].stocks.length; i++) {
+        if (state[0].stocks[i].id === action.stock.id) {
+          nextState[0].stocks[i] = action.stock;
+          break;
+        }
+      }
+      return nextState;
+    case _stock_actions.REMOVE_STOCK:
+      for (var _i = 0; _i < state[0].stocks.length; _i++) {
+        if (state[0].stocks[_i].id === action.stock.id) {
+          nextState[0].stocks.splice(_i, 1);
+          break;
+        }
+      }
+      return nextState;
+    default:
+      return state;
+  }
 };
 
 exports.default = PortfolioReducer;
@@ -33288,6 +33368,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _session_actions = __webpack_require__(39);
 
+var _investor_actions = __webpack_require__(407);
+
+var _lodash = __webpack_require__(66);
+
 var _nullUser = null;
 
 var SessionReducer = function SessionReducer() {
@@ -33298,6 +33382,10 @@ var SessionReducer = function SessionReducer() {
   switch (action.type) {
     case _session_actions.RECEIVE_CURRENT_USER:
       return action.currentUser;
+    case _investor_actions.RECEIVE_INVESTOR:
+      var newState = (0, _lodash.merge)({}, state);
+      newState['investor'] = action.investor;
+      return newState;
     default:
       return state;
   }
@@ -33394,15 +33482,16 @@ var createStock = exports.createStock = function createStock(stock) {
   return $.ajax({
     method: "POST",
     url: 'api/stocks',
-    data: { stock: stock }
+    data: stock
   });
 };
 
 var updateStock = exports.updateStock = function updateStock(stock) {
+
   return $.ajax({
     method: "PATCH",
     url: 'api/stocks',
-    data: { stock: stock }
+    data: stock
   });
 };
 
@@ -33410,7 +33499,7 @@ var deleteStock = exports.deleteStock = function deleteStock(stockId) {
   return $.ajax({
     method: 'DELETE',
     url: 'api/stocks',
-    data: { stockId: stockId }
+    data: stockId
   });
 };
 
@@ -51765,6 +51854,344 @@ function symbolObservablePonyfill(root) {
 	}
 
 	return result;
+};
+
+/***/ }),
+/* 403 */,
+/* 404 */,
+/* 405 */,
+/* 406 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.deleteStock = exports.updateStock = exports.createStock = exports.removeStockErrors = exports.receiveStockErrors = exports.removeStock = exports.receiveUpdateStock = exports.receiveCreateStock = exports.REMOVE_STOCK_ERRORS = exports.RECEIVE_STOCK_ERRORS = exports.REMOVE_STOCK = exports.UPDATE_STOCK = exports.CREATE_STOCK = undefined;
+
+var _stock_api_util = __webpack_require__(183);
+
+var StockAPIUtil = _interopRequireWildcard(_stock_api_util);
+
+var _reactRouter = __webpack_require__(87);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var CREATE_STOCK = exports.CREATE_STOCK = "CREATE_STOCK";
+var UPDATE_STOCK = exports.UPDATE_STOCK = "UPDATE_STOCK";
+var REMOVE_STOCK = exports.REMOVE_STOCK = "REMOVE_STOCK";
+var RECEIVE_STOCK_ERRORS = exports.RECEIVE_STOCK_ERRORS = "RECEIVE_STOCK_ERRORS";
+var REMOVE_STOCK_ERRORS = exports.REMOVE_STOCK_ERRORS = "REMOVE_STOCK_ERRORS";
+
+var receiveCreateStock = exports.receiveCreateStock = function receiveCreateStock(stock) {
+  return {
+    type: CREATE_STOCK,
+    stock: stock
+  };
+};
+
+var receiveUpdateStock = exports.receiveUpdateStock = function receiveUpdateStock(stock) {
+  return {
+    type: UPDATE_STOCK,
+    stock: stock
+  };
+};
+
+var removeStock = exports.removeStock = function removeStock(stock) {
+  return {
+    type: REMOVE_STOCK,
+    stock: stock
+  };
+};
+
+var receiveStockErrors = exports.receiveStockErrors = function receiveStockErrors(errors) {
+  return {
+    type: RECEIVE_STOCK_ERRORS,
+    errors: errors
+  };
+};
+
+var removeStockErrors = exports.removeStockErrors = function removeStockErrors() {
+  return {
+    type: REMOVE_STOCK_ERRORS
+  };
+};
+
+var createStock = exports.createStock = function createStock(stock) {
+  return function (dispatch) {
+    return StockAPIUtil.createStock(stock).then(function (res) {
+      return dispatch(receiveCreateStock(res));
+    }, function (err) {
+      return dispatch(receiveStockErrors(err.responseJSON));
+    });
+  };
+};
+
+var updateStock = exports.updateStock = function updateStock(stock) {
+  return function (dispatch) {
+    return StockAPIUtil.updateStock(stock).then(function (res) {
+      return dispatch(receiveUpdateStock(res));
+    }, function (err) {
+      return dispatch(receiveStockErrors(err.responseJSON));
+    });
+  };
+};
+
+var deleteStock = exports.deleteStock = function deleteStock(stockId) {
+  return function (dispatch) {
+    return StockAPIUtil.deleteStock(stockId).then(function () {
+      return dispatch(removeStock(stockId));
+    }, function (err) {
+      return dispatch(receiveStockErrors(err.responseJSON));
+    });
+  };
+};
+
+/***/ }),
+/* 407 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateInvestor = exports.receiveInvestor = exports.RECEIVE_INVESTOR = undefined;
+
+var _investor_api_util = __webpack_require__(409);
+
+var InvestorAPIUtil = _interopRequireWildcard(_investor_api_util);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var RECEIVE_INVESTOR = exports.RECEIVE_INVESTOR = "RECEIVE_INVESTOR";
+
+var receiveInvestor = exports.receiveInvestor = function receiveInvestor(investor) {
+  return {
+    type: RECEIVE_INVESTOR,
+    investor: investor
+  };
+};
+
+var updateInvestor = exports.updateInvestor = function updateInvestor(investor) {
+  return function (dispatch) {
+    return InvestorAPIUtil.updateBalance(investor).then(function (res) {
+      return dispatch(receiveInvestor(res));
+    });
+  };
+};
+
+/***/ }),
+/* 408 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(87);
+
+var _stock_api_util = __webpack_require__(183);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TradeForm = function (_React$Component) {
+  _inherits(TradeForm, _React$Component);
+
+  function TradeForm(props) {
+    _classCallCheck(this, TradeForm);
+
+    var _this = _possibleConstructorReturn(this, (TradeForm.__proto__ || Object.getPrototypeOf(TradeForm)).call(this, props));
+
+    _this.state = _this.props.stock;
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handlePromise = _this.handlePromise.bind(_this);
+    _this.updateBalance = _this.updateBalance.bind(_this);
+    return _this;
+  }
+
+  _createClass(TradeForm, [{
+    key: 'buyStock',
+    value: function buyStock(existingPosition, price) {
+      if (parseInt(this.props.balance) >= price * parseInt(this.state.number_of_shares)) {
+
+        var purchaseInfo = {
+          ticker: this.state.ticker
+        };
+
+        var action = "";
+        if (existingPosition) {
+          purchaseInfo["id"] = existingPosition.id;
+          purchaseInfo["purchase_price"] = (parseFloat(existingPosition.purchase_price) * parseInt(existingPosition.number_of_shares) + price * parseInt(this.state.number_of_shares)) / (parseInt(existingPosition.number_of_shares) + parseFloat(this.state.number_of_shares));
+          purchaseInfo["number_of_shares"] = parseInt(existingPosition.number_of_shares) + parseInt(this.state.number_of_shares);
+          action = this.props.updateStock;
+        } else {
+          purchaseInfo["purchase_price"] = price;
+          var today = new Date();
+          purchaseInfo["purchase_date"] = today.getFullYear + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+          purchaseInfo["number_of_shares"] = this.state.number_of_shares;
+          purchaseInfo["portfolio"] = this.props.portfolio[0];
+          action = this.props.createStock;
+        }
+        var newBalance = Math.round(parseInt(this.props.balance) + price * parseInt(this.state.number_of_shares));
+        this.updateBalance(newBalance);
+        action(purchaseInfo).then(_reactRouter.hashHistory.push("/portfolio"));
+      } else {
+        this.props.receiveStockErrors("You have insufficient balance for this trade");
+      }
+    }
+  }, {
+    key: 'sellStock',
+    value: function sellStock(existingPosition, price) {
+      var newBalance = Math.round(parseInt(this.props.balance) + price * parseInt(this.state.number_of_shares));
+
+      if (existingPosition) {
+        if (parseInt(this.state.number_of_shares) < parseInt(existingPosition.number_of_shares)) {
+          var saleInfo = {
+            id: existingPosition.id,
+            number_of_shares: parseInt(existingPosition.number_of_shares) - parseInt(this.state.number_of_shares)
+          };
+          this.props.updateStock(saleInfo).then(_reactRouter.hashHistory.push("/portfolio"));
+          this.updateBalance(newBalance);
+        } else if (parseInt(this.state.number_of_shares) === parseInt(existingPosition.number_of_shares)) {
+          this.props.deleteStock({ id: existingPosition.id });
+          this.updateBalance(newBalance);
+        } else {
+          this.props.receiveStockErrors("You are trying to sell more shares than you have");
+        }
+      } else {
+        this.props.receiveStockErrors('You don\'t have any ' + this.state.ticker + ' shares to sell');
+      }
+    }
+  }, {
+    key: 'updateBalance',
+    value: function updateBalance(newBalance) {
+      this.props.updateInvestor({ id: this.props.investor.id, balance: newBalance });
+    }
+  }, {
+    key: 'handlePromise',
+    value: function handlePromise(res) {
+      var price = res.price;
+      var existingPosition = undefined;
+      for (var i = 0; i < this.props.currentStocks.length; i++) {
+        if (this.props.currentStocks[i].ticker === this.state.ticker) {
+          existingPosition = this.props.currentStocks[i];
+          break;
+        }
+      }
+
+      if (this.state.action === "Buy") {
+
+        this.buyStock(existingPosition, price);
+      } else if (this.state.action === "Sell") {
+        this.sellStock(existingPosition, price);
+      }
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      var price = undefined;
+      (0, _stock_api_util.fetchStockPrice)(this.state.ticker).then(function (res) {
+        return _this2.handlePromise(res);
+      });
+    }
+  }, {
+    key: 'update',
+    value: function update(field) {
+      var _this3 = this;
+
+      return function (e) {
+        _this3.setState(_defineProperty({}, field, e.target.value));
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'form',
+        { className: 'trade-form', onSubmit: this.handleSubmit },
+        _react2.default.createElement(
+          'label',
+          null,
+          ' Action',
+          _react2.default.createElement(
+            'select',
+            { className: 'trade-action', onChange: this.update('action') },
+            _react2.default.createElement('option', { value: '' }),
+            _react2.default.createElement(
+              'option',
+              { value: 'Buy' },
+              'Buy'
+            ),
+            _react2.default.createElement(
+              'option',
+              { value: 'Sell' },
+              'Sell'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'label',
+          null,
+          ' Symbol',
+          _react2.default.createElement('input', { className: 'form-symbol', onChange: this.update("ticker") })
+        ),
+        _react2.default.createElement(
+          'label',
+          null,
+          ' Quantity of Shares',
+          _react2.default.createElement('input', { className: 'form-shares', onChange: this.update('number_of_shares') })
+        ),
+        _react2.default.createElement('input', { type: 'submit', className: 'form-submit-button', value: 'Submit',
+          onSubmit: this.handleSubmit })
+      );
+    }
+  }]);
+
+  return TradeForm;
+}(_react2.default.Component);
+
+exports.default = TradeForm;
+
+/***/ }),
+/* 409 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var updateBalance = exports.updateBalance = function updateBalance(investor) {
+  return $.ajax({
+    method: 'PATCH',
+    url: 'api/investor',
+    data: investor
+  });
 };
 
 /***/ })

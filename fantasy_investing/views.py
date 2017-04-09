@@ -3,7 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from fantasy_investing.serializers import UserRegistrationSerializer, UserLoginSerializer, StockSerializer
+from fantasy_investing.serializers import UserRegistrationSerializer, \
+    UserLoginSerializer, StockSerializer, InvestorSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -17,9 +18,9 @@ from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
 from fantasy_investing.serializers import PortfolioSerializer
 from fantasy_investing.models import Portfolio
-# from fantasy_investing.serializers import StockPriceSerializer
+from fantasy_investing.serializers import StockPriceSerializer
 import datetime
-from fantasy_investing.models import Investor
+from fantasy_investing.models import Investor, Stock
 import pdb
 
 @csrf_exempt
@@ -69,7 +70,7 @@ def portfolio_index(request):
 
 def portfolio_detail(request, pk):
     try:
-        portfolio = Portfolio.objects.filer(pk=pk)
+        portfolio = Portfolio.objects.get(pk=pk)
     except portfolio.DoesNotExist:
         return HttpResponse(status=404)
     if request.method == "GET":
@@ -130,15 +131,41 @@ class StockView(CreateModelMixin, GenericAPIView):
         return self.create(request)
 
     def patch(self, request):
-        return self.update(request)
+        instance = Stock.objects.get(pk=request.POST.get('id', False))
+        instance.ticker = request.POST.get('ticker', instance.ticker)
+        instance.purchase_price = request.POST.get('purchase_price', instance.purchase_price)
+        instance.purchase_date = request.POST.get('purchase_date', instance.purchase_date)
+        instance.number_of_shares = request.POST.get('number_of_shares', instance.number_of_shares)
+        serializer = StockSerializer(instance)
+        if serializer.is_valid:
+            instance.save()
+            return Response(serializer.data)
+        else:
+            return HttpResponse("Invalid stock info", status=404)
 
     def delete(self, request):
-        s = Stock.objects.get(pk=request.DELETE['id'])
+        s = Stock.objects.get(pk=request.POST.get('id', False))
         if s:
-            Stock.objects.delete(s)
+            s.delete()
+
             return HttpResponse(status=200)
         else:
             return HttpResponse("Stock is not in your portfolio", status=404)
+
+
+class InvestorView(GenericAPIView):
+
+    serializer_class = InvestorSerializer
+
+    def patch(self, request):
+        instance = Investor.objects.get(pk=request.POST.get('id', False))
+        instance.balance = request.POST.get('balance', instance.balance)
+        serializer = InvestorSerializer(instance)
+        if serializer.is_valid:
+            instance.save()
+            return Response(serializer.data)
+        else:
+            return HttpResponse("Invalid info", status=404)
 
 def stock_price(request, ticker):
 

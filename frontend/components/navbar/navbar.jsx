@@ -1,5 +1,6 @@
 import React from 'react';
 import { hashHistory, router } from 'react-router';
+import TradeModal from '../trade/trade';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -77,6 +78,7 @@ class NavBar extends React.Component {
               </button>
             </label>
           </form>
+          <TradeModal />
           <button className="portfolio-button"
             onClick={this.handlePortfolioButton}>Portfolio</button>
           <button className="logout-button" onClick={this.handleLogOutClick}>
