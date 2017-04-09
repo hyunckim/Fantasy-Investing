@@ -20,6 +20,28 @@ class Portfolio extends React.Component {
 
     }
 
+    pieChart(equity, cash) {
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        let data = google.visualization.arrayToDataTable([
+          ['Type', 'Amount'],
+          ['Equity', equity],
+          ['Cash', cash]
+        ]);
+
+        let options = {
+          title: 'Portfolio Breakdown'
+        };
+
+        let chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    }
+
     handleClick(event){
         this.setState({ currentPortfolio: event });
     }
@@ -143,7 +165,7 @@ class Portfolio extends React.Component {
             </tr>);
           });
 
-          let totalValue = this.props.currentUser.investor.balance;
+          var totalValue = this.props.currentUser.investor.balance;
           let unrealizedGain = 0;
           let initialValue = 0;
 
@@ -152,8 +174,7 @@ class Portfolio extends React.Component {
             totalValue += (stock.current_price * stock.number_of_shares);
             initialValue += (stock.purchase_price * stock.number_of_shares);
           }
-
-          let percentageChange = (unrealizedGain / initialValue) * 100;
+          let percentageChange = ((totalValue - initialValue) / initialValue) * 100;
 
           portfolioTable = <table>
             <tbody>
@@ -166,7 +187,6 @@ class Portfolio extends React.Component {
                 <th>Purchase Price</th>
                 <th>Cost Basis</th>
                 <th>Unrealiezed Gain / Loss</th>
-                <th>% Change</th>
                 <th>% Change</th>
               </tr>
               { stocks }
@@ -184,7 +204,7 @@ class Portfolio extends React.Component {
                 <th></th>
                 <th></th>
                 <th>${this.numberWithCommas(Math.round(totalValue - initialValue))}</th>
-                <th>{percentageChange}%</th>
+                <th>{Math.round(percentageChange)}%</th>
               </tr>
 
             </tbody>
@@ -200,6 +220,10 @@ class Portfolio extends React.Component {
                 </div>
               { portfolioTable }
               <PortfolioFormContainer />
+              <div id="piechart">
+                {this.pieChart(totalValue - this.props.currentUser.investor.balance,
+                  this.props.currentUser.investor.balance)}
+              </div>
             </div>
         );
     }
