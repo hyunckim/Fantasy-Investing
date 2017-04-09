@@ -5,6 +5,7 @@ import App from './app';
 import CompanyContainer from './company/company_container';
 import SessionFormContainer from './session_form/session_form_container';
 import PortfolioContainer from './portfolio/portfolio_container';
+import WelcomePage from './welcome_page/welcome_page'
 const Root = ({ store }) => {
 
   const _redirectIfLoggedIn = (nextState, replace) => {
@@ -25,6 +26,7 @@ const Root = ({ store }) => {
     <Provider store={ store }>
       <Router history={ hashHistory }>
         <Route path="/" component={ App } >
+          <IndexRoute component={WelcomePage}/>
           <Route path="company/:ticker" component={ CompanyContainer } />
           <Route path="/login" component={ SessionFormContainer }
             onEnter={_redirectIfLoggedIn}/>
