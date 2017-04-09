@@ -73,6 +73,7 @@ def portfolio_index(request):
 
 def portfolio_detail(request, pk):
     try:
+        debugger;
         portfolio = Portfolio.objects.get(pk=pk)
     except portfolio.DoesNotExist:  
         return HttpResponse(status=404)

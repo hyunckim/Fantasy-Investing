@@ -5,7 +5,6 @@ const PortfolioReducer = (state = {}, action) => {
     let newState;
     switch (action.type) {
         case RECEIVE_PORTFOLIOS:
-  			debugger;
             return action.portfolios;
         case RECEIVE_PORTFOLIO:
             return merge({}, state, action.portfolio);

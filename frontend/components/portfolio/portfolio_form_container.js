@@ -1,16 +1,19 @@
 import { connect } from 'react-redux';
 import PortfolioForm from './portfolio_form';
-import { createPortfolio, updatePortfolio } from './portfolio_form.jsx';
+import { createPortfolio, updatePortfolio } from '../../actions/portfolio_actions';
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    portfolio: state.portfolio
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  createPortfolio: () => dispatch(createTrack()),
+  createPortfolio: () => dispatch(createPortfolio()),
   updatePortfolio: () => dispatch(updatePortfolio())
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(PortfolioForm);
+export default connect(mapStateToProps, mapDispatchToProps)(PortfolioForm);
+
+

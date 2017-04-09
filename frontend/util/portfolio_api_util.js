@@ -13,4 +13,22 @@ export const fetchPortfolio = (portfolio) => (
     })
 );
 
+export const createPortfolio = (portfolio) => (
+    $.ajax({
+        method: 'POST',
+        url: `/portfolio`,
+    })
+);
+
+export const deletePortfolio = (portfolio) => (
+    $.ajax({
+        method: 'POST',
+        url: `/portfolio`,
+    })
+);
+
+
+
+
+
 
