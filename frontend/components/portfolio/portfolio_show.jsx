@@ -1,8 +1,6 @@
 import React from 'react';
 import { fetchStockPrice } from '../../util/stock_api_util';
 import {Link} from 'react-router';  
-import {PortfolioDetails} from './portfolio_details';
-
 class Portfolio extends React.Component {
     constructor(props) {
       super(props);

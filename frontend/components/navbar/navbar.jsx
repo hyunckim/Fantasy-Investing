@@ -90,9 +90,9 @@ class NavBar extends React.Component {
           </form>
           </div>
           <div className='right-nav'>
-               <TradeModal />
-
             <div className='auth'>
+              <TradeModal />
+
               <button
                 className="portfolio-button"
                 onClick={this.handlePortfolioButton}>Portfolio
