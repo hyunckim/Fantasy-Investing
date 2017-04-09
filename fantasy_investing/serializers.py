@@ -46,6 +46,13 @@ class PortfolioSerializer(serializers.ModelSerializer):
         model = Portfolio
         fields = ('id', 'title', 'main', 'stocks')
 
+    def create(self, validated_data):
+        portfolio = Portfolio.objects.create(**validated_data)
+        portfolio.save()
+        return portfolio
+
+        
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

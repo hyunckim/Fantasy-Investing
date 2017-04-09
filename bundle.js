@@ -26179,7 +26179,7 @@ var receiveCompany = function receiveCompany(company) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchPortfolio = exports.fetchPortfolios = exports.deleteComment = exports.createPortfolio = exports.removePortfolio = exports.receivePortfolios = exports.REMOVE_PORTFOLIO = exports.RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIO = undefined;
+exports.fetchPortfolio = exports.fetchPortfolios = exports.deletePortfolio = exports.createPortfolio = exports.removePortfolio = exports.receivePortfolio = exports.receivePortfolios = exports.REMOVE_PORTFOLIO = exports.RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIO = undefined;
 
 var _portfolio_api_util = __webpack_require__(181);
 
@@ -26197,7 +26197,8 @@ var receivePortfolios = exports.receivePortfolios = function receivePortfolios(p
     portfolios: portfolios
   };
 };
-var receivePortfolio = function receivePortfolio(portfolio) {
+
+var receivePortfolio = exports.receivePortfolio = function receivePortfolio(portfolio) {
   return {
     type: RECEIVE_PORTFOLIO,
     portfolio: portfolio
@@ -26211,18 +26212,18 @@ var removePortfolio = exports.removePortfolio = function removePortfolio(portfol
   };
 };
 
-var createPortfolio = exports.createPortfolio = function createPortfolio(comment) {
+var createPortfolio = exports.createPortfolio = function createPortfolio(portfolio) {
   return function (dispatch) {
-    return PortfolioAPIUtil.createPortfolio(comment).then(function (newPortfolio) {
+    return PortfolioAPIUtil.createPortfolio(portfolio).then(function (newPortfolio) {
       return dispatch(receivePortfolio(newPortfolio));
     });
   };
 };
 
-var deleteComment = exports.deleteComment = function deleteComment(comment) {
+var deletePortfolio = exports.deletePortfolio = function deletePortfolio(portfolio) {
   return function (dispatch) {
-    return PortfolioAPIUtil.deleteComment(comment).then(function () {
-      return dispatch(removePortfolio(comment));
+    return PortfolioAPIUtil.deletePortfolio(portfolio).then(function () {
+      return dispatch(removePortfolio(portfolio));
     });
   };
 };
@@ -33411,12 +33412,20 @@ var PortfolioReducer = function PortfolioReducer() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
 
-    var newState = void 0;
+    var nextState = (0, _lodash.merge)({}, state);
     switch (action.type) {
         case _portfolio_actions.RECEIVE_PORTFOLIOS:
             return action.portfolios;
         case _portfolio_actions.RECEIVE_PORTFOLIO:
             return (0, _lodash.merge)({}, state, action.portfolio);
+        case _portfolio_actions.REMOVE_PORTFOLIO:
+            for (var i = 0; i < state[0].portfolio.length; i++) {
+                if (state[0].portfolio[i].id === action.portfolio.id) {
+                    nextState[0].portfolio.splice(i, 1);
+                    break;
+                }
+            }
+            return nextState;
         default:
             return state;
     }
@@ -33539,14 +33548,16 @@ var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(portfolio)
 var createPortfolio = exports.createPortfolio = function createPortfolio(portfolio) {
     return $.ajax({
         method: 'POST',
-        url: '/portfolio'
+        url: 'api/portfolio',
+        data: portfolio
     });
 };
 
-var deletePortfolio = exports.deletePortfolio = function deletePortfolio(portfolio) {
+var deletePortfolio = exports.deletePortfolio = function deletePortfolio(portfolioId) {
     return $.ajax({
-        method: 'POST',
-        url: '/portfolio'
+        method: 'DELETE',
+        url: 'api/portfolio',
+        data: portfolioId
     });
 };
 
@@ -52015,7 +52026,7 @@ var PortfolioForm = function (_React$Component) {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
             e.preventDefault();
-            debugger;
+            console.log(this.state);
             this.props.createPortfolio(this.state);
         }
     }, {
@@ -52082,11 +52093,8 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    createPortfolio: function createPortfolio() {
-      return dispatch((0, _portfolio_actions.createPortfolio)());
-    },
-    updatePortfolio: function updatePortfolio() {
-      return dispatch((0, _portfolio_actions.updatePortfolio)());
+    createPortfolio: function createPortfolio(portfolio) {
+      return dispatch((0, _portfolio_actions.createPortfolio)(portfolio));
     }
   };
 };

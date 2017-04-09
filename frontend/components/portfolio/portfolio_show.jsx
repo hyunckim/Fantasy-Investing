@@ -16,7 +16,6 @@ class Portfolio extends React.Component {
         let portfolioTable;
         let currentPortfolio;
         let portfolioIndex = [];
-        debugger;
 
         
         if (currentPortfolio) {

@@ -10,8 +10,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  createPortfolio: () => dispatch(createPortfolio()),
-  updatePortfolio: () => dispatch(updatePortfolio())
+  createPortfolio: (portfolio) => dispatch(createPortfolio(portfolio)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PortfolioForm);

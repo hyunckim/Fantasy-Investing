@@ -26,8 +26,6 @@ import pdb
 @csrf_exempt
 
 
-# Create your views here.
-
 def auth(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -71,9 +69,21 @@ def portfolio_index(request):
         serializer = PortfolioSerializer(portfolio_list, many=True)
         return JsonResponse(serializer.data, safe=False)
 
+class PortfolioView(CreateModelMixin, GenericAPIView):
+    serializer_class = PortfolioSerializer
+    def post(self, request):
+        return self.create(request)
+    def delete(self, request):
+        p = Portfolio.objects.get(pk=request.DELETE['id'])
+        if p:
+            Portfolio.objects.delete(p)
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse("User does not have portfolio", status=404)
+
+
 def portfolio_detail(request, pk):
     try:
-        debugger;
         portfolio = Portfolio.objects.get(pk=pk)
     except portfolio.DoesNotExist:  
         return HttpResponse(status=404)

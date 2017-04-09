@@ -16,14 +16,16 @@ export const fetchPortfolio = (portfolio) => (
 export const createPortfolio = (portfolio) => (
     $.ajax({
         method: 'POST',
-        url: `/portfolio`,
+        url: `api/portfolio`,
+        data: portfolio
     })
 );
 
-export const deletePortfolio = (portfolio) => (
+export const deletePortfolio = (portfolioId) => (
     $.ajax({
-        method: 'POST',
-        url: `/portfolio`,
+        method: 'DELETE',
+        url: `api/portfolio`,
+        data: portfolioId
     })
 );
 
