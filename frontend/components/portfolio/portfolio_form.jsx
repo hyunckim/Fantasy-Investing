@@ -17,7 +17,6 @@ class PortfolioForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state);
         this.props.createPortfolio(this.state)
         .then(() => this.props.closeModal());
     }

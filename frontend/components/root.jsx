@@ -18,7 +18,7 @@ const Root = ({ store }) => {
   const _redirectIfNotLoggedIn = (nextState, replace) => {
     const currentUser = store.getState().currentUser;
     if (!currentUser) {
-      replace('/');
+      replace('/login');
     }
   };
 
@@ -26,13 +26,15 @@ const Root = ({ store }) => {
     <Provider store={ store }>
       <Router history={ hashHistory }>
         <Route path="/" component={ App } >
-          <IndexRoute component={WelcomePage}/>
+          <IndexRoute component={WelcomePage}
+            onEnter={_redirectIfLoggedIn}/>
           <Route path="company/:ticker" component={ CompanyContainer } />
           <Route path="/login" component={ SessionFormContainer }
             onEnter={_redirectIfLoggedIn}/>
           <Route path="/signup" component={ SessionFormContainer }
             onEnter={_redirectIfLoggedIn}/>
-          <Route path="/portfolio" component={ PortfolioContainer } />
+          <Route path="/portfolio" component={ PortfolioContainer }
+            onEnter={_redirectIfNotLoggedIn}/>
         </Route>
       </Router>
     </Provider>
