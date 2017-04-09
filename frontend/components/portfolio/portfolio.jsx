@@ -24,58 +24,64 @@ class Portfolio extends React.Component {
         this.setState({ currentPortfolio: event });
     }
 
-    render() {
-        let portfolioTable;
-        if (this.props.portfolio[0]) {
-          let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
+    // render() {
+    //     let portfolioTable;
+    //     if (this.props.portfolio[0]) {
+    //       let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
+    //
+    //         let title = undefined;
+    //
+    //         // let currentPrice;
+    //         //   fetchStockPrice(stock.ticker).then(response => {
+    //         //
+    //         //     title = response.title;
+    //         //     currentPrice = response.price;
+    //         //   });
+    //
+    //         return (<tr key={idx}>
+    //           <td>{ stock.ticker }</td>
+    //           <td>{ stock.title }</td>
+    //           <td>{ stock.number_of_shares }</td>
+    //
+    //           <td> { stock.current_price } </td>
+    //           <td>{ stock.current_price * stock.number_of_shares }</td>
+    //
+    //           <td> {stock.purchase_price }</td>
+    //           <td>{ stock.purchase_price * stock.number_of_shares }</td>
+    //           <td>{(stock.current_price - stock.purchase_price)  * stock.number_of_shares}</td>
+    //           <td>{ (stock.current_price - stock.purchase_price) /
+    //             stock.purchase_price }</td>
+    //
+    //         </tr>);
+    //       });
+    //
+    //       portfolioTable = <table>
+    //         <tbody>
+    //           <tr>
+    //             <th>Symbol</th>
+    //             <th>Title</th>
+    //             <th>Quantity</th>
+    //             <th>Price</th>
+    //             <th>Value</th>
+    //             <th>Unit Cost</th>
+    //             <th>Cost Basis</th>
+    //             <th>Unrealiezed Gain / Loss</th>
+    //             <th>% Change</th>
+    //           </tr>
+    //           { stocks }
+    //         </tbody>
+    //       </table>;
+    //     }
+    //
+    //     return (
+    //         <div>
+    //           { portfolioTable }
+    //         </div>
+    //     );
+    // }
 
-            let title = undefined;
-
-            // let currentPrice;
-            //   fetchStockPrice(stock.ticker).then(response => {
-            //
-            //     title = response.title;
-            //     currentPrice = response.price;
-            //   });
-
-            return (<tr key={idx}>
-              <td>{ stock.ticker }</td>
-              <td>{ stock.title }</td>
-              <td>{ stock.number_of_shares }</td>
-
-              <td> { stock.current_price } </td>
-              <td>{ stock.current_price * stock.number_of_shares }</td>
-
-              <td> {stock.purchase_price }</td>
-              <td>{ stock.purchase_price * stock.number_of_shares }</td>
-              <td>{(stock.current_price - stock.purchase_price)  * stock.number_of_shares}</td>
-              <td>{ (stock.current_price - stock.purchase_price) /
-                stock.purchase_price }</td>
-      
-            </tr>);
-          });
-
-          portfolioTable = <table>
-            <tbody>
-              <tr>
-                <th>Symbol</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Value</th>
-                <th>Unit Cost</th>
-                <th>Cost Basis</th>
-              </tr>
-              { stocks }
-            </tbody>
-          </table>;
-        }
-
-        return (
-            <div>
-              { portfolioTable }
-            </div>
-        );
+    numberWithCommas (num) {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     }
 
     render() {
@@ -122,16 +128,32 @@ class Portfolio extends React.Component {
 
         if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
+
             return (<tr key={idx}>
               <td>{ stock.ticker }</td>
               <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
-              <td> { stock.current_price } </td>
-              <td>{ stock.current_price * stock.number_of_shares }</td>
-              <td> { stock.purchase_price }</td>
-              <td>{ stock.purchase_price * stock.number_of_shares }</td>
+              <td>${ stock.current_price.toFixed(2) } </td>
+              <td>${ this.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))}</td>
+              <td>${ stock.purchase_price.toFixed(2) }</td>
+              <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+              <td>${ this.numberWithCommas(Math.round((stock.current_price - stock.purchase_price)  * stock.number_of_shares))}</td>
+              <td>{ Math.round(((stock.current_price - stock.purchase_price) /
+                  stock.purchase_price) * 100) }% </td>
             </tr>);
           });
+
+          let totalValue = this.props.currentUser.investor.balance;
+          let unrealizedGain = 0;
+          let initialValue = 0;
+
+          for (let i = 0; i < mainPortfolio.stocks.length; i++) {
+            let stock = mainPortfolio.stocks[i];
+            totalValue += (stock.current_price * stock.number_of_shares);
+            initialValue += (stock.purchase_price * stock.number_of_shares);
+          }
+
+          let percentageChange = (unrealizedGain / initialValue) * 100;
 
           portfolioTable = <table>
             <tbody>
@@ -141,10 +163,30 @@ class Portfolio extends React.Component {
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Value</th>
-                <th>Unit Purchase Price</th>
+                <th>Purchase Price</th>
                 <th>Cost Basis</th>
+                <th>Unrealiezed Gain / Loss</th>
+                <th>% Change</th>
+                <th>% Change</th>
               </tr>
               { stocks }
+              <tr>Cash
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</th>
+              </tr>
+              <tr>Total
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>${this.numberWithCommas(Math.round(totalValue))}</th>
+                <th></th>
+                <th></th>
+                <th>${this.numberWithCommas(Math.round(totalValue - initialValue))}</th>
+                <th>{percentageChange}%</th>
+              </tr>
+
             </tbody>
           </table>;
         }
