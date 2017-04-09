@@ -1,0 +1,91 @@
+.login-form-container {
+    box-sizing: border-box;
+    width: 260px;
+    margin: 100px auto 0;
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+    padding-bottom: 40px;
+    border-radius: 10px;
+    background: #F5F1F2;
+    text-align: center;
+}
+
+.login-form-box {
+    background: #F5F1F2
+}
+
+.session-form-message {
+    height: 100px;
+    width: 100%;
+    font-size: 18px;
+    background: #4b6777;
+    color: ce9e62;
+    line-height: 150%;
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.login-form-container form h1 {
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.login-form-container input {
+    margin: 40px 25px;
+    width: 200px;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #4b6777;
+    -webkit-transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 96%, #4b6777 4%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #4b6777 4%);
+    background-position: -200px 0;
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    color: #0e6252;
+}
+
+.login-form-container input:focus,
+.login-form-container input:valid {
+    box-shadow: none;
+    outline: none;
+    background-position: 0 0;
+}
+
+.login-form-container input:focus::-webkit-input-placeholder,
+.login-form-container input:valid::-webkit-input-placeholder {
+    color: #4b6777;
+    font-size: 11px;
+    -webkit-transform: translateY(-20px);
+    transform: translateY(-20px);
+    visibility: visible !important;
+}
+
+.submit-button {
+    border: none;
+    background: #4b6777;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 6px;
+    width: 200px;
+    color: white;
+    margin-left: 25px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.submit-button:hover {
+    -webkit-transform: translateY(-3px);
+    -ms-transform: translateY(-3px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.login-form-container input:focus::-webkit-input-placeholder,
+.login-form-container input:valid::-webkit-input-placeholder {
+    color: #1abc9c;
+    font-size: 11px;
+    -webkit-transform: translateY(-20px);
+    transform: translateY(-20px);
+    visibility: visible !important;
+}

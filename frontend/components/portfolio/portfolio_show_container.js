@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchPortfolios } from '../../actions/portfolio_actions';
-import Portfolio from './portfolio';
+import PortfolioShow from './portfolio';
 
 const mapStateToProps = state => {
     return {
@@ -15,7 +15,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     });
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Portfolio);
+export default connect(mapStateToProps, mapDispatchToProps)(PortfolioShow);

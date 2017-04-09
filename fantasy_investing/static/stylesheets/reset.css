@@ -1,3 +1,6 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+
 html, body, header, nav, h1, a,
 ul, li, strong, main, button, i,
 section, img, div, h2, p, form,
@@ -7,8 +10,8 @@ span, article, footer, time, small, select {
   padding: 0;
   border: 0;
   outline: 0;
-  font: inherit;
-  color: inherit;
+  
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;  color: inherit;
   text-align: inherit;
   text-decoration: inherit;
   vertical-align: inherit;
