@@ -10,9 +10,9 @@ const PortfolioReducer = (state = {}, action) => {
         case RECEIVE_PORTFOLIO:
             return merge({}, state, action.portfolio);
         case REMOVE_PORTFOLIO:
-            for (let i = 0; i < state[0].portfolio.length; i++) {
-                if (state[0].portfolio[i].id === action.portfolio.id) {
-                    nextState[0].portfolio.splice(i, 1);
+            for (let i = 0; i < state.length; i++) {
+                if (state[i].id === action.portfolio.id) {
+                    nextState.splice(i, 1);
                     break;
                 }
             }
