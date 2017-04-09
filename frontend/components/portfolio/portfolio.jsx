@@ -12,7 +12,6 @@ class Portfolio extends React.Component {
     render() {
         let portfolioTable;
         if (this.props.portfolio[0]) {
-          debugger;
           let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
 
             let title = undefined;
