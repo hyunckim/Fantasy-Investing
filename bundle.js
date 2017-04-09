@@ -26346,7 +26346,7 @@ var updateInvestor = exports.updateInvestor = function updateInvestor(investor) 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchPortfolio = exports.fetchPortfolios = exports.receivePortfolios = exports.RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIO = undefined;
+exports.fetchPortfolio = exports.fetchPortfolios = exports.deletePortfolio = exports.createPortfolio = exports.removePortfolio = exports.receivePortfolio = exports.receivePortfolios = exports.REMOVE_PORTFOLIO = exports.RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIO = undefined;
 
 var _portfolio_api_util = __webpack_require__(188);
 
@@ -26356,6 +26356,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var RECEIVE_PORTFOLIO = exports.RECEIVE_PORTFOLIO = "RECEIVE_PORTFOLIO";
 var RECEIVE_PORTFOLIOS = exports.RECEIVE_PORTFOLIOS = "RECEIVE_PORTFOLIOS";
+var REMOVE_PORTFOLIO = exports.REMOVE_PORTFOLIO = "REMOVE_PORTFOLIO";
 
 var receivePortfolios = exports.receivePortfolios = function receivePortfolios(portfolios) {
   return {
@@ -26363,10 +26364,34 @@ var receivePortfolios = exports.receivePortfolios = function receivePortfolios(p
     portfolios: portfolios
   };
 };
-var receivePortfolio = function receivePortfolio(portfolio) {
+
+var receivePortfolio = exports.receivePortfolio = function receivePortfolio(portfolio) {
   return {
     type: RECEIVE_PORTFOLIO,
     portfolio: portfolio
+  };
+};
+
+var removePortfolio = exports.removePortfolio = function removePortfolio(portfolio) {
+  return {
+    type: REMOVE_PORTFOLIO,
+    portfolio: portfolio
+  };
+};
+
+var createPortfolio = exports.createPortfolio = function createPortfolio(portfolio) {
+  return function (dispatch) {
+    return PortfolioAPIUtil.createPortfolio(portfolio).then(function (newPortfolio) {
+      return dispatch(receivePortfolio(newPortfolio));
+    });
+  };
+};
+
+var deletePortfolio = exports.deletePortfolio = function deletePortfolio(portfolio) {
+  return function (dispatch) {
+    return PortfolioAPIUtil.deletePortfolio(portfolio).then(function () {
+      return dispatch(removePortfolio(portfolio));
+    });
   };
 };
 
@@ -32004,6 +32029,10 @@ var _portfolio_container = __webpack_require__(172);
 
 var _portfolio_container2 = _interopRequireDefault(_portfolio_container);
 
+var _welcome_page = __webpack_require__(179);
+
+var _welcome_page2 = _interopRequireDefault(_welcome_page);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Root = function Root(_ref) {
@@ -32020,7 +32049,7 @@ var Root = function Root(_ref) {
   var _redirectIfNotLoggedIn = function _redirectIfNotLoggedIn(nextState, replace) {
     var currentUser = store.getState().currentUser;
     if (!currentUser) {
-      replace('/');
+      replace('/login');
     }
   };
 
@@ -32033,12 +32062,15 @@ var Root = function Root(_ref) {
       _react2.default.createElement(
         _reactRouter.Route,
         { path: '/', component: _app2.default },
+        _react2.default.createElement(_reactRouter.IndexRoute, { component: _welcome_page2.default,
+          onEnter: _redirectIfLoggedIn }),
         _react2.default.createElement(_reactRouter.Route, { path: 'company/:ticker', component: _company_container2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _session_form_container2.default,
           onEnter: _redirectIfLoggedIn }),
         _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _session_form_container2.default,
           onEnter: _redirectIfLoggedIn }),
-        _react2.default.createElement(_reactRouter.Route, { path: '/portfolio', component: _portfolio_container2.default })
+        _react2.default.createElement(_reactRouter.Route, { path: '/portfolio', component: _portfolio_container2.default,
+          onEnter: _redirectIfNotLoggedIn })
       )
     )
   );
@@ -32067,11 +32099,13 @@ var _reduxThunk = __webpack_require__(400);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
+var _reduxPersist = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"redux-persist\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var configureStore = function configureStore() {
   var preloadedState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return (0, _redux.createStore)(_root_reducer2.default, preloadedState, (0, _redux.applyMiddleware)(_reduxThunk2.default));
+  return (0, _redux.createStore)(_root_reducer2.default, preloadedState, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default), (0, _reduxPersist.autoRehydrate)()));
 };
 
 exports.default = configureStore;
@@ -32315,7 +32349,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 earningShare
               )
             ),
@@ -32329,7 +32363,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 prevClose
               )
             ),
@@ -32343,7 +32377,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 dividend
               )
             ),
@@ -32357,7 +32391,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 yearHigh
               )
             ),
@@ -32371,7 +32405,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 yearLow
               )
             ),
@@ -32385,7 +32419,7 @@ var Company = function (_React$Component) {
               ),
               _react2.default.createElement(
                 'span',
-                null,
+                { className: 'value' },
                 volume
               )
             )
@@ -32513,9 +32547,15 @@ var NavBar = function (_React$Component) {
     key: 'handleLogOutClick',
     value: function handleLogOutClick(e) {
       e.preventDefault();
-      this.props.logout().then(function () {
-        return _reactRouter.hashHistory.push("/");
-      });
+      this.props.logout();
+      var timesRun = 0;
+      var interval = setInterval(function () {
+        timesRun += 1;
+        if (timesRun === 1) {
+          clearInterval(interval);
+        }
+        _reactRouter.hashHistory.push("/");
+      }, 200);
     }
   }, {
     key: 'handleGuestClick',
@@ -32554,71 +32594,105 @@ var NavBar = function (_React$Component) {
       var logo = _react2.default.createElement(
         'div',
         { className: 'logo-container' },
-        _react2.default.createElement(
-          'p',
-          { className: 'logo-text' },
-          'Fantasy Investing'
-        )
+        _react2.default.createElement('img', { className: 'logo', src: 'https://ibb.co/k2Tdvk', alt: 'Logo' })
       );
 
       if (this.props.currentUser) {
         return _react2.default.createElement(
           'nav',
-          { className: 'main-nav' },
-          logo,
+          { id: 'main-nav-logged-in' },
           _react2.default.createElement(
-            'form',
-            { className: 'header-search' },
+            'div',
+            { className: 'left-nav' },
             _react2.default.createElement(
-              'label',
-              { className: 'header-search-label' },
-              ' Select Company by ticker',
-              _react2.default.createElement('input', { className: 'search-input',
-                placeholder: 'Type ticker',
-                onChange: this.handleFilterChange("ticker") }),
+              'div',
+              { className: 'logo' },
+              logo
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'middle-nav' },
+            _react2.default.createElement(
+              'form',
+              { className: 'header-search' },
               _react2.default.createElement(
-                'button',
-                { className: 'header-search-button',
-                  onClick: this.handleSearchSubmit },
-                _react2.default.createElement('i', { className: 'fa fa-search', 'aria-hidden': 'true' })
+                'label',
+                { className: 'header-search-label' },
+                ' Search Company',
+                _react2.default.createElement('input', { className: 'search-input',
+                  placeholder: 'Search Ticker Ex: MSFT',
+                  onChange: this.handleFilterChange("ticker") }),
+                _react2.default.createElement('button', { className: 'header-search-button',
+                  onClick: this.handleSearchSubmit })
               )
             )
           ),
-          _react2.default.createElement(_trade2.default, null),
           _react2.default.createElement(
-            'button',
-            { className: 'portfolio-button',
-              onClick: this.handlePortfolioButton },
-            'Portfolio'
-          ),
-          _react2.default.createElement(
-            'button',
-            { className: 'logout-button', onClick: this.handleLogOutClick },
-            'Log Out'
+            'div',
+            { className: 'right-nav' },
+            _react2.default.createElement(_trade2.default, null),
+            _react2.default.createElement(
+              'div',
+              { className: 'auth' },
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'portfolio-button',
+                  onClick: this.handlePortfolioButton },
+                'Portfolio'
+              ),
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'logout-button',
+                  onClick: this.handleLogOutClick },
+                'Log Out'
+              )
+            )
           )
         );
       } else {
         return _react2.default.createElement(
           'nav',
-          { className: 'main-nav' },
-          logo,
+          { id: 'main-nav' },
           _react2.default.createElement(
-            'button',
-            { className: 'signup-button',
-              onClick: this.handleSignUpClick },
-            'Register'
+            'div',
+            { className: 'left-nav' },
+            _react2.default.createElement(
+              'div',
+              { className: 'logo' },
+              logo
+            )
           ),
           _react2.default.createElement(
-            'button',
-            { className: 'login-button',
-              onClick: this.handleLogInClick },
-            'Log In'
-          ),
-          _react2.default.createElement(
-            'button',
-            { className: 'demo-button',
-              onClick: this.handleGuestClick },
-            ' Guest'
+            'div',
+            { className: 'right-nav' },
+            _react2.default.createElement(
+              'div',
+              { className: 'auth' },
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'signup-button',
+                  onClick: this.handleSignUpClick },
+                'Register'
+              ),
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'login-button',
+                  onClick: this.handleLogInClick },
+                'Log In'
+              ),
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'demo-button',
+                  onClick: this.handleGuestClick },
+                ' Guest'
+              )
+            )
           )
         );
       }
@@ -32696,6 +32770,12 @@ var _react2 = _interopRequireDefault(_react);
 
 var _stock_api_util = __webpack_require__(59);
 
+var _reactRouter = __webpack_require__(29);
+
+var _portfolio_form_container = __webpack_require__(409);
+
+var _portfolio_form_container2 = _interopRequireDefault(_portfolio_form_container);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32710,7 +32790,13 @@ var Portfolio = function (_React$Component) {
   function Portfolio(props) {
     _classCallCheck(this, Portfolio);
 
-    return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+
+    _this.handleClick = _this.handleClick.bind(_this);
+    _this.state = {
+      currentPortfolio: undefined
+    };
+    return _this;
   }
 
   _createClass(Portfolio, [{
@@ -32719,20 +32805,147 @@ var Portfolio = function (_React$Component) {
       this.props.fetchPortfolios();
     }
   }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps() {}
+  }, {
+    key: 'pieChart',
+    value: function pieChart(equity, cash) {
+      google.charts.load('current', { 'packages': ['corechart'] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([['Type', 'Amount'], ['Equity', equity], ['Cash', cash]]);
+
+        var options = {
+          title: 'Portfolio Breakdown'
+        };
+        if (document.getElementById('piechart')) {
+          var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(data, options);
+        }
+      }
+    }
+  }, {
+    key: 'handleClick',
+    value: function handleClick(event) {
+      this.setState({ currentPortfolio: event });
+    }
+
+    // render() {
+    //     let portfolioTable;
+    //     if (this.props.portfolio[0]) {
+    //       let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
+    //
+    //         let title = undefined;
+    //
+    //         // let currentPrice;
+    //         //   fetchStockPrice(stock.ticker).then(response => {
+    //         //
+    //         //     title = response.title;
+    //         //     currentPrice = response.price;
+    //         //   });
+    //
+    //         return (<tr key={idx}>
+    //           <td>{ stock.ticker }</td>
+    //           <td>{ stock.title }</td>
+    //           <td>{ stock.number_of_shares }</td>
+    //
+    //           <td> { stock.current_price } </td>
+    //           <td>{ stock.current_price * stock.number_of_shares }</td>
+    //
+    //           <td> {stock.purchase_price }</td>
+    //           <td>{ stock.purchase_price * stock.number_of_shares }</td>
+    //           <td>{(stock.current_price - stock.purchase_price)  * stock.number_of_shares}</td>
+    //           <td>{ (stock.current_price - stock.purchase_price) /
+    //             stock.purchase_price }</td>
+    //
+    //         </tr>);
+    //       });
+    //
+    //       portfolioTable = <table>
+    //         <tbody>
+    //           <tr>
+    //             <th>Symbol</th>
+    //             <th>Title</th>
+    //             <th>Quantity</th>
+    //             <th>Price</th>
+    //             <th>Value</th>
+    //             <th>Unit Cost</th>
+    //             <th>Cost Basis</th>
+    //             <th>Unrealiezed Gain / Loss</th>
+    //             <th>% Change</th>
+    //           </tr>
+    //           { stocks }
+    //         </tbody>
+    //       </table>;
+    //     }
+    //
+    //     return (
+    //         <div>
+    //           { portfolioTable }
+    //         </div>
+    //     );
+    // }
+
+  }, {
+    key: 'numberWithCommas',
+    value: function numberWithCommas(num) {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var portfolioTable = void 0;
-      if (this.props.portfolio[0]) {
-        var stocks = this.props.portfolio[0].stocks.map(function (stock, idx) {
+      var portfolioIndex = [];
 
-          var title = undefined;
+      var mainPortfolio = this.state.currentPortfolio;
 
-          // let currentPrice;
-          //   fetchStockPrice(stock.ticker).then(response => {
-          //
-          //     title = response.title;
-          //     currentPrice = response.price;
-          //   });
+      for (var i = 0; i < this.props.portfolio.length; i++) {
+        if (this.props.portfolio[i].main === true && mainPortfolio === undefined) {
+          mainPortfolio = this.props.portfolio[i];
+        }
+      }
+
+      // if (this.props.portfolio.length > 0) {
+      //     portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
+      //         if (this.props.portfolio[idx].main === true) {
+      //             return (
+      //                 <Link to={`portfolio/`}>
+      //                     <h5>{portfolio.title}</h5>
+      //                 </Link>
+      //             );
+      //         } else {
+      //             return (
+      //                 <Link to={`portfolio/${portfolio.id}`}>
+      //                     <h5>{portfolio.title}</h5>
+      //                 </Link>
+      //             );
+      //         }
+
+      //     });
+      // }
+
+      if (this.props.portfolio.length > 0) {
+        portfolioIndex = this.props.portfolio.map(function (portfolio, idx) {
+          return _react2.default.createElement(
+            'button',
+            { onClick: function onClick() {
+                return _this2.handleClick(portfolio);
+              } },
+            _react2.default.createElement(
+              'h5',
+              null,
+              portfolio.title
+            )
+          );
+        });
+      }
+
+      if (mainPortfolio && this.props.currentUser) {
+        var stocks = mainPortfolio.stocks.map(function (stock, idx) {
 
           return _react2.default.createElement(
             'tr',
@@ -32755,28 +32968,53 @@ var Portfolio = function (_React$Component) {
             _react2.default.createElement(
               'td',
               null,
-              ' ',
-              stock.current_price,
+              '$',
+              stock.current_price.toFixed(2),
               ' '
             ),
             _react2.default.createElement(
               'td',
               null,
-              stock.current_price * stock.number_of_shares
+              '$',
+              _this2.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))
             ),
             _react2.default.createElement(
               'td',
               null,
-              ' ',
-              stock.purchase_price
+              '$',
+              stock.purchase_price.toFixed(2)
             ),
             _react2.default.createElement(
               'td',
               null,
-              stock.purchase_price * stock.number_of_shares
+              '$',
+              _this2.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares))
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              '$',
+              _this2.numberWithCommas(Math.round((stock.current_price - stock.purchase_price) * stock.number_of_shares))
+            ),
+            _react2.default.createElement(
+              'td',
+              null,
+              Math.round((stock.current_price - stock.purchase_price) / stock.purchase_price * 100),
+              '% '
             )
           );
         });
+
+        var totalValue = this.props.currentUser.investor.balance;
+        var unrealizedGain = 0;
+        var initialValue = 0;
+
+        for (var _i = 0; _i < mainPortfolio.stocks.length; _i++) {
+          var stock = mainPortfolio.stocks[_i];
+          totalValue += stock.current_price * stock.number_of_shares;
+          initialValue += stock.purchase_price * stock.number_of_shares;
+        }
+        var percentageChange = (totalValue - initialValue) / initialValue * 100;
 
         portfolioTable = _react2.default.createElement(
           'table',
@@ -32815,24 +33053,96 @@ var Portfolio = function (_React$Component) {
               _react2.default.createElement(
                 'th',
                 null,
-                'Unit Cost'
+                'Purchase Price'
               ),
               _react2.default.createElement(
                 'th',
                 null,
                 'Cost Basis'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                'Unrealiezed Gain / Loss'
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                '% Change'
               )
             ),
-            stocks
+            stocks,
+            _react2.default.createElement(
+              'tr',
+              null,
+              'Cash',
+              _react2.default.createElement('th', null),
+              _react2.default.createElement('th', null),
+              _react2.default.createElement('th', null),
+              _react2.default.createElement(
+                'th',
+                null,
+                '$',
+                this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))
+              )
+            ),
+            _react2.default.createElement(
+              'tr',
+              null,
+              'Total',
+              _react2.default.createElement('th', null),
+              _react2.default.createElement('th', null),
+              _react2.default.createElement('th', null),
+              _react2.default.createElement(
+                'th',
+                null,
+                '$',
+                this.numberWithCommas(Math.round(totalValue))
+              ),
+              _react2.default.createElement('th', null),
+              _react2.default.createElement('th', null),
+              _react2.default.createElement(
+                'th',
+                null,
+                '$',
+                this.numberWithCommas(Math.round(totalValue - initialValue))
+              ),
+              _react2.default.createElement(
+                'th',
+                null,
+                Math.round(percentageChange),
+                '%'
+              )
+            )
           )
         );
       }
 
-      return _react2.default.createElement(
-        'div',
-        null,
-        portfolioTable
-      );
+      if (this.props.currentUser) {
+        return _react2.default.createElement(
+          'div',
+          { className: 'main-portfolio-index' },
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement('br', null),
+            _react2.default.createElement(
+              'div',
+              null,
+              portfolioIndex
+            )
+          ),
+          portfolioTable,
+          _react2.default.createElement(_portfolio_form_container2.default, null),
+          _react2.default.createElement(
+            'div',
+            { id: 'piechart' },
+            this.pieChart(totalValue - this.props.currentUser.investor.balance, this.props.currentUser.investor.balance)
+          )
+        );
+      } else {
+        return _react2.default.createElement('div', { id: 'piechart' });
+      }
     }
   }]);
 
@@ -32849,7 +33159,7 @@ exports.default = Portfolio;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _reactRedux = __webpack_require__(27);
@@ -32863,20 +33173,18 @@ var _portfolio2 = _interopRequireDefault(_portfolio);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {
-    currentUser: state.currentUser,
-    portfolio: Object.keys(state.portfolio).map(function (id) {
-      return state.portfolio[id];
-    })
-  };
+    return {
+        currentUser: state.currentUser,
+        portfolio: state.portfolio
+    };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    fetchPortfolios: function fetchPortfolios() {
-      return dispatch((0, _portfolio_actions.fetchPortfolios)());
-    }
-  };
+    return {
+        fetchPortfolios: function fetchPortfolios() {
+            return dispatch((0, _portfolio_actions.fetchPortfolios)());
+        }
+    };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_portfolio2.default);
@@ -33032,48 +33340,48 @@ var SessionForm = function (_React$Component) {
 				'div',
 				{ className: 'login-form-container' },
 				_react2.default.createElement(
-					'form',
-					{ onSubmit: this.handleSubmit, className: 'login-form-box' },
+					'div',
+					{ className: 'login-form' },
 					_react2.default.createElement(
-						'div',
-						{ className: 'session-form-message-container' },
+						'form',
+						{ onSubmit: this.handleSubmit, className: 'login-form-box' },
 						_react2.default.createElement(
-							'p',
+							'div',
 							{ className: 'session-form-message' },
 							message
-						)
-					),
-					this.renderErrors(),
-					_react2.default.createElement(
-						'div',
-						{ className: 'first-last-names' },
-						firstName,
-						lastName
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'login-form-info' },
-						_react2.default.createElement('input', { type: 'text',
-							placeholder: 'Username',
-							value: this.state.username,
-							onChange: this.update("username"),
-							className: 'email-input' }),
-						_react2.default.createElement('input', { type: 'password',
-							placeholder: 'Password',
-							value: this.state.password,
-							onChange: this.update("password"),
-							className: 'password-input' }),
-						_react2.default.createElement('input', { type: 'submit', value: submitText, className: 'submit-button' })
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'bottom-message-form' },
-						_react2.default.createElement(
-							'p',
-							{ className: 'redirect-message' },
-							redirectMessage
 						),
-						this.navButton()
+						this.renderErrors(),
+						_react2.default.createElement(
+							'div',
+							{ className: 'first-last-names' },
+							firstName,
+							lastName
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'login-form-info' },
+							_react2.default.createElement('input', { type: 'text',
+								placeholder: 'Username',
+								value: this.state.username,
+								onChange: this.update("username"),
+								className: 'email-input' }),
+							_react2.default.createElement('input', { type: 'password',
+								placeholder: 'Password',
+								value: this.state.password,
+								onChange: this.update("password"),
+								className: 'password-input' }),
+							_react2.default.createElement('input', { type: 'submit', value: submitText, className: 'submit-button' })
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'bottom-message-form' },
+							_react2.default.createElement(
+								'p',
+								{ className: 'redirect-message' },
+								redirectMessage
+							),
+							this.navButton()
+						)
 					)
 				)
 			);
@@ -33172,7 +33480,8 @@ var customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(-50%, -50%)',
+    height: '300px'
   }
 };
 
@@ -33392,43 +33701,49 @@ var TradeForm = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+
       return _react2.default.createElement(
-        'form',
-        { className: 'trade-form', onSubmit: this.handleSubmit },
+        'div',
+        { className: 'trade-form-container' },
         _react2.default.createElement(
-          'label',
-          null,
-          ' Action',
+          'form',
+          { className: 'trade-form', onSubmit: this.handleSubmit },
           _react2.default.createElement(
-            'select',
-            { className: 'trade-action', onChange: this.update('action') },
-            _react2.default.createElement('option', { value: '' }),
+            'label',
+            null,
+            ' Action',
             _react2.default.createElement(
-              'option',
-              { value: 'Buy' },
-              'Buy'
-            ),
-            _react2.default.createElement(
-              'option',
-              { value: 'Sell' },
-              'Sell'
+              'select',
+              { className: 'trade-action', onChange: this.update('action') },
+              _react2.default.createElement('option', { value: '' }),
+              _react2.default.createElement(
+                'option',
+                { value: 'Buy' },
+                'Buy'
+              ),
+              _react2.default.createElement(
+                'option',
+                { value: 'Sell' },
+                'Sell'
+              )
             )
-          )
+          ),
+          _react2.default.createElement(
+            'label',
+            null,
+            ' Symbol',
+            _react2.default.createElement('input', { className: 'form-symbol', onChange: this.update("ticker") })
+          ),
+          _react2.default.createElement(
+            'label',
+            null,
+            ' Quantity(Shares)',
+            _react2.default.createElement('input', { className: 'form-shares', onChange: this.update('number_of_shares') })
+          ),
+          _react2.default.createElement('input', { type: 'submit', className: 'form-submit-button', value: 'Submit',
+            onSubmit: this.handleSubmit })
         ),
-        _react2.default.createElement(
-          'label',
-          null,
-          ' Symbol',
-          _react2.default.createElement('input', { className: 'form-symbol', onChange: this.update("ticker") })
-        ),
-        _react2.default.createElement(
-          'label',
-          null,
-          ' Quantity of Shares',
-          _react2.default.createElement('input', { className: 'form-shares', onChange: this.update('number_of_shares') })
-        ),
-        _react2.default.createElement('input', { type: 'submit', className: 'form-submit-button', value: 'Submit',
-          onSubmit: this.handleSubmit })
+        _react2.default.createElement('div', { className: 'trade-form-popup' })
       );
     }
   }]);
@@ -33452,6 +33767,8 @@ Object.defineProperty(exports, "__esModule", {
 var _reactRedux = __webpack_require__(27);
 
 var _stock_actions = __webpack_require__(40);
+
+var _company_actions = __webpack_require__(96);
 
 var _investor_actions = __webpack_require__(97);
 
@@ -33493,6 +33810,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref) {
     },
     updateInvestor: function updateInvestor(investor) {
       return dispatch((0, _investor_actions.updateInvestor)(investor));
+    },
+    fetchCompany: function fetchCompany(ticker) {
+      return dispatch((0, _company_actions.fetchCompany)(ticker));
     }
   };
 };
@@ -33500,7 +33820,62 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_trade_form2.default);
 
 /***/ }),
-/* 179 */,
+/* 179 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(3);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var WelcomePage = function WelcomePage() {
+  var placeholder = 'Lorem ipsum dolor sit amet, dapibus est tempus eget, vitae ornare viverra ipsum. Neque urna quis. Pellentesque vivamus dolor at et dui dis, sed litora aliquam eu eros. Nec consectetuer, luctus laborum turpis, suscipit auctor curabitur maecenas, non turpis luctus diam ipsum. Nascetur mauris pellentesque sodales ut quo, nullam pede vel vivamus leo praesent, vel nulla convallis vitae, proin pretium nibh pellentesque dapibus fermentum commodo. In vestibulum nunc wisi ut, urna commodo nunc nonummy voluptas magnis posuere, velit bibendum, nunc quam pede nascetur at etiam justo, vel itaque consectetuer ligula ipsum ornare. Dicta quis cras lorem, ornare lobortis aliquet, felis est accumsan quis, wisi at phasellus nulla. Pellentesque faucibus. Elit mauris sed quis, justo orci at nec at interdum enim, et phasellus, egestas non, tellus fermentum nibh posuere. A amet dolor in nunc cursus lacinia, in sit in enim etiam, vestibulum diam. Potenti quam occaecat pharetra ullamcorper mi enim, scelerisque libero ut ut, porttitor auctor ornare morbi ultrices porta, ut et ante massa faucibus rem, magna convallis tellus sed imperdiet praesent. Vel accumsan varius wisi vivamus faucibus, erat et tellus taciti lectus, dolor tristique tortor ac, egestas a a leo, id pretium semper imperdiet. In volutpat ut at morbi tortor urna. Tempor urna nec urna, praesent nulla. Dignissim tempus, praesent praesent imperdiet nec reiciendis faucibus, erat etiam tortor, mauris neque consectetuer erat nulla ligula eu. Est nam, cras maecenas nisl lacinia natoque cras semper, mauris metus morbi at aliquam dictum tincidunt. Odio erat sit sed non lectus donec, volutpat cum cursus laoreet morbi, eu nibh dapibus dolor fusce, hendrerit mauris posuere consectetuer neque. Integer ac libero praesent, viverra facilisi, pellentesque vitae eget.';
+  return _react2.default.createElement(
+    'div',
+    { className: 'welcome-page' },
+    _react2.default.createElement('div', { className: 'background-pic' }),
+    _react2.default.createElement(
+      'div',
+      { className: 'background-text' },
+      _react2.default.createElement(
+        'h1',
+        null,
+        'Welcome to Fantasy Investing'
+      ),
+      _react2.default.createElement(
+        'h2',
+        null,
+        'Your Future in Stocks...'
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'content' },
+      _react2.default.createElement(
+        'h3',
+        null,
+        'What is Fantasy Investing?'
+      ),
+      _react2.default.createElement(
+        'p',
+        null,
+        placeholder
+      )
+    )
+  );
+};
+
+exports.default = WelcomePage;
+
+/***/ }),
 /* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -33522,6 +33897,8 @@ var _store2 = _interopRequireDefault(_store);
 var _root = __webpack_require__(164);
 
 var _root2 = _interopRequireDefault(_root);
+
+var _reduxPersist = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"redux-persist\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 var _stock_actions = __webpack_require__(40);
 
@@ -33546,6 +33923,7 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem("currentUser", store.getState().currentUser);
   }
 
+  (0, _reduxPersist.persistStore)(store);
   window.store = store;
 
   var root = document.getElementById('root');
@@ -33657,21 +34035,29 @@ var PortfolioReducer = function PortfolioReducer() {
       return action.portfolios;
     case _portfolio_actions.RECEIVE_PORTFOLIO:
       return (0, _lodash.merge)({}, state, action.portfolio);
+    case _portfolio_actions.REMOVE_PORTFOLIO:
+      for (var i = 0; i < state[0].portfolio.length; i++) {
+        if (state[0].portfolio[i].id === action.portfolio.id) {
+          nextState[0].portfolio.splice(i, 1);
+          break;
+        }
+      }
+      return nextState;
     case _stock_actions.CREATE_STOCK:
       nextState[0].stocks.push(action.stock);
       return nextState;
     case _stock_actions.UPDATE_STOCK:
-      for (var i = 0; i < state[0].stocks.length; i++) {
-        if (state[0].stocks[i].id === action.stock.id) {
-          nextState[0].stocks[i] = action.stock;
+      for (var _i = 0; _i < state[0].stocks.length; _i++) {
+        if (state[0].stocks[_i].id === action.stock.id) {
+          nextState[0].stocks[_i] = action.stock;
           break;
         }
       }
       return nextState;
     case _stock_actions.REMOVE_STOCK:
-      for (var _i = 0; _i < state[0].stocks.length; _i++) {
-        if (state[0].stocks[_i].id === action.stock.id) {
-          nextState[0].stocks.splice(_i, 1);
+      for (var _i2 = 0; _i2 < state[0].stocks.length; _i2++) {
+        if (state[0].stocks[_i2].id === action.stock.id) {
+          nextState[0].stocks.splice(_i2, 1);
           break;
         }
       }
@@ -33818,6 +34204,22 @@ var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(portfolio)
     return $.ajax({
         method: 'GET',
         url: '/portfolio/' + portfolio.id
+    });
+};
+
+var createPortfolio = exports.createPortfolio = function createPortfolio(portfolio) {
+    return $.ajax({
+        method: 'POST',
+        url: 'api/portfolio',
+        data: portfolio
+    });
+};
+
+var deletePortfolio = exports.deletePortfolio = function deletePortfolio(portfolioId) {
+    return $.ajax({
+        method: 'DELETE',
+        url: 'api/portfolio',
+        data: portfolioId
     });
 };
 
@@ -52191,6 +52593,132 @@ function symbolObservablePonyfill(root) {
 
 	return result;
 };
+
+/***/ }),
+/* 408 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(3);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PortfolioForm = function (_React$Component) {
+    _inherits(PortfolioForm, _React$Component);
+
+    function PortfolioForm(props) {
+        _classCallCheck(this, PortfolioForm);
+
+        var _this = _possibleConstructorReturn(this, (PortfolioForm.__proto__ || Object.getPrototypeOf(PortfolioForm)).call(this, props));
+
+        _this.state = {
+            title: "",
+            main: false,
+            user: _this.props.currentUser
+        };
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        _this.updatePortfolio = _this.updatePortfolio.bind(_this);
+
+        return _this;
+    }
+
+    _createClass(PortfolioForm, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {}
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+            e.preventDefault();
+            console.log(this.state);
+            this.props.createPortfolio(this.state);
+        }
+    }, {
+        key: 'updatePortfolio',
+        value: function updatePortfolio(event) {
+            this.setState({ title: event.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'portfolio-form' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'createMessage' },
+                    'Create A New Portfolio'
+                ),
+                _react2.default.createElement(
+                    'form',
+                    { onSubmit: this.handleSubmit },
+                    _react2.default.createElement('input', {
+                        onChange: this.updatePortfolio,
+                        type: 'text',
+                        placeholder: 'Portfolio Title',
+                        value: this.state.title })
+                )
+            );
+        }
+    }]);
+
+    return PortfolioForm;
+}(_react2.default.Component);
+
+exports.default = PortfolioForm;
+
+/***/ }),
+/* 409 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactRedux = __webpack_require__(27);
+
+var _portfolio_form = __webpack_require__(408);
+
+var _portfolio_form2 = _interopRequireDefault(_portfolio_form);
+
+var _portfolio_actions = __webpack_require__(98);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    currentUser: state.currentUser,
+    portfolio: state.portfolio
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    createPortfolio: function createPortfolio(portfolio) {
+      return dispatch((0, _portfolio_actions.createPortfolio)(portfolio));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_portfolio_form2.default);
 
 /***/ })
 /******/ ]);

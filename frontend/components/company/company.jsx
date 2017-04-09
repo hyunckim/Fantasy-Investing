@@ -9,6 +9,7 @@ class Company extends React.Component {
 
   componentDidMount() {
     this.props.fetchCompany();
+    
   }
 
   componentWillReceiveProps(nextProps) {
@@ -129,37 +130,37 @@ class Company extends React.Component {
     return (
       <div className="company-content">
         <div className="company-info">
+
           <div className="company-name-price">
             <span className="company-title">{ title } { ticker }</span>
             <span className="company-price">{ price } ({ percentChange })</span>
           </div>
-
         </div>
         <div className="company-summary">
           <div className="company-detail">
             <div className="company-nums">
-              <span>Earning Share</span>
-              <span>{ earningShare }</span>
+              <span >Earning Share</span>
+              <span className='value'>{ earningShare }</span>
             </div>
             <div className="company-nums">
               <span>Previous Close</span>
-              <span>{ prevClose }</span>
+              <span className='value'>{ prevClose }</span>
             </div>
             <div className="company-nums">
               <span>Dividend</span>
-              <span>{ dividend }</span>
+              <span className='value'>{ dividend }</span>
             </div>
             <div className="company-nums">
               <span>Yr. High</span>
-              <span>{ yearHigh }</span>
+              <span className='value'>{ yearHigh }</span>
             </div>
             <div className="company-nums">
               <span>Yr. Low</span>
-              <span>{ yearLow }</span>
+              <span className='value'>{ yearLow }</span>
             </div>
             <div className="company-nums">
               <span>Volume</span>
-              <span>{ volume }</span>
+              <span className='value'>{ volume }</span>
             </div>
           </div>
           <div id="canvas-svg">

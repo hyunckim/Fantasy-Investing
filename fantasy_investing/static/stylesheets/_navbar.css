@@ -1,9 +1,106 @@
-.header {
-  display: flex;
-  border: 1px solid black;
-  height: 100px;
+#main-nav {
+  z-index:1000;
+  overflow: hidden;
+  position: fixed; 
+  z-index:9999;
+  top: 0;
+  width: 100%;
+  height: 5%vh;
+  background-color: transparent;
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
 }
 
-.main-nav {
+.logo {
+  justify-content: flex-start;
+}
+
+.auth {
   display: flex;
+  justify-content: flex-end;
+}
+
+.signup-button,
+.login-button,
+.logout-button,
+.demo-button {
+  color: white;
+  font-size: 3vh;
+  margin-right: 24px;
+}
+
+.right-navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.left-navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+#main-nav-logged-in{
+  z-index:1000;
+  overflow: hidden;
+  position: fixed; 
+  z-index:9999;
+  top: 0;
+  width: 100%;
+  height: 5%vh;
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+}
+
+#main-nav-logged-in .right-navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  align-content: center;
+  align-items: center;
+}
+
+#main-nav-logged-in .left-navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#main-nav-logged-in .middle-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-search{
+  display: flex;
+  flex-direction: row;
+}
+
+.header-search input{
+  border: 1px solid black;
+}
+
+.search-input{
+    width: 100px;
+    box-sizing: border-box;
+    border: 1px solid white;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: transparent;
+    background-image: url('searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+.search-input:focus {
+    width: 100%;
 }

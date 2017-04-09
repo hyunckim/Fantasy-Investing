@@ -1,0 +1,13 @@
+.main-portfolio-index {
+    color: white;
+    margin-top: 50px;
+}
+
+.main-portfolio-index td, .main-portfolio-index tr {
+    color: white;
+}
+
+#piechart {
+  width: 600px;
+  height: 500px;
+}
