@@ -27,7 +27,15 @@ class NavBar extends React.Component {
 
   handleLogOutClick(e) {
     e.preventDefault();
-    this.props.logout().then(() => hashHistory.push("/"));
+    this.props.logout();
+    let timesRun = 0;
+    let interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+        clearInterval(interval);
+      }
+      hashHistory.push("/");
+    }, 200);
   }
 
   handleGuestClick(e) {
@@ -77,15 +85,14 @@ class NavBar extends React.Component {
                 onChange={this.handleFilterChange("ticker")} />
               <button className='header-search-button'
                 onClick={this.handleSearchSubmit}>
-                <i className="fa fa-search" aria-hidden="true"></i>
               </button>
             </label>
           </form>
           </div>
           <div className='right-nav'>
-               <TradeModal />
-
             <div className='auth'>
+              <TradeModal />
+
               <button
                 className="portfolio-button"
                 onClick={this.handlePortfolioButton}>Portfolio

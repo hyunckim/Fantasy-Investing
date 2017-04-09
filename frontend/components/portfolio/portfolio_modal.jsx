@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import TradeFormContainer from './trade_form_container';
-
+import PortfolioFormContainer from './portfolio_form_container';
 const customStyles = {
   content : {
     top                   : '50%',
@@ -9,12 +8,11 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    height                : '300px'
+    transform             : 'translate(-50%, -50%)'
   }
 };
 
-class TradeModal extends React.Component {
+class PortfolioModal extends React.Component {
   constructor() {
     super();
 
@@ -36,8 +34,6 @@ class TradeModal extends React.Component {
   }
 
   afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    // this.refs.subtitle.style.color = '#f00';
   }
 
   closeModal() {
@@ -47,19 +43,20 @@ class TradeModal extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.openModal}>Trade</button>
+        <button onClick={this.openModal}>Add Portfolio</button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           style={customStyles}
-          contentLabel="Example Modal"
+          contentLabel="Portfolio Modal"
         >
-        <TradeFormContainer />
+        <button className='auth-close-button' onClick={this.closeModal}>✖</button>
+        <PortfolioFormContainer closeModal={this.closeModal}/> 
         </Modal>
       </div>
     );
   }
 }
 
-export default TradeModal;
+export default PortfolioModal;
