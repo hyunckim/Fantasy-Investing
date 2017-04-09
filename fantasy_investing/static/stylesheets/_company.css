@@ -10,7 +10,8 @@
 
 .company-info {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   font-size: 30px;
   /*border: 1px solid red;*/
   padding: 20px 10px;
@@ -56,3 +57,8 @@
  .value{
    color: #ce9e62
  }
+.company-name-price {
+  display: flex;
+  flex-direction: column;
+}
+

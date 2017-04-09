@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import configureStore from './store/store';
 import Root from './components/root';
 
+import{ createStock, updateStock , deleteStock } from "./actions/stock_actions";
+window.createStock = createStock;
+window.updateStock = updateStock;
+window.deleteStock = deleteStock;
 
 document.addEventListener('DOMContentLoaded',() => {
   let store;
@@ -13,7 +17,7 @@ document.addEventListener('DOMContentLoaded',() => {
   } else {
     store = configureStore();
   }
-  
+
   if (store.getState().currentUser) {
 
     localStorage.setItem("currentUser", store.getState().currentUser);

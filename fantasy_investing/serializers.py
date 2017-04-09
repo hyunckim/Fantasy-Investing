@@ -13,8 +13,7 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stock
-        # fields = ('ticker', 'purchase_price', 'purchase_date', 'number_of_shares')
-        fields = '__all__'
+        fields = "__all__"
 
     def create(self, validated_data):
         stock = Stock.objects.create(**validated_data)
@@ -37,11 +36,16 @@ class StockSerializer(serializers.ModelSerializer):
         stock = Share(obj.ticker)
         return stock.get_name()
 
+class StockPriceSerializer(serializers.Serializer):
+    price = serializers.FloatField(default=0)
+    title = serializers.CharField(max_length=100)
+
 class PortfolioSerializer(serializers.ModelSerializer):
     stocks = StockSerializer(
         source="get_stocks",
         many=True
     )
+
     class Meta:
         model = Portfolio
         fields = ('id', 'title', 'main', 'stocks')
@@ -52,7 +56,6 @@ class PortfolioSerializer(serializers.ModelSerializer):
         return portfolio
 
         
-
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -72,7 +75,7 @@ class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investor
         fields = '__all__'
-
+        
 class UserLoginSerializer(serializers.ModelSerializer):
 
     investor = InvestorSerializer()

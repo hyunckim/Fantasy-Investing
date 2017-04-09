@@ -1,6 +1,5 @@
 import React from 'react';
 import { merge } from  'lodash';
-import TradeModal from '../trade/trade';
 
 class Company extends React.Component {
 
@@ -131,9 +130,11 @@ class Company extends React.Component {
     return (
       <div className="company-content">
         <div className="company-info">
-          <span className="company-title">{ title } { ticker }</span>
-          <span className="company-price" >{ price } ({ percentChange })</span>
-          <TradeModal />
+
+          <div className="company-name-price">
+            <span className="company-title">{ title } { ticker }</span>
+            <span className="company-price">{ price } ({ percentChange })</span>
+          </div>
         </div>
         <div className="company-summary">
           <div className="company-detail">
