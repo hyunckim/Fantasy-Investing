@@ -1,6 +1,6 @@
 import React from 'react';
 import { fetchStockPrice } from '../../util/stock_api_util';
-import {Link} from 'react-router';  
+import {Link} from 'react-router';
 import PortfolioFormContainer from './portfolio_form_container';
 
 
@@ -48,6 +48,10 @@ class Portfolio extends React.Component {
 
               <td> {stock.purchase_price }</td>
               <td>{ stock.purchase_price * stock.number_of_shares }</td>
+              <td>{(stock.current_price - stock.purchase_price)  * stock.number_of_shares}</td>
+              <td>{ (stock.current_price - stock.purchase_price) /
+                stock.purchase_price }</td>
+      
             </tr>);
           });
 
@@ -73,7 +77,7 @@ class Portfolio extends React.Component {
             </div>
         );
     }
-   
+
     render() {
 
         let portfolioTable;
