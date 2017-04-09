@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
-from fantasy_investing.serializers import PortfolioSerializer
+from fantasy_investing.serializers import PortfolioSerializer, PortfolioFormSerializer
 from fantasy_investing.models import Portfolio
 from fantasy_investing.serializers import StockPriceSerializer
 import datetime
@@ -70,13 +70,13 @@ def portfolio_index(request):
         return JsonResponse(serializer.data, safe=False)
 
 class PortfolioView(CreateModelMixin, GenericAPIView):
-    serializer_class = PortfolioSerializer
+    serializer_class = PortfolioFormSerializer
     def post(self, request):
         return self.create(request)
     def delete(self, request):
-        p = Portfolio.objects.get(pk=request.DELETE['id'])
+        p = Portfolio.objects.get(pk=request.POST.get('id', False))
         if p:
-            Portfolio.objects.delete(p)
+            p.delete()
             return HttpResponse(status=200)
         else:
             return HttpResponse("User does not have portfolio", status=404)
