@@ -35,10 +35,10 @@ class Portfolio extends React.Component {
         let options = {
           title: 'Portfolio Breakdown'
         };
-
-        let chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
+        if (document.getElementById('piechart')) {
+          let chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(data, options);
+        }
       }
     }
 
@@ -148,7 +148,7 @@ class Portfolio extends React.Component {
             });
         }
 
-        if (mainPortfolio) {
+        if (mainPortfolio && this.props.currentUser) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
 
             return (<tr key={idx}>
@@ -210,22 +210,27 @@ class Portfolio extends React.Component {
             </tbody>
           </table>;
         }
-        return (
-            <div className='main-portfolio-index'>
-                <div>
-                    <br />
-                    <div>
-                        {portfolioIndex}
-                    </div>
-                </div>
-              { portfolioTable }
-              <PortfolioFormContainer />
-              <div id="piechart">
-                {this.pieChart(totalValue - this.props.currentUser.investor.balance,
-                  this.props.currentUser.investor.balance)}
+
+        if (this.props.currentUser) {
+          return (
+              <div className='main-portfolio-index'>
+                  <div>
+                      <br />
+                      <div>
+                          {portfolioIndex}
+                      </div>
+                  </div>
+                { portfolioTable }
+                <PortfolioFormContainer />
+                  <div id="piechart">
+                    {this.pieChart(totalValue - this.props.currentUser.investor.balance,
+                      this.props.currentUser.investor.balance)}
+                  </div>
               </div>
-            </div>
-        );
+          );
+        } else {
+          return (<div id="piechart"></div>);
+        }
     }
 }
 

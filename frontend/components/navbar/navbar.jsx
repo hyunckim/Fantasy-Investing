@@ -85,7 +85,6 @@ class NavBar extends React.Component {
                 onChange={this.handleFilterChange("ticker")} />
               <button className='header-search-button'
                 onClick={this.handleSearchSubmit}>
-                <i className="fa fa-search" aria-hidden="true"></i>
               </button>
             </label>
           </form>
