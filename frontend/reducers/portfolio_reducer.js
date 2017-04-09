@@ -23,7 +23,7 @@ const PortfolioReducer = (state = {}, action) => {
         case REMOVE_STOCK:
           for (let i = 0; i < state[0].stocks.length; i++) {
             if (state[0].stocks[i].id === action.stock.id) {
-              delete nextState[0].stocks[i];
+              nextState[0].stocks.splice(i, 1);
               break;
             }
           }

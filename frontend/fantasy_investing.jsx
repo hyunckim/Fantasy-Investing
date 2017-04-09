@@ -8,7 +8,6 @@ window.createStock = createStock;
 window.updateStock = updateStock;
 window.deleteStock = deleteStock;
 
-
 document.addEventListener('DOMContentLoaded',() => {
   let store;
 

@@ -4,9 +4,8 @@ import { hashHistory } from "react-router";
 export const CREATE_STOCK = "CREATE_STOCK";
 export const UPDATE_STOCK = "UPDATE_STOCK";
 export const REMOVE_STOCK = "REMOVE_STOCK";
-export const RECEIVE_STOCK_ERRORS = "RECEIVE_SESSION_ERRORS";
-export const REMOVE_STOCK_ERRORS = "REMOVE_SESSION_ERRORS";
-
+export const RECEIVE_STOCK_ERRORS = "RECEIVE_STOCK_ERRORS";
+export const REMOVE_STOCK_ERRORS = "REMOVE_STOCK_ERRORS";
 
 export const  receiveCreateStock = stock => ({
   type: CREATE_STOCK,

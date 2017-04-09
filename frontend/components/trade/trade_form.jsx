@@ -1,74 +1,100 @@
 import React from 'react';
 import { hashHistory } from 'react-router';
+import { fetchStockPrice } from "../../util/stock_api_util";
 
 class TradeForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.props.stock;
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePromise = this.handlePromise.bind(this);
+    this.updateBalance = this.updateBalance.bind(this);
   }
 
   buyStock(existingPosition, price) {
-    if (this.props.balance >= (price*this.state.number_of_shares)) {
+    if (parseInt(this.props.balance) >= (price * parseInt(this.state.number_of_shares))) {
+
       let purchaseInfo = {
         ticker: this.state.ticker,
-        purchase_price: ((existingPosition.purchase_price * existingPosition.number_of_shares)
-          + (this.price * this.state.number_of_shares)) / 2,
-        number_of_shares: existingPosition.number_of_shares
-          + this.state.number_of_shares,
-
       };
+
       let action = "";
-      if (this.props.stocks.includes(this.state.ticker)) {
-        purchaseInfo["id"] = this.stock.id;
+      if (existingPosition) {
+        purchaseInfo["id"] = existingPosition.id;
+        purchaseInfo["purchase_price"] = ((parseFloat(existingPosition.purchase_price) * parseInt(existingPosition.number_of_shares))
+          + (price * parseInt(this.state.number_of_shares))) /
+          (parseInt(existingPosition.number_of_shares) + parseFloat(this.state.number_of_shares));
+        purchaseInfo["number_of_shares"] = parseInt(existingPosition.number_of_shares)
+          + parseInt(this.state.number_of_shares);
         action = this.props.updateStock;
       } else {
+        purchaseInfo["purchase_price"] = price;
+        let today = new Date();
+        purchaseInfo["purchase_date"] =
+          `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate()}`;
+        purchaseInfo["number_of_shares"] = this.state.number_of_shares;
+        purchaseInfo["portfolio"] = this.props.portfolio[0];
         action = this.props.createStock;
       }
+      let newBalance = Math.round((parseInt(this.props.balance) +
+        (price * parseInt(this.state.number_of_shares))));
+      this.updateBalance(newBalance);
       action(purchaseInfo).then(hashHistory.push("/portfolio"));
-
     } else {
       this.props.receiveStockErrors("You have insufficient balance for this trade");
     }
   }
 
   sellStock(existingPosition, price) {
-    let action = "";
-    if (this.state.number_of_shares < existingPosition.number_of_shares) {
-      let saleInfo = {
-        id: this.stock.id,
-        ticker: this.state.ticker,
-        number_of_shares: existingPosition.number_of_shares - this.props.number_of_shares
-      };
-      this.props.updateStock(saleInfo).then(hashHistory.push("/portfolio"));
-      this.updateBalance(this.state.action, price);
-    } else if (this.state.number_of_shares === existingPosition.number_of_shares) {
-      this.props.deleteStock(this.stock.id);
-      this.updateBalance(this.state.action, price);
+    let newBalance = Math.round((parseInt(this.props.balance) +
+      (price * parseInt(this.state.number_of_shares))));
+
+    if (existingPosition) {
+      if (parseInt(this.state.number_of_shares) < parseInt(existingPosition.number_of_shares)) {
+        let saleInfo = {
+          id: existingPosition.id,
+          number_of_shares: parseInt(existingPosition.number_of_shares)
+            - parseInt(this.state.number_of_shares)
+        };
+        this.props.updateStock(saleInfo).then(hashHistory.push("/portfolio"));
+        this.updateBalance(newBalance);
+      } else if (parseInt(this.state.number_of_shares) === parseInt(existingPosition.number_of_shares)) {
+        this.props.deleteStock({id: existingPosition.id});
+        this.updateBalance(newBalance);
+      } else {
+        this.props.receiveStockErrors("You are trying to sell more shares than you have");
+      }
     } else {
-      this.props.receiveStockErrors("You are trying to sell more shares than you have");
+      this.props.receiveStockErrors(`You don't have any ${this.state.ticker} shares to sell`);
     }
   }
 
-  updateBalance(action, price) {
-    if (action === "Buy") {
-      let newBalance = this.props.balance - (price * this.state.number_of_shares);
-      this.props.updateInvestor( {id: this.investor.id, balance: newBalance});
-    } else {
-      let newBalance = this.props.balance + (price * this.state.number_of_shares);
-      this.props.updateInvestor( {id: this.investor.id, balance: newBalance});
+  updateBalance(newBalance) {
+    this.props.updateInvestor( {id: this.props.investor.id, balance: newBalance});
+  }
+
+  handlePromise(res) {
+    let price = res.price;
+    let existingPosition = undefined;
+    for (let i = 0; i < this.props.currentStocks.length; i++) {
+      if (this.props.currentStocks[i].ticker === this.state.ticker) {
+        existingPosition = this.props.currentStocks[i];
+        break;
+      }
+    }
+
+    if (this.state.action === "Buy") {
+
+      this.buyStock(existingPosition, price);
+    } else if (this.state.action === "Sell") {
+      this.sellStock(existingPosition, price);
     }
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    let price = fetchPrice(this.state.ticker);
-    let existingPosition = this.stocks[this.state.ticker];
-    if (this.state.action === "Buy") {
-      this.buyStock(existingPosition, price);
-    } else if (this.state.action === "Sell") {
-      this.sellStock(existingPosition, price);
-    }
+    let price = undefined;
+    fetchStockPrice(this.state.ticker).then(res => this.handlePromise(res));
   }
 
   update(field) {
@@ -82,6 +108,7 @@ class TradeForm extends React.Component {
       <form className="trade-form" onSubmit={this.handleSubmit}>
         <label> Action
           <select className="trade-action" onChange={this.update('action')}>
+            <option value=""></option>
             <option value="Buy">Buy</option>
             <option value="Sell">Sell</option>
           </select>

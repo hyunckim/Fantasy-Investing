@@ -18,7 +18,7 @@ from fantasy_investing.serializers import CompanySerializer
 from yahoo_finance import Share
 from fantasy_investing.serializers import PortfolioSerializer
 from fantasy_investing.models import Portfolio
-# from fantasy_investing.serializers import StockPriceSerializer
+from fantasy_investing.serializers import StockPriceSerializer
 import datetime
 from fantasy_investing.models import Investor, Stock
 import pdb
@@ -153,12 +153,19 @@ class StockView(CreateModelMixin, GenericAPIView):
             return HttpResponse("Stock is not in your portfolio", status=404)
 
 
-class InvestorView(CreateModelMixin, GenericAPIView):
+class InvestorView(GenericAPIView):
 
     serializer_class = InvestorSerializer
 
     def patch(self, request):
-        return self.update(request)
+        instance = Investor.objects.get(pk=request.POST.get('id', False))
+        instance.balance = request.POST.get('balance', instance.balance)
+        serializer = InvestorSerializer(instance)
+        if serializer.is_valid:
+            instance.save()
+            return Response(serializer.data)
+        else:
+            return HttpResponse("Invalid info", status=404)
 
 def stock_price(request, ticker):
 

@@ -7,7 +7,7 @@ export const createStock = stock => {
 };
 
 export const updateStock = stock => {
-  debugger;
+
   return $.ajax ({
     method: "PATCH",
     url: 'api/stocks',
