@@ -5,7 +5,7 @@ import App from './app';
 import CompanyContainer from './company/company_container';
 import SessionFormContainer from './session_form/session_form_container';
 import PortfolioContainer from './portfolio/portfolio_container';
-import WelcomePage from './welcome_page/welcome_page'
+import WelcomePage from './welcome_page/welcome_page';
 const Root = ({ store }) => {
 
   const _redirectIfLoggedIn = (nextState, replace) => {
