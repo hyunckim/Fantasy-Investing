@@ -148,7 +148,7 @@ class Portfolio extends React.Component {
             });
         }
 
-        if (mainPortfolio && this.props.currentUser) {
+        if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
 
             return (<tr key={idx}>
