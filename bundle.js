@@ -26490,10 +26490,14 @@ var mapStateToProps = function mapStateToProps(state) {
   };
 };
 
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+
   return {
     createPortfolio: function createPortfolio(portfolio) {
       return dispatch((0, _portfolio_actions.createPortfolio)(portfolio));
+    },
+    closeModal: function closeModal() {
+      return ownProps.closeModal;
     }
   };
 };
@@ -33216,10 +33220,10 @@ var NavBar = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'right-nav' },
-            _react2.default.createElement(_trade2.default, null),
             _react2.default.createElement(
               'div',
               { className: 'auth' },
+              _react2.default.createElement(_trade2.default, null),
               _react2.default.createElement(
                 'button',
                 {
@@ -33344,7 +33348,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -33356,6 +33360,10 @@ var _react2 = _interopRequireDefault(_react);
 var _stock_api_util = __webpack_require__(63);
 
 var _reactRouter = __webpack_require__(30);
+
+var _portfolio_modal = __webpack_require__(182);
+
+var _portfolio_modal2 = _interopRequireDefault(_portfolio_modal);
 
 var _portfolio_form_container = __webpack_require__(101);
 
@@ -33370,368 +33378,295 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var Portfolio = function (_React$Component) {
-  _inherits(Portfolio, _React$Component);
+    _inherits(Portfolio, _React$Component);
 
-  function Portfolio(props) {
-    _classCallCheck(this, Portfolio);
+    function Portfolio(props) {
+        _classCallCheck(this, Portfolio);
 
-    var _this = _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call(this, props));
 
-    _this.handleClick = _this.handleClick.bind(_this);
-    _this.state = {
-      currentPortfolio: undefined
-    };
-    return _this;
-  }
-
-  _createClass(Portfolio, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.props.fetchPortfolios();
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps() {}
-  }, {
-    key: 'pieChart',
-    value: function pieChart(equity, cash) {
-      google.charts.load('current', { 'packages': ['corechart'] });
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-        var data = google.visualization.arrayToDataTable([['Type', 'Amount'], ['Equity', equity], ['Cash', cash]]);
-
-        var options = {
-          title: 'Portfolio Breakdown'
+        _this.state = {
+            currentPortfolio: undefined
         };
-        if (document.getElementById('piechart')) {
-          var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-          chart.draw(data, options);
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.handleDelete = _this.handleDelete.bind(_this);
+
+        return _this;
+    }
+
+    _createClass(Portfolio, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.fetchPortfolios();
         }
-      }
-    }
-  }, {
-    key: 'handleClick',
-    value: function handleClick(event) {
-      this.setState({ currentPortfolio: event });
-    }
-
-    // render() {
-    //     let portfolioTable;
-    //     if (this.props.portfolio[0]) {
-    //       let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
-    //
-    //         let title = undefined;
-    //
-    //         // let currentPrice;
-    //         //   fetchStockPrice(stock.ticker).then(response => {
-    //         //
-    //         //     title = response.title;
-    //         //     currentPrice = response.price;
-    //         //   });
-    //
-    //         return (<tr key={idx}>
-    //           <td>{ stock.ticker }</td>
-    //           <td>{ stock.title }</td>
-    //           <td>{ stock.number_of_shares }</td>
-    //
-    //           <td> { stock.current_price } </td>
-    //           <td>{ stock.current_price * stock.number_of_shares }</td>
-    //
-    //           <td> {stock.purchase_price }</td>
-    //           <td>{ stock.purchase_price * stock.number_of_shares }</td>
-    //           <td>{(stock.current_price - stock.purchase_price)  * stock.number_of_shares}</td>
-    //           <td>{ (stock.current_price - stock.purchase_price) /
-    //             stock.purchase_price }</td>
-    //
-    //         </tr>);
-    //       });
-    //
-    //       portfolioTable = <table>
-    //         <tbody>
-    //           <tr>
-    //             <th>Symbol</th>
-    //             <th>Title</th>
-    //             <th>Quantity</th>
-    //             <th>Price</th>
-    //             <th>Value</th>
-    //             <th>Unit Cost</th>
-    //             <th>Cost Basis</th>
-    //             <th>Unrealiezed Gain / Loss</th>
-    //             <th>% Change</th>
-    //           </tr>
-    //           { stocks }
-    //         </tbody>
-    //       </table>;
-    //     }
-    //
-    //     return (
-    //         <div>
-    //           { portfolioTable }
-    //         </div>
-    //     );
-    // }
-
-  }, {
-    key: 'numberWithCommas',
-    value: function numberWithCommas(num) {
-      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      var portfolioTable = void 0;
-      var portfolioIndex = [];
-
-      var mainPortfolio = this.state.currentPortfolio;
-
-      for (var i = 0; i < this.props.portfolio.length; i++) {
-        if (this.props.portfolio[i].main === true && mainPortfolio === undefined) {
-          mainPortfolio = this.props.portfolio[i];
+    }, {
+        key: 'handleClick',
+        value: function handleClick(event) {
+            this.setState({ currentPortfolio: event });
         }
-      }
-
-      // if (this.props.portfolio.length > 0) {
-      //     portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
-      //         if (this.props.portfolio[idx].main === true) {
-      //             return (
-      //                 <Link to={`portfolio/`}>
-      //                     <h5>{portfolio.title}</h5>
-      //                 </Link>
-      //             );
-      //         } else {
-      //             return (
-      //                 <Link to={`portfolio/${portfolio.id}`}>
-      //                     <h5>{portfolio.title}</h5>
-      //                 </Link>
-      //             );
-      //         }
-
-      //     });
-      // }
-
-      if (this.props.portfolio.length > 0) {
-        portfolioIndex = this.props.portfolio.map(function (portfolio, idx) {
-          return _react2.default.createElement(
-            'button',
-            { onClick: function onClick() {
-                return _this2.handleClick(portfolio);
-              } },
-            _react2.default.createElement(
-              'h5',
-              null,
-              portfolio.title
-            )
-          );
-        });
-      }
-
-      if (mainPortfolio && this.props.currentUser) {
-        var stocks = mainPortfolio.stocks.map(function (stock, idx) {
-
-          return _react2.default.createElement(
-            'tr',
-            { key: idx },
-            _react2.default.createElement(
-              'td',
-              null,
-              stock.ticker
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              stock.title
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              stock.number_of_shares
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              '$',
-              stock.current_price.toFixed(2),
-              ' '
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              '$',
-              _this2.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              '$',
-              stock.purchase_price.toFixed(2)
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              '$',
-              _this2.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares))
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              '$',
-              _this2.numberWithCommas(Math.round((stock.current_price - stock.purchase_price) * stock.number_of_shares))
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              Math.round((stock.current_price - stock.purchase_price) / stock.purchase_price * 100),
-              '% '
-            )
-          );
-        });
-
-        var totalValue = this.props.currentUser.investor.balance;
-        var unrealizedGain = 0;
-        var initialValue = 0;
-
-        for (var _i = 0; _i < mainPortfolio.stocks.length; _i++) {
-          var stock = mainPortfolio.stocks[_i];
-          totalValue += stock.current_price * stock.number_of_shares;
-          initialValue += stock.purchase_price * stock.number_of_shares;
+    }, {
+        key: 'handleDelete',
+        value: function handleDelete(e) {
+            this.props.deletePortfolio({ id: e.id });
         }
-        var percentageChange = (totalValue - initialValue) / initialValue * 100;
+    }, {
+        key: 'pieChart',
+        value: function pieChart(equity, cash) {
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
 
-        portfolioTable = _react2.default.createElement(
-          'table',
-          null,
-          _react2.default.createElement(
-            'tbody',
-            null,
-            _react2.default.createElement(
-              'tr',
-              null,
-              _react2.default.createElement(
-                'th',
-                null,
-                'Symbol'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                'Title'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                'Quantity'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                'Price'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                'Value'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                'Purchase Price'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                'Cost Basis'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                'Unrealiezed Gain / Loss'
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                '% Change'
-              )
-            ),
-            stocks,
-            _react2.default.createElement(
-              'tr',
-              null,
-              'Cash',
-              _react2.default.createElement('th', null),
-              _react2.default.createElement('th', null),
-              _react2.default.createElement('th', null),
-              _react2.default.createElement(
-                'th',
-                null,
-                '$',
-                this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))
-              )
-            ),
-            _react2.default.createElement(
-              'tr',
-              null,
-              'Total',
-              _react2.default.createElement('th', null),
-              _react2.default.createElement('th', null),
-              _react2.default.createElement('th', null),
-              _react2.default.createElement(
-                'th',
-                null,
-                '$',
-                this.numberWithCommas(Math.round(totalValue))
-              ),
-              _react2.default.createElement('th', null),
-              _react2.default.createElement('th', null),
-              _react2.default.createElement(
-                'th',
-                null,
-                '$',
-                this.numberWithCommas(Math.round(totalValue - initialValue))
-              ),
-              _react2.default.createElement(
-                'th',
-                null,
-                Math.round(percentageChange),
-                '%'
-              )
-            )
-          )
-        );
-      }
+            function drawChart() {
 
-      if (this.props.currentUser) {
-        return _react2.default.createElement(
-          'div',
-          { className: 'main-portfolio-index' },
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement('br', null),
-            _react2.default.createElement(
-              'div',
-              null,
-              portfolioIndex
-            )
-          ),
-          portfolioTable,
-          _react2.default.createElement(_portfolio_form_container2.default, null),
-          _react2.default.createElement(
-            'div',
-            { id: 'piechart' },
-            this.pieChart(totalValue - this.props.currentUser.investor.balance, this.props.currentUser.investor.balance)
-          )
-        );
-      } else {
-        return _react2.default.createElement('div', { id: 'piechart' });
-      }
-    }
-  }]);
+                var data = google.visualization.arrayToDataTable([['Type', 'Amount'], ['Equity', equity], ['Cash', cash]]);
 
-  return Portfolio;
+                var options = {
+                    title: 'Portfolio Breakdown'
+                };
+                if (document.getElementById('piechart')) {
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                    chart.draw(data, options);
+                }
+            }
+        }
+    }, {
+        key: 'numberWithCommas',
+        value: function numberWithCommas(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var portfolioTable = void 0;
+            var portfolioIndex = [];
+            var mainPortfolio = this.state.currentPortfolio;
+            for (var i = 0; i < this.props.portfolio.length; i++) {
+                if (this.props.portfolio[i].main === true && mainPortfolio === undefined) {
+                    mainPortfolio = this.props.portfolio[i];
+                }
+            }
+            if (this.props.portfolio.length > 0) {
+                portfolioIndex = this.props.portfolio.map(function (portfolio, idx) {
+                    return _react2.default.createElement(
+                        'button',
+                        { key: idx, onClick: function onClick() {
+                                return _this2.handleClick(portfolio);
+                            } },
+                        _react2.default.createElement(
+                            'h5',
+                            null,
+                            portfolio.title
+                        )
+                    );
+                });
+            }
+
+            if (mainPortfolio) {
+                var stocks = mainPortfolio.stocks.map(function (stock, idx) {
+
+                    return _react2.default.createElement(
+                        'tr',
+                        { key: idx },
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            stock.ticker
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            stock.title
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            stock.number_of_shares
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            '$',
+                            stock.current_price.toFixed(2),
+                            ' '
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            '$',
+                            _this2.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            '$',
+                            stock.purchase_price.toFixed(2)
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            '$',
+                            _this2.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares))
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            '$',
+                            _this2.numberWithCommas(Math.round((stock.current_price - stock.purchase_price) * stock.number_of_shares))
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            Math.round((stock.current_price - stock.purchase_price) / stock.purchase_price * 100),
+                            '% '
+                        )
+                    );
+                });
+
+                var totalValue = this.props.currentUser.investor.balance;
+                var unrealizedGain = 0;
+                var initialValue = 0;
+
+                for (var _i = 0; _i < mainPortfolio.stocks.length; _i++) {
+                    var stock = mainPortfolio.stocks[_i];
+                    totalValue += stock.current_price * stock.number_of_shares;
+                    initialValue += stock.purchase_price * stock.number_of_shares;
+                }
+                var percentageChange = (totalValue - initialValue) / initialValue * 100;
+
+                portfolioTable = _react2.default.createElement(
+                    'table',
+                    null,
+                    _react2.default.createElement(
+                        'tbody',
+                        null,
+                        _react2.default.createElement(
+                            'tr',
+                            null,
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Symbol'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Title'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Quantity'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Price'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Value'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Purchase Price'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Cost Basis'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                'Unrealiezed Gain / Loss'
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                '% Change'
+                            )
+                        ),
+                        stocks,
+                        _react2.default.createElement(
+                            'tr',
+                            null,
+                            'Cash',
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                '$',
+                                this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'tr',
+                            null,
+                            'Total',
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                '$',
+                                this.numberWithCommas(Math.round(totalValue))
+                            ),
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement('th', null),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                '$',
+                                this.numberWithCommas(Math.round(totalValue - initialValue))
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                Math.round(percentageChange),
+                                '%'
+                            )
+                        )
+                    )
+                );
+            }
+            if (this.props.currentUser) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'main-portfolio-index' },
+                    _react2.default.createElement('div', null),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        portfolioTable
+                    ),
+                    portfolioIndex,
+                    _react2.default.createElement(_portfolio_modal2.default, null),
+                    _react2.default.createElement(
+                        'button',
+                        { onClick: function onClick() {
+                                return _this2.handleDelete(mainPortfolio);
+                            } },
+                        'Delete Portfolio'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { id: 'piechart' },
+                        this.pieChart(totalValue - this.props.currentUser.investor.balance, this.props.currentUser.investor.balance)
+                    )
+                );
+            } else {
+                return _react2.default.createElement('div', null);
+            }
+        }
+    }]);
+
+    return Portfolio;
 }(_react2.default.Component);
 
 exports.default = Portfolio;
@@ -33768,6 +33703,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
     return {
         fetchPortfolios: function fetchPortfolios() {
             return dispatch((0, _portfolio_actions.fetchPortfolios)());
+        },
+        deletePortfolio: function deletePortfolio(portfolioId) {
+            return dispatch((0, _portfolio_actions.deletePortfolio)(portfolioId));
         }
     };
 };
@@ -33814,7 +33752,6 @@ var PortfolioForm = function (_React$Component) {
         };
         _this.handleSubmit = _this.handleSubmit.bind(_this);
         _this.updatePortfolio = _this.updatePortfolio.bind(_this);
-
         return _this;
     }
 
@@ -33824,9 +33761,12 @@ var PortfolioForm = function (_React$Component) {
     }, {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
+            var _this2 = this;
+
             e.preventDefault();
-            console.log(this.state);
-            this.props.createPortfolio(this.state);
+            this.props.createPortfolio(this.state).then(function () {
+                return _this2.props.closeModal();
+            });
         }
     }, {
         key: 'updatePortfolio',
@@ -33863,7 +33803,122 @@ var PortfolioForm = function (_React$Component) {
 exports.default = PortfolioForm;
 
 /***/ }),
-/* 182 */,
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(3);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactModal = __webpack_require__(148);
+
+var _reactModal2 = _interopRequireDefault(_reactModal);
+
+var _portfolio_form_container = __webpack_require__(101);
+
+var _portfolio_form_container2 = _interopRequireDefault(_portfolio_form_container);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
+var PortfolioModal = function (_React$Component) {
+  _inherits(PortfolioModal, _React$Component);
+
+  function PortfolioModal() {
+    _classCallCheck(this, PortfolioModal);
+
+    var _this = _possibleConstructorReturn(this, (PortfolioModal.__proto__ || Object.getPrototypeOf(PortfolioModal)).call(this));
+
+    _this.state = {
+      modalIsOpen: false
+    };
+
+    _this.openModal = _this.openModal.bind(_this);
+    _this.afterOpenModal = _this.afterOpenModal.bind(_this);
+    _this.closeModal = _this.closeModal.bind(_this);
+    return _this;
+  }
+
+  _createClass(PortfolioModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      _reactModal2.default.setAppElement('body');
+    }
+  }, {
+    key: 'openModal',
+    value: function openModal() {
+      this.setState({ modalIsOpen: true });
+    }
+  }, {
+    key: 'afterOpenModal',
+    value: function afterOpenModal() {}
+  }, {
+    key: 'closeModal',
+    value: function closeModal() {
+      this.setState({ modalIsOpen: false });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'button',
+          { onClick: this.openModal },
+          'Add Portfolio'
+        ),
+        _react2.default.createElement(
+          _reactModal2.default,
+          {
+            isOpen: this.state.modalIsOpen,
+            onAfterOpen: this.afterOpenModal,
+            onRequestClose: this.closeModal,
+            style: customStyles,
+            contentLabel: 'Portfolio Modal'
+          },
+          _react2.default.createElement(
+            'button',
+            { className: 'auth-close-button', onClick: this.closeModal },
+            '\u2716'
+          ),
+          _react2.default.createElement(_portfolio_form_container2.default, { closeModal: this.closeModal })
+        )
+      );
+    }
+  }]);
+
+  return PortfolioModal;
+}(_react2.default.Component);
+
+exports.default = PortfolioModal;
+
+/***/ }),
 /* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -34294,10 +34349,17 @@ var TradeForm = function (_React$Component) {
           var today = new Date();
           purchaseInfo["purchase_date"] = today.getFullYear + '-' + (today.getMonth() + 1) + '-' + today.getDate();
           purchaseInfo["number_of_shares"] = this.state.number_of_shares;
-          purchaseInfo["portfolio"] = this.props.portfolio[0];
+          var portfolio = void 0;
+          for (var i = 0; i < this.props.portfolio.length; i++) {
+            if (this.props.portfolio[i].main === true) {
+              portfolio = this.props.portfolio[i];
+              break;
+            }
+          }
+          purchaseInfo["portfolio"] = portfolio;
           action = this.props.createStock;
         }
-        var newBalance = Math.round(parseInt(this.props.balance) + price * parseInt(this.state.number_of_shares));
+        var newBalance = Math.round(parseInt(this.props.balance) - price * parseInt(this.state.number_of_shares));
         this.updateBalance(newBalance);
         action(purchaseInfo).then(_reactRouter.hashHistory.push("/portfolio"));
       } else {
@@ -34452,9 +34514,16 @@ var _trade_form2 = _interopRequireDefault(_trade_form);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
+  var currentStocks = void 0;
+  for (var i = 0; i < state.portfolio.length; i++) {
+    if (state.portfolio[i].main === true) {
+      currentStocks = state.portfolio[i].stocks;
+    }
+  }
+
   return {
     balance: state.currentUser.investor.balance,
-    currentStocks: state.portfolio[0].stocks,
+    currentStocks: currentStocks,
     stock: { ticker: "", purchase_price: "", purchase_date: "", number_of_shares: "",
       action: "" },
     investor: state.currentUser.investor,
@@ -34699,38 +34768,58 @@ var _stock_actions = __webpack_require__(42);
 var _lodash = __webpack_require__(53);
 
 var PortfolioReducer = function PortfolioReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var action = arguments[1];
 
-  var nextState = (0, _lodash.merge)({}, state);
+  var nextState = (0, _lodash.merge)([], state);
+
+  var portfolioIdx = void 0;
+  if (action.stock) {
+    for (var i = 0; i < nextState.length; i++) {
+      if (nextState[i].id === action.stock.portfolio) {
+        portfolioIdx = i;
+      }
+    }
+  }
+
   switch (action.type) {
     case _portfolio_actions.RECEIVE_PORTFOLIOS:
       return action.portfolios;
     case _portfolio_actions.RECEIVE_PORTFOLIO:
-      return (0, _lodash.merge)({}, state, action.portfolio);
+      nextState.push(action.portfolio);
+      return nextState;
     case _portfolio_actions.REMOVE_PORTFOLIO:
-      for (var i = 0; i < state[0].portfolio.length; i++) {
-        if (state[0].portfolio[i].id === action.portfolio.id) {
-          nextState[0].portfolio.splice(i, 1);
+      for (var _i = 0; _i < state.length; _i++) {
+        if (state[_i].id === action.portfolio.id) {
+          nextState.splice(_i, 1);
           break;
         }
       }
       return nextState;
     case _stock_actions.CREATE_STOCK:
-      nextState[0].stocks.push(action.stock);
+      nextState[portfolioIdx].stocks.push(action.stock);
       return nextState;
     case _stock_actions.UPDATE_STOCK:
-      for (var _i = 0; _i < state[0].stocks.length; _i++) {
-        if (state[0].stocks[_i].id === action.stock.id) {
-          nextState[0].stocks[_i] = action.stock;
+
+      for (var _i2 = 0; _i2 < nextState[portfolioIdx].stocks.length; _i2++) {
+        if (nextState[portfolioIdx].stocks[_i2].id === action.stock.id) {
+          nextState[portfolioIdx].stocks[_i2] = action.stock;
           break;
         }
       }
       return nextState;
     case _stock_actions.REMOVE_STOCK:
-      for (var _i2 = 0; _i2 < state[0].stocks.length; _i2++) {
-        if (state[0].stocks[_i2].id === action.stock.id) {
-          nextState[0].stocks.splice(_i2, 1);
+      var idx = void 0;
+
+      for (var _i3 = 0; _i3 < nextState.length; _i3++) {
+        if (nextState[_i3].main === true) {
+          idx = _i3;
+        }
+      }
+
+      for (var _i4 = 0; _i4 < nextState[idx].stocks.length; _i4++) {
+        if (nextState[idx].stocks[_i4].id === action.stock.id) {
+          nextState[idx].stocks.splice(_i4, 1);
           break;
         }
       }
