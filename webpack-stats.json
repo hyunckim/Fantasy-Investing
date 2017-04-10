@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"status":"done","chunks":{"main":[{"name":"bundle.js","path":"/Users/James/Desktop/appacademy/Fantasy-Investing/bundle.js"},{"name":"bundle.js.map","path":"/Users/James/Desktop/appacademy/Fantasy-Investing/bundle.js.map"}]}}
+=======
+{"status":"done","chunks":{"main":[{"name":"bundle.js","path":"/Users/MasterHames/Desktop/Fantasy-Investing/bundle.js"},{"name":"bundle.js.map","path":"/Users/MasterHames/Desktop/Fantasy-Investing/bundle.js.map"}]},"error":"ModuleBuildError","message":"Module build failed: SyntaxError: Expected corresponding JSX closing tag for <a> (197:14)\n\n  195 |               <a href={ news.url } className=\"news-summary\">\n  196 |                 { news.summary }\n> 197 |               </div>\n      |               ^\n  198 |               <div className=\"news-date\">\n  199 |                 { this.timeSince(news.publication_date) } ago\n  200 |               </div>\n"}
+>>>>>>> 1a9fb2f7f606dcf58072655ab779b520d507df8a

@@ -1,31 +1,31 @@
-{% load render_bundle from webpack_loader %}
-{% load staticfiles %}
+{% load render_bundle from webpack_loader %} {% load staticfiles %}
 
 <html>
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<meta name="csrf_token" content="{{ csrf_token }}">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" type="text/css"
-      href="{% static 'stylesheets/reset.css' %}" />
-    <link rel="stylesheet" type="text/css"
-      href="{% static 'stylesheets/_navbar.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_company.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_navbar.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_welcome_page.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_session_form.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_portfolio.css' %}" />
+  <meta name="csrf_token" content="{{ csrf_token }}">
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/reset.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_navbar.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_company.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_navbar.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_welcome_page.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_session_form.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_portfolio.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_tables.css' %}" />
 
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    
-    <title>Fantasy Investing</title>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <title>Fantasy Investing</title>
 
 
-  </head>
-  <body>
-    <div id="root">I am root</div>
-    {% render_bundle 'main' %}
-  </body>
+</head>
+
+<body>
+  <div id="root">I am root</div>
+  {% render_bundle 'main' %}
+</body>
+
 </html>
