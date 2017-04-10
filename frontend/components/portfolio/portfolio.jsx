@@ -100,6 +100,7 @@ class Portfolio extends React.Component {
           });
 
           var totalValue = this.props.currentUser.investor.balance;
+
           let unrealizedGain = 0;
           let initialValue = 0;
 
