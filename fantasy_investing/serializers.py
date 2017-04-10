@@ -55,7 +55,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
         portfolio.save()
         return portfolio
 
-        
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -75,7 +75,7 @@ class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investor
         fields = '__all__'
-        
+
 class UserLoginSerializer(serializers.ModelSerializer):
 
     investor = InvestorSerializer()
@@ -102,3 +102,15 @@ class CompanySerializer(serializers.Serializer):
     EPS_estimate_curr_year = serializers.CharField(max_length=10)
     EPS_estimate_next_year = serializers.CharField(max_length=10)
     earnings_growth_ratio = serializers.CharField(max_length=10)
+    open = serializers.FloatField(default=0)
+    market_cap = serializers.CharField(max_length=10)
+    fiftytwo_week_high = serializers.FloatField(default=0)
+    fiftytwo_week_low = serializers.FloatField(default=0)
+    fifty_day_moving_avg = serializers.FloatField(default=0)
+    two_hundred_day_moving_avg = serializers.FloatField(default=0)
+    ebitda = serializers.CharField(max_length=10)
+    dividend_share = serializers.FloatField(default=0)
+    avg_volume = serializers.FloatField(default=0)
+    price_per_sale = serializers.FloatField(default=0)
+    price_per_book = serializers.FloatField(default=0)
+    short_ratio = serializers.FloatField(default=0)
