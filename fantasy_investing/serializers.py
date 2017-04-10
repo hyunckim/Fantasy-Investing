@@ -47,10 +47,6 @@ class PortfolioFormSerializer(serializers.ModelSerializer):
         portfolio.save()
         return portfolio
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

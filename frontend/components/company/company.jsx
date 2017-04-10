@@ -41,6 +41,34 @@ class Company extends React.Component {
     });
   }
 
+  timeSince(date) {
+
+  let seconds = Math.floor((new Date() - new Date(date)) / 1000);
+
+  let interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) {
+    return interval + " years";
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) {
+    return interval + " months";
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) {
+    return interval + " days";
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) {
+    return interval + " hours";
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) {
+    return interval + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
+}
+
   render() {
     console.log(this.state);
     let title;
@@ -70,6 +98,7 @@ class Company extends React.Component {
     let pricePerSale;
     let pricePerBook;
     let shortRatio;
+    let newsContent;
 
     let drawD3Document = function() {};
 
@@ -154,6 +183,20 @@ class Company extends React.Component {
           svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end").text(yAxisLabel);
           svg.append("path").datum(data).attr("class", "line").attr("d", line);
       };
+
+      if (this.state.news.length) {
+        newsContent = this.state.news.map((news, idx) => {
+          return (
+            <div key={ idx } className="news-content">
+              <div className="news-summary">
+                <a href={ news.url }>{ news.summary }</a>
+              </div>
+              <div className="news-date">
+                { this.timeSince(news.publication_date) } ago
+              </div>
+            </div>);
+        });
+      }
     }
 
     return (
@@ -236,9 +279,14 @@ class Company extends React.Component {
           <div id="canvas-svg">
             { drawD3Document(pastYearInfo) }
           </div>
-          <svg className="company-graph">
-
-          </svg>
+          <div className="company-news">
+            <div className="news-header">
+              Company News
+            </div><br/>
+            <div className="company-news-summary">
+              { newsContent }
+            </div>
+          </div>
         </div>
       </div>
     );
