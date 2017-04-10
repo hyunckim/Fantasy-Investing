@@ -13,7 +13,6 @@ class Portfolio extends React.Component {
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
-
     }
 
     componentDidMount() {
@@ -26,6 +25,14 @@ class Portfolio extends React.Component {
 
     handleDelete(e){
         this.props.deletePortfolio({id: e.id});
+        let main;
+        for (let i = 0; i < this.props.portfolio.length; i++) {
+          if (this.props.portfolio[i].main === true) {
+            main = this.props.portfolio[i];
+            break;
+          }
+        }
+        this.setState({ currentPortfolio: main});
     }
 
     pieChart(equity, cash) {
@@ -114,6 +121,7 @@ class Portfolio extends React.Component {
           });
           
           var totalValue = this.props.currentUser.investor.balance;
+
           let unrealizedGain = 0;
           let initialValue = 0;
 

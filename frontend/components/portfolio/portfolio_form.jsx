@@ -14,7 +14,7 @@ class PortfolioForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
     }
-
+    
     handleSubmit(e) {
         e.preventDefault();
         this.props.createPortfolio(this.state)
@@ -45,5 +45,3 @@ class PortfolioForm extends React.Component {
 }
 
 export default PortfolioForm;
-
-
