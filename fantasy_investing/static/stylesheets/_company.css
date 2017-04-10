@@ -1,10 +1,11 @@
 .company-content {
   color: #ce9e62;
   display: flex;
-  width: 900px;
+  width: 92vw;
   height: 500px;
   flex-direction: column;
-  margin: 100px;
+  margin-top: 100px;
+  margin-left: 4vw;;
   background: #4F6E7C;
 }
 
@@ -13,7 +14,6 @@
   flex-direction: row;
   justify-content: space-between;
   font-size: 30px;
-  /*border: 1px solid red;*/
   padding: 20px 10px;
   font-weight: bold;
   background: #4F6E7C
@@ -22,7 +22,6 @@
 .company-summary {
   display: flex;
   flex-direction: row;
-  /*border: 1px solid yellow;*/
   height: 100%;
   color: #F6F2F3;
 
@@ -41,24 +40,68 @@
   display: flex;
   justify-content: space-between;
   padding-right: 15px;
+  font-size: 12px;
 }
 
 #canvas-svg {
-  background: #F6F2F3;
-  /*border: 1px solid green;*/
+  background: #4F6E7C;
 }
 
 .line {
   fill: none;
-  stroke: #C74837;
+  stroke: #ce9e62;
   stroke-width: 1.5px;
 }
 
  .value{
    color: #ce9e62
  }
+
 .company-name-price {
   display: flex;
   flex-direction: column;
 }
 
+.company-news {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  width: calc(100vw - 1000px);
+  background: #4F6E7C;
+  margin-top: -75.3px;
+}
+
+.news-header {
+  color: #ce9e62;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.company-news-summary {
+  font-size: 12px;
+  color: #ce9e62;
+  text-align: left;
+}
+
+.news-content {
+  padding-bottom: 10px;
+  padding: 0 15px 10px 15px;
+}
+
+.news-summary {
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  max-height: 80px;
+}
+
+.news-summary:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.news-date {
+  text-align: right;
+  opacity: 0.8;
+}

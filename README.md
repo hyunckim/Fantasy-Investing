@@ -13,8 +13,7 @@ creating and updating watchlists, and reviewing information for a specific compa
 
 ### Buying and Selling Shares
 
-Upon logging in, the user is taken to their main portfolio page, which includes current holding and performance information. The user can also make a trade by clicking the "Trade"
-button in the top navigation bar.
+Upon logging in, the user is taken to their main portfolio page, which includes current holding and performance information. The user can also make a trade by clicking the "Trade" button in the top navigation bar.
 
 Once the Trade button is clicked, a trading form is rendered where the user can specify what type of trade they would want to make. When a trade is submitted, the app utilizes a Yahoo Finance Python module in the back end to pull live market data. Based on this data, a virtual trade is executed and the stock is added to the user's main holdings portfolio.
 

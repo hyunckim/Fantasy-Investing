@@ -5,11 +5,12 @@ class Company extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {news : ""};
   }
 
   componentDidMount() {
     this.props.fetchCompany();
-    
+    this.receiveNews(this.props.ticker);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -22,8 +23,54 @@ class Company extends React.Component {
     }
   }
 
-  render() {
+  receiveNews(ticker) {
+    let username = "d6166222f6cd23d2214f20c0de1d4cc3";
+    let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
+    let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
 
+    $.ajax({
+      type: "GET",
+      url: `https://api.intrinio.com/news?ticker=${ticker}`,
+      dataType: 'json',
+      headers: {
+        "Authorization": "Basic " + btoa(username + ":" + password)
+      },
+      success: (res) => {
+        this.setState({ news: res.data.slice(0,4) });
+      }
+    });
+  }
+
+  timeSince(date) {
+
+  let seconds = Math.floor((new Date() - new Date(date)) / 1000);
+
+  let interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) {
+    return interval + " years";
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) {
+    return interval + " months";
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) {
+    return interval + " days";
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) {
+    return interval + " hours";
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) {
+    return interval + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
+}
+
+  render() {
+    console.log(this.state);
     let title;
     let price;
     let earningShare;
@@ -34,8 +81,25 @@ class Company extends React.Component {
     let dividend;
     let yearHigh;
     let yearLow;
-    let past_year_info;
+    let pastYearInfo;
     let sample;
+    let open;
+    let fiftytwoWeekHigh;
+    let fiftytwoWeekLow;
+    let marketCap;
+    let dividendShare;
+    let fiftyDayMovingAvg;
+    let twoHundredDayMovingAvg;
+    let ebitda;
+    let eps;
+    let avgVolume;
+    let forwardPE;
+    let peg;
+    let pricePerSale;
+    let pricePerBook;
+    let shortRatio;
+    let newsContent;
+
     let drawD3Document = function() {};
 
     if (this.props.company.title !== undefined ) {
@@ -53,32 +117,26 @@ class Company extends React.Component {
       }
       yearHigh = this.props.company.year_high;
       yearLow = this.props.company.year_low;
-      past_year_info = jQuery.extend(true, [], this.props.company.past_year_info);
-      // let Date = this.props.company.past_year_info.map(el => el[0]);
-      // let Close = this.props.company.past_year_info.map(el => el[1]);
-      //
-      // // Set the ranges
-      // let x = d3.time.scale().range([0, width]);
-      // let y = d3.scale.linear().range([height, 0]);
-      //
-      // // Define the axes
-      // let xAxis = d3.svg.axis().scale(x)
-      //   .orient("bottom").ticks(5);
-      //
-      // let yAxis = d3.svg.axis().scale(y)
-      //   .orient("left").ticks(5);
-      //
-      // // Define the line
-      // let valueline = d3.svg.line()
-      //   .x(function(d) { return x(d.Date); })
-      //   .y(function(d) { return y(d.Close); });
-      //
-      // // Adds the svg canvas
-      // let svg = d3.select('svg'),
-      //   margin = {top: 20, right: 20, bottom: 30, left: 50},
-      //   width= svg.attr("width") - margin.left - margin.right,
-      //   height = svg.attr("height") - margin.top - margin.bottom,
-      //   g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      pastYearInfo = jQuery.extend(true, [], this.props.company.past_year_info);
+      open = this.props.company.open;
+      fiftytwoWeekHigh = this.props.company.fiftytwo_week_high;
+      fiftytwoWeekLow = this.props.company.fiftytwo_week_low;
+      marketCap = this.props.company.market_cap;
+      if (this.props.company.dividend_share === null) {
+        dividendShare = "N/A";
+      } else {
+        dividendShare = this.props.company.dividend_share;
+      }
+      fiftyDayMovingAvg = this.props.company.fifty_day_moving_avg;
+      twoHundredDayMovingAvg = this.props.company.two_hundred_day_moving_avg;
+      ebitda = this.props.company.ebitda;
+      eps = this.props.company.EPS_next_year;
+      avgVolume = this.props.company.avg_volume;
+      forwardPE = Math.round( this.props.company.EPS_estimate_next_year * 10 ) / 10;
+      peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10
+      pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
+      pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
+      shortRatio =   Math.round( this.props.company.short_ratio * 10 ) / 10;
 
       let WIDTH = 700, HEIGHT = 300;
 
@@ -125,6 +183,20 @@ class Company extends React.Component {
           svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end").text(yAxisLabel);
           svg.append("path").datum(data).attr("class", "line").attr("d", line);
       };
+
+      if (this.state.news.length) {
+        newsContent = this.state.news.map((news, idx) => {
+          return (
+            <div key={ idx } className="news-content">
+              <div className="news-summary">
+                <a href={ news.url }>{ news.summary }</a>
+              </div>
+              <div className="news-date">
+                { this.timeSince(news.publication_date) } ago
+              </div>
+            </div>);
+        });
+      }
     }
 
     return (
@@ -133,42 +205,88 @@ class Company extends React.Component {
 
           <div className="company-name-price">
             <span className="company-title">{ title } { ticker }</span>
-            <span className="company-price">{ price } ({ percentChange })</span>
+            <span className="company-price">${ price } ({ percentChange })</span>
           </div>
         </div>
         <div className="company-summary">
           <div className="company-detail">
             <div className="company-nums">
-              <span >Earning Share</span>
-              <span className='value'>{ earningShare }</span>
+              <p >Open</p>
+              <p className='value'>${ open }</p>
             </div>
             <div className="company-nums">
-              <span>Previous Close</span>
-              <span className='value'>{ prevClose }</span>
+              <p>Previous Close</p>
+              <p className='value'>${ prevClose }</p>
             </div>
             <div className="company-nums">
-              <span>Dividend</span>
-              <span className='value'>{ dividend }</span>
+              <p >EPS</p>
+              <p className='value'>${ eps }</p>
             </div>
             <div className="company-nums">
-              <span>Yr. High</span>
-              <span className='value'>{ yearHigh }</span>
+              <p >52 Week-high</p>
+              <p className='value'>${ fiftytwoWeekHigh }</p>
             </div>
             <div className="company-nums">
-              <span>Yr. Low</span>
-              <span className='value'>{ yearLow }</span>
+              <p >52 Week-low</p>
+              <p className='value'>${ fiftytwoWeekLow }</p>
             </div>
             <div className="company-nums">
-              <span>Volume</span>
-              <span className='value'>{ volume }</span>
+              <p >Market Cap</p>
+              <p className='value'>${ marketCap }</p>
+            </div>
+            <div className="company-nums">
+              <p>Daily Avg. Volume</p>
+              <p className='value'>{ avgVolume }</p>
+            </div>
+            <div className="company-nums">
+              <p>Dividend per Share</p>
+              <p className='value'>{ dividendShare }</p>
+            </div>
+            <div className="company-nums">
+              <p>Dividend Yield</p>
+              <p className='value'>{ dividend }</p>
+            </div>
+            <div className="company-nums">
+              <p>50-day Moving Avg</p>
+              <p className='value'>${ fiftyDayMovingAvg }</p>
+            </div>
+            <div className="company-nums">
+              <p>200-day Moving Avg</p>
+              <p className='value'>${ twoHundredDayMovingAvg }</p>
+            </div>
+            <br></br>
+            <div className="company-nums">
+              <p>Forward P/E</p>
+              <p className='value'>{ forwardPE }x</p>
+            </div>
+            <div className="company-nums">
+              <p>PEG</p>
+              <p className='value'>{ peg }x</p>
+            </div>
+            <div className="company-nums">
+              <p>Price / Sales</p>
+              <p className='value'>{ pricePerSale }x</p>
+            </div>
+            <div className="company-nums">
+              <p>Price / Book</p>
+              <p className='value'>{ pricePerBook }x</p>
+            </div>
+            <div className="company-nums">
+              <p>Short Ratio</p>
+              <p className='value'>{ shortRatio }%</p>
             </div>
           </div>
           <div id="canvas-svg">
-            { drawD3Document(past_year_info) }
+            { drawD3Document(pastYearInfo) }
           </div>
-          <svg className="company-graph">
-
-          </svg>
+          <div className="company-news">
+            <div className="news-header">
+              Company News
+            </div><br/>
+            <div className="company-news-summary">
+              { newsContent }
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -10,8 +10,8 @@ window.login = login;
 document.addEventListener('DOMContentLoaded',() => {
   let store;
 
-  if (localStorage.currentUser) {
-    const preloadedState = { currentUser: localStorage.currentUser };
+  if (window.currentUser) {
+    const preloadedState = { currentUser: window.currentUser };
     store = configureStore(preloadedState);
   } else {
     store = configureStore();
