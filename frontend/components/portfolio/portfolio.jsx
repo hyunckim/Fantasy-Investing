@@ -59,7 +59,7 @@ class Portfolio extends React.Component {
             },
             legend: {
                 textStyle: {
-                    color: '#F5F1F2', 
+                    color: '#F5F1F2',
                     fontSize: 16
                 }
             }
@@ -69,7 +69,7 @@ class Portfolio extends React.Component {
           let chart = new google.visualization.PieChart(document.getElementById('piechart'));
           chart.draw(data, options);
 
-          
+
         }
       }
     }
@@ -104,7 +104,7 @@ class Portfolio extends React.Component {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
 
             return (
-                
+
             <tr key={idx} className='lalign'>
 
               <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
@@ -119,7 +119,7 @@ class Portfolio extends React.Component {
                   stock.purchase_price) * 100) }% </td>
             </tr>);
           });
-          
+
           var totalValue = this.props.currentUser.investor.balance;
 
           let unrealizedGain = 0;
@@ -129,8 +129,10 @@ class Portfolio extends React.Component {
             let stock = mainPortfolio.stocks[i];
             totalValue += (stock.current_price * stock.number_of_shares);
             initialValue += (stock.purchase_price * stock.number_of_shares);
+
           }
-          let percentageChange = ((totalValue - initialValue) / initialValue) * 100;
+          unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
+          let percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
 
           portfolioTable =
               <table id='portfolioTable'>
@@ -164,7 +166,7 @@ class Portfolio extends React.Component {
                           <td>${this.numberWithCommas(Math.round(totalValue))}</td>
                           <td></td>
                           <td></td>
-                          <td>${this.numberWithCommas(Math.round(totalValue - initialValue))}</td>
+                          <td>${this.numberWithCommas(Math.round(unrealizedGain))}</td>
                           <td>{Math.round(percentageChange)}%</td>
                       </tr>
                   </tbody>
@@ -188,7 +190,7 @@ class Portfolio extends React.Component {
                     </div>
                     <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
                 </div>
-                
+
                     <div>
                         {portfolioTable}
                     </div>
