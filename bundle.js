@@ -33150,7 +33150,7 @@ var NavBar = function (_React$Component) {
     key: 'handleGuestClick',
     value: function handleGuestClick(e) {
       e.preventDefault();
-      this.props.loginGuest({ user: { username: 'guest@gmail.com', password: 'password' } }).then(function () {
+      this.props.loginGuest({ username: 'Guest', password: 'password' }).then(function () {
         return _reactRouter.hashHistory.push("/login");
       });
     }
@@ -33390,7 +33390,6 @@ var Portfolio = function (_React$Component) {
         };
         _this.handleClick = _this.handleClick.bind(_this);
         _this.handleDelete = _this.handleDelete.bind(_this);
-
         return _this;
     }
 
@@ -33408,6 +33407,14 @@ var Portfolio = function (_React$Component) {
         key: 'handleDelete',
         value: function handleDelete(e) {
             this.props.deletePortfolio({ id: e.id });
+            var main = void 0;
+            for (var i = 0; i < this.props.portfolio.length; i++) {
+                if (this.props.portfolio[i].main === true) {
+                    main = this.props.portfolio[i];
+                    break;
+                }
+            }
+            this.setState({ currentPortfolio: main });
         }
     }, {
         key: 'pieChart',
@@ -33524,6 +33531,7 @@ var Portfolio = function (_React$Component) {
                 });
 
                 var totalValue = this.props.currentUser.investor.balance;
+
                 var unrealizedGain = 0;
                 var initialValue = 0;
 
@@ -33635,7 +33643,7 @@ var Portfolio = function (_React$Component) {
                     )
                 );
             }
-            if (this.props.currentUser) {
+            if (this.props.currentUser && mainPortfolio) {
                 return _react2.default.createElement(
                     'div',
                     { className: 'main-portfolio-index' },
@@ -34642,13 +34650,11 @@ var _root2 = _interopRequireDefault(_root);
 
 var _reduxPersist = __webpack_require__(99);
 
-var _stock_actions = __webpack_require__(42);
+var _session_actions = __webpack_require__(43);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.createStock = _stock_actions.createStock;
-window.updateStock = _stock_actions.updateStock;
-window.deleteStock = _stock_actions.deleteStock;
+window.login = _session_actions.login;
 
 document.addEventListener('DOMContentLoaded', function () {
   var store = void 0;
@@ -34786,7 +34792,9 @@ var PortfolioReducer = function PortfolioReducer() {
     case _portfolio_actions.RECEIVE_PORTFOLIOS:
       return action.portfolios;
     case _portfolio_actions.RECEIVE_PORTFOLIO:
-      nextState.push(action.portfolio);
+      var portfolio = action.portfolio;
+      portfolio['stocks'] = [];
+      nextState.push(portfolio);
       return nextState;
     case _portfolio_actions.REMOVE_PORTFOLIO:
       for (var _i = 0; _i < state.length; _i++) {

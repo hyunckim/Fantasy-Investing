@@ -40,7 +40,7 @@ class NavBar extends React.Component {
 
   handleGuestClick(e) {
     e.preventDefault();
-    this.props.loginGuest({ user: { username: 'guest@gmail.com', password: 'password' } })
+    this.props.loginGuest({ username: 'Guest', password: 'password' })
       .then(() => hashHistory.push("/login"));
   }
 
