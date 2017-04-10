@@ -36,7 +36,7 @@ class TradeForm extends React.Component {
         purchaseInfo["portfolio"] = this.props.portfolio[0];
         action = this.props.createStock;
       }
-      let newBalance = Math.round((parseInt(this.props.balance) +
+      let newBalance = Math.round((parseInt(this.props.balance) -
         (price * parseInt(this.state.number_of_shares))));
       this.updateBalance(newBalance);
       action(purchaseInfo).then(hashHistory.push("/portfolio"));

@@ -1,6 +1,6 @@
 import React from 'react';
 import { fetchStockPrice } from '../../util/stock_api_util';
-import {Link} from 'react-router';  
+import {Link} from 'react-router';
 import PortfolioModal from './portfolio_modal.jsx';
 import PortfolioFormContainer from './portfolio_form_container';
 
@@ -17,12 +17,16 @@ class Portfolio extends React.Component {
     }
 
     componentDidMount() {
+      debugger;
       this.props.fetchPortfolios();
     }
 
-    componentWillReceiveProps(nextProps){
-
-    }
+    // componentWillReceiveProps(nextProps){
+    //   if (this.props.portfolio[0].stocks !== nextProps.portfolio[0].stocks) {
+    //     debugger;
+    //     this.props.fetchPortfolios();
+    //   }
+    // }
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
@@ -167,4 +171,3 @@ class Portfolio extends React.Component {
 }
 
 export default Portfolio;
-

@@ -15,19 +15,6 @@ class StockSerializer(serializers.ModelSerializer):
         model = Stock
         fields = "__all__"
 
-    def create(self, validated_data):
-        stock = Stock.objects.create(**validated_data)
-        stock.save()
-        return stock
-
-    def update(self, instance, validated_data):
-        instance.ticker = validated_data.get('ticker', instance.ticker)
-        instance.purchase_price = validated_data.get('purchase_price', instance.purchase_price)
-        instance.purchase_date = validated_data.get('purchase_date', instance.purchase_date)
-        instance.number_of_shares = validated_data.get('number_of_shares', instance.number_of_shares)
-        instance.save()
-        return instance
-
     def get_current_price(self, obj):
         stock = Share(obj.ticker)
         return float(stock.get_price())
@@ -59,7 +46,7 @@ class PortfolioFormSerializer(serializers.ModelSerializer):
         portfolio = Portfolio.objects.create(**validated_data)
         portfolio.save()
         return portfolio
-        
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -79,7 +66,7 @@ class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investor
         fields = '__all__'
-        
+
 class UserLoginSerializer(serializers.ModelSerializer):
 
     investor = InvestorSerializer()
