@@ -2,13 +2,26 @@ import { RECEIVE_PORTFOLIOS, RECEIVE_PORTFOLIO, REMOVE_PORTFOLIO} from '../actio
 import { CREATE_STOCK, UPDATE_STOCK, REMOVE_STOCK } from '../actions/stock_actions';
 import { merge } from 'lodash';
 
-const PortfolioReducer = (state = {}, action) => {
-    let nextState = merge({}, state);
+const PortfolioReducer = (state = [], action) => {
+    let nextState = merge([], state);
+
+    let portfolioIdx;
+    if (action.stock) {
+      for (let i = 0; i < nextState.length; i++) {
+        if (nextState[i].id === action.stock.portfolio) {
+          portfolioIdx = i;
+        }
+      }
+    }
+
     switch (action.type) {
         case RECEIVE_PORTFOLIOS:
             return action.portfolios;
         case RECEIVE_PORTFOLIO:
-            return merge({}, state, action.portfolio);
+            let portfolio = action.portfolio;
+            portfolio['stocks'] = [];
+            nextState.push(portfolio);
+            return nextState;
         case REMOVE_PORTFOLIO:
             for (let i = 0; i < state.length; i++) {
                 if (state[i].id === action.portfolio.id) {
@@ -18,20 +31,29 @@ const PortfolioReducer = (state = {}, action) => {
             }
             return nextState;
         case CREATE_STOCK:
-          nextState[0].stocks.push(action.stock);
+          nextState[portfolioIdx].stocks.push(action.stock);
           return nextState;
         case UPDATE_STOCK:
-          for (let i = 0; i < state[0].stocks.length; i++) {
-            if (state[0].stocks[i].id === action.stock.id) {
-              nextState[0].stocks[i] = action.stock;
+
+          for (let i = 0; i < nextState[portfolioIdx].stocks.length; i++) {
+            if (nextState[portfolioIdx].stocks[i].id === action.stock.id) {
+              nextState[portfolioIdx].stocks[i] = action.stock;
               break;
             }
           }
           return nextState;
         case REMOVE_STOCK:
-          for (let i = 0; i < state[0].stocks.length; i++) {
-            if (state[0].stocks[i].id === action.stock.id) {
-              nextState[0].stocks.splice(i, 1);
+          let idx;
+
+          for (let i = 0; i < nextState.length; i++) {
+            if (nextState[i].main === true) {
+              idx = i;
+            }
+          }
+
+          for (let i = 0; i < nextState[idx].stocks.length; i++) {
+            if (nextState[idx].stocks[i].id === action.stock.id) {
+              nextState[idx].stocks.splice(i, 1);
               break;
             }
           }
