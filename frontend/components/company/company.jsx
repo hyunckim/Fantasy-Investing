@@ -5,11 +5,12 @@ class Company extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {news : ""};
   }
 
   componentDidMount() {
     this.props.fetchCompany();
-
+    this.receiveNews(this.props.ticker);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -22,8 +23,26 @@ class Company extends React.Component {
     }
   }
 
-  render() {
+  receiveNews(ticker) {
+    let username = "d6166222f6cd23d2214f20c0de1d4cc3";
+    let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
+    let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
 
+    $.ajax({
+      type: "GET",
+      url: `https://api.intrinio.com/news?ticker=${ticker}`,
+      dataType: 'json',
+      headers: {
+        "Authorization": "Basic " + btoa(username + ":" + password)
+      },
+      success: (res) => {
+        this.setState({ news: res.data.slice(0,4) });
+      }
+    });
+  }
+
+  render() {
+    console.log(this.state);
     let title;
     let price;
     let earningShare;
@@ -89,23 +108,6 @@ class Company extends React.Component {
       pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
       pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
       shortRatio =   Math.round( this.props.company.short_ratio * 10 ) / 10;
-
-      let https = require('https');
-      let username = "d6166222f6cd23d2214f20c0de1d4cc3";
-      let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
-      let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
-
-      $.ajax({
-        type: "GET",
-        url: "https://api.intrinio.com/news?ticker=AAPL",
-        dataType: 'json',
-        headers: {
-          "Authorization": "Basic " + btoa(username + ":" + password)
-        },
-        success: function (res){
-          console.log(res);
-        }
-      });
 
       let WIDTH = 700, HEIGHT = 300;
 
