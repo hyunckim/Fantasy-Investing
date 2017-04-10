@@ -78,21 +78,19 @@ class NavBar extends React.Component {
             </div>
           </div>
           <div className='middle-nav'>
-           <form className="header-search">
-            <label className="header-search-label"> Search Company
+            <form className="header-search">
               <input className="search-input"
-                placeholder="Search Ticker Ex: MSFT"
-                onChange={this.handleFilterChange("ticker")} />
-              <button className='header-search-button'
-                onClick={this.handleSearchSubmit}>
-              </button>
-            </label>
-          </form>
+                  placeholder="Search Ticker Ex: MSFT"
+                  onChange={this.handleFilterChange("ticker")} />
+                <button className='header-search-button'
+                  onClick={this.handleSearchSubmit}>
+                  Search
+                </button> 
+            </form>
           </div>
           <div className='right-nav'>
             <div className='auth'>
               <TradeModal />
-
               <button
                 className="portfolio-button"
                 onClick={this.handlePortfolioButton}>Portfolio

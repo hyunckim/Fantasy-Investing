@@ -72,17 +72,18 @@ class Portfolio extends React.Component {
         if (this.props.portfolio.length > 0) {
             portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
                 return (
-                    <button onClick={() => this.handleClick(portfolio)}>
+                    <button key={idx} onClick={() => this.handleClick(portfolio)}>
                         <h5>{portfolio.title}</h5>
                     </button>
                 );
             });
         }
 
+
         if (mainPortfolio && this.props.currentUser) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
 
-            return (<tr key={idx}>
+            return (<tr key={idx} className='lalign'>
               <td>{ stock.ticker }</td>
               <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
@@ -95,7 +96,7 @@ class Portfolio extends React.Component {
                   stock.purchase_price) * 100) }% </td>
             </tr>);
           });
-
+          
           var totalValue = this.props.currentUser.investor.balance;
           let unrealizedGain = 0;
           let initialValue = 0;
@@ -107,50 +108,57 @@ class Portfolio extends React.Component {
           }
           let percentageChange = ((totalValue - initialValue) / initialValue) * 100;
 
-          portfolioTable = <table>
-            <tbody>
-              <tr>
-                <th>Symbol</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Value</th>
-                <th>Purchase Price</th>
-                <th>Cost Basis</th>
-                <th>Unrealiezed Gain / Loss</th>
-                <th>% Change</th>
-              </tr>
-              { stocks }
-              <tr>Cash
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</th>
-              </tr>
-              <tr>Total
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>${this.numberWithCommas(Math.round(totalValue))}</th>
-                <th></th>
-                <th></th>
-                <th>${this.numberWithCommas(Math.round(totalValue - initialValue))}</th>
-                <th>{Math.round(percentageChange)}%</th>
-              </tr>
 
-            </tbody>
-          </table>;
+          portfolioTable =
+              <table id='keywords'>
+                  <thead>
+                      <tr>
+                          <th><span>Symbol</span></th>
+                          <th><span>Title</span></th>
+                          <th><span>Quantity</span></th>
+                          <th><span>Price</span></th>
+                          <th><span>Value</span></th>
+                          <th><span>Purchase Price</span></th>
+                          <th><span>Cost Basis</span></th>
+                          <th><span>Unrealiezed Gain / Loss</span></th>
+                          <th><span>% Change</span></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {stocks}
+                      <tr>Cash
+                        <th></th>
+                          <th></th>
+                          <th></th>
+                          <th>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</th>
+                      </tr>
+                      <tr>Total
+                        <th></th>
+                          <th></th>
+                          <th></th>
+                          <th>${this.numberWithCommas(Math.round(totalValue))}</th>
+                          <th></th>
+                          <th></th>
+                          <th>${this.numberWithCommas(Math.round(totalValue - initialValue))}</th>
+                          <th>{Math.round(percentageChange)}%</th>
+                      </tr>
+                  </tbody>
+              </table>;
         }
+
         if (this.props.currentUser) {
             return (
                 <div className='main-portfolio-index'>
-                    <div>
+                    <div className='dropdown'>
+                        <span>Portfolio</span>
+                        <div className="dropdown-content">
+                            {portfolioIndex}
+                            <PortfolioModal />
+                        </div>
                     </div>
                     <div>
                         {portfolioTable}
                     </div>
-                    {portfolioIndex}
-                    <PortfolioModal />
                     <button onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
                     <div id="piechart">
                         {this.pieChart(totalValue - this.props.currentUser.investor.balance,
@@ -167,4 +175,6 @@ class Portfolio extends React.Component {
 }
 
 export default Portfolio;
+
+
 

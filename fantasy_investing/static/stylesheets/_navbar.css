@@ -1,12 +1,15 @@
 #main-nav {
+  display: flex;
+  align-items: center;
   overflow: hidden;
   position: fixed; 
   z-index:9999;
   top: 0;
   width: 100%;
-  height: 5%vh;
+  height: 46px;
   background-color: transparent;
   font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  margin-top:10px;
 }
 
 .logo {
@@ -22,84 +25,123 @@
 .login-button,
 .logout-button,
 .demo-button {
-  color: white;
+  color: #F6F2F3;
   font-size: 3vh;
   margin-right: 24px;
 }
 
-.right-navbar {
+.right-nav {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: flex-end;
+  height: 100%;
   width: 100%;
 }
 
-.left-navbar {
+.left-nav {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  height: 100%;
 }
 
 
-#main-nav-logged-in{
-  z-index:9999;
+#main-nav-logged-in {
+  display: flex;
+  align-items: center;
   overflow: hidden;
   position: fixed; 
   z-index:9999;
   top: 0;
   width: 100%;
-  height: 5%vh;
-  background-color: white;
+  height: 46px;
+  background-color: #4F6E7C;
   font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
 }
 
-#main-nav-logged-in .right-navbar {
+#main-nav-logged-in .right-nav {
   display: flex;
-  flex-direction: row;
+  align-items: center;
   justify-content: flex-end;
-  width: 100%;
-  align-content: center;
-  align-items: center;
+  width: auto;
 }
-
-#main-nav-logged-in .left-navbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+#main-nav-logged-in button {
+  margin: 5px;
+  height: 100%;
 }
 
 #main-nav-logged-in .middle-nav {
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  
 }
 
 .header-search{
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-self: center;
+  height: 100%;
 }
 
-.header-search input{
-  border: 1px solid black;
+.header-search label{
+  display: flex;
+  width: 100%;  
+  align-content: center;
+  margin-top: 3%;
+  margin-bottom: 3%;
 }
+.header-search form{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+
+.header-search input {
+  align-self: center;
+  background: url(search-dark.png) no-repeat 10px 6px #444;
+  border: 0 none;
+  font: bold 12px Arial, Helvetica, Sans-serif;
+  color: #777;
+  width: 200px;
+  height: 15px;
+  padding: 6px 15px 6px 35px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+  -webkit-transition: all 0.7s ease 0s;
+  -moz-transition: all 0.7s ease 0s;
+  -o-transition: all 0.7s ease 0s;
+  transition: all 0.7s ease 0s;
+}
+
+.header-search input:focus {
+  width: 250px;
+    }
+
+    
 
 .search-input{
-    width: 100px;
-    box-sizing: border-box;
-    border: 1px solid white;
-    border-radius: 4px;
-    font-size: 12px;
-    background-color: transparent;
-    background-image: url('searchicon.png');
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
+  
 }
 
 .search-input:focus {
-    width: 100%;
 }
+
+.header-search-button {
+  border: .5px solid black;
+  border-radius: 50%;
+
+}
+
