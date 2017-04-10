@@ -131,7 +131,6 @@ class Portfolio extends React.Component {
             initialValue += (stock.purchase_price * stock.number_of_shares);
 
           }
-          debugger;
           unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
           let percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
 
