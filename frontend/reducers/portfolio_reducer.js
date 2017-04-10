@@ -18,7 +18,9 @@ const PortfolioReducer = (state = [], action) => {
         case RECEIVE_PORTFOLIOS:
             return action.portfolios;
         case RECEIVE_PORTFOLIO:
-            nextState.push(action.portfolio);
+            let portfolio = action.portfolio;
+            portfolio['stocks'] = [];
+            nextState.push(portfolio);
             return nextState;
         case REMOVE_PORTFOLIO:
             for (let i = 0; i < state.length; i++) {
