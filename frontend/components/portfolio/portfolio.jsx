@@ -1,161 +1,210 @@
 import React from 'react';
 import { fetchStockPrice } from '../../util/stock_api_util';
-import {Link} from 'react-router';  
+import {Link} from 'react-router';
+import PortfolioModal from './portfolio_modal.jsx';
 import PortfolioFormContainer from './portfolio_form_container';
 
 
 class Portfolio extends React.Component {
     constructor(props) {
       super(props);
-        this.handleClick = this.handleClick.bind(this);
         this.state = {
             currentPortfolio: undefined
         };
+        this.handleClick = this.handleClick.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
+
     componentDidMount() {
       this.props.fetchPortfolios();
-    }
-
-    componentWillReceiveProps(){
-
     }
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
     }
 
-    render() {
-        let portfolioTable;
-        if (this.props.portfolio[0]) {
-          let stocks = this.props.portfolio[0].stocks.map((stock, idx) => {
-
-            let title = undefined;
-
-            // let currentPrice;
-            //   fetchStockPrice(stock.ticker).then(response => {
-            //
-            //     title = response.title;
-            //     currentPrice = response.price;
-            //   });
-
-            return (<tr key={idx}>
-              <td>{ stock.ticker }</td>
-              <td>{ stock.title }</td>
-              <td>{ stock.number_of_shares }</td>
-
-              <td> { stock.current_price } </td>
-              <td>{ stock.current_price * stock.number_of_shares }</td>
-
-              <td> {stock.purchase_price }</td>
-              <td>{ stock.purchase_price * stock.number_of_shares }</td>
-            </tr>);
-          });
-
-          portfolioTable = <table>
-            <tbody>
-              <tr>
-                <th>Symbol</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Value</th>
-                <th>Unit Cost</th>
-                <th>Cost Basis</th>
-              </tr>
-              { stocks }
-            </tbody>
-          </table>;
+    handleDelete(e){
+        this.props.deletePortfolio({id: e.id});
+        let main;
+        for (let i = 0; i < this.props.portfolio.length; i++) {
+          if (this.props.portfolio[i].main === true) {
+            main = this.props.portfolio[i];
+            break;
+          }
         }
-
-        return (
-            <div>
-              { portfolioTable }
-            </div>
-        );
+        this.setState({ currentPortfolio: main});
     }
-   
-    render() {
 
+    pieChart(equity, cash) {
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        let data = google.visualization.arrayToDataTable([
+          ['Type', 'Amount'],
+          ['Equity', equity],
+          ['Cash', cash]
+        ]);
+
+        let options = {
+            title: 'Portfolio Breakdown',
+            colors: ['#c1432e', '#ce9e62', '#4b6777' ],
+            is3D: true,
+            backgroundColor: '#2c2c2c',
+            titleTextStyle: {
+                fontName: "Arial",
+                fontSize: 36,
+                color: '#F5F1F2'
+            },
+            legend: {
+                textStyle: {
+                    color: '#F5F1F2', 
+                    fontSize: 16
+                }
+            }
+
+        };
+        if (document.getElementById('piechart')) {
+          let chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(data, options);
+
+          
+        }
+      }
+    }
+
+
+    numberWithCommas (num) {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    }
+
+
+    render() {
         let portfolioTable;
         let portfolioIndex = [];
-
         let mainPortfolio = this.state.currentPortfolio;
-
         for (let i = 0; i < this.props.portfolio.length; i++) {
             if (this.props.portfolio[i].main === true && mainPortfolio === undefined) {
                 mainPortfolio = this.props.portfolio[i];
             }
         }
-
-        // if (this.props.portfolio.length > 0) {
-        //     portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
-        //         if (this.props.portfolio[idx].main === true) {
-        //             return (
-        //                 <Link to={`portfolio/`}>
-        //                     <h5>{portfolio.title}</h5>
-        //                 </Link>
-        //             );
-        //         } else {
-        //             return (
-        //                 <Link to={`portfolio/${portfolio.id}`}>
-        //                     <h5>{portfolio.title}</h5>
-        //                 </Link>
-        //             );
-        //         }
-
-        //     });
-        // }
-
         if (this.props.portfolio.length > 0) {
             portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
                 return (
-                    <button onClick={() => this.handleClick(portfolio)}>
-                        <h5>{portfolio.title}</h5>
+                    <button key={idx} onClick={() => this.handleClick(portfolio)}>
+                        <h5 className='index-dropdown-title' >{portfolio.title}</h5>
                     </button>
                 );
             });
         }
 
+
         if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
-            return (<tr key={idx}>
-              <td>{ stock.ticker }</td>
+
+            return (
+                
+            <tr key={idx} className='lalign'>
+
+              <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
               <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
-              <td> { stock.current_price } </td>
-              <td>{ stock.current_price * stock.number_of_shares }</td>
-              <td> { stock.purchase_price }</td>
-              <td>{ stock.purchase_price * stock.number_of_shares }</td>
+              <td>${ stock.current_price.toFixed(2) } </td>
+              <td>${ this.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))}</td>
+              <td>${ stock.purchase_price.toFixed(2) }</td>
+              <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+              <td>${ this.numberWithCommas(Math.round((stock.current_price - stock.purchase_price)  * stock.number_of_shares))}</td>
+              <td>{ Math.round(((stock.current_price - stock.purchase_price) /
+                  stock.purchase_price) * 100) }% </td>
             </tr>);
           });
+          
+          var totalValue = this.props.currentUser.investor.balance;
 
-          portfolioTable = <table>
-            <tbody>
-              <tr>
-                <th>Symbol</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Value</th>
-                <th>Unit Purchase Price</th>
-                <th>Cost Basis</th>
-              </tr>
-              { stocks }
-            </tbody>
-          </table>;
+          let unrealizedGain = 0;
+          let initialValue = 0;
+
+          for (let i = 0; i < mainPortfolio.stocks.length; i++) {
+            let stock = mainPortfolio.stocks[i];
+            totalValue += (stock.current_price * stock.number_of_shares);
+            initialValue += (stock.purchase_price * stock.number_of_shares);
+          }
+          let percentageChange = ((totalValue - initialValue) / initialValue) * 100;
+
+          portfolioTable =
+              <table id='portfolioTable'>
+                  <thead>
+                      <tr>
+                          <th><span>Symbol</span></th>
+                          <th><span>Title</span></th>
+                          <th><span>Quantity</span></th>
+                          <th><span>Price</span></th>
+                          <th><span>Value</span></th>
+                          <th><span>Purchase Price</span></th>
+                          <th><span>Cost Basis</span></th>
+                          <th><span>Unrealized Gain / Loss</span></th>
+                          <th><span>% Change</span></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {stocks}
+                      <tr>
+                      <td>Cash</td>
+                        <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
+                      </tr>
+                      <tr>
+                      <td>Total</td>
+                        <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(totalValue))}</td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(totalValue - initialValue))}</td>
+                          <td>{Math.round(percentageChange)}%</td>
+                      </tr>
+                  </tbody>
+              </table>;
         }
-        return (
-            <div className='main-portfolio-index'>
-                <div>
-                    <br />
+
+        if (this.props.currentUser && mainPortfolio) {
+            return (
+                <div className='main-portfolio-index'>
+                    <div className='portfolio-title'>
+                        {mainPortfolio.title}
+                    </div>
+
+                <div className = 'portfolio-buttons'>
+                    <div className='dropdown'>
+                        <span>Portfolios</span>
+                        <div className="dropdown-content">
+                            {portfolioIndex}
+                            <PortfolioModal />
+                        </div>
+                    </div>
+                    <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
+                </div>
+                
                     <div>
-                        {portfolioIndex}
+                        {portfolioTable}
+                    </div>
+
+
+                    <div id="piechart">
+                        {this.pieChart(totalValue - this.props.currentUser.investor.balance,
+                            this.props.currentUser.investor.balance)}
                     </div>
                 </div>
-              { portfolioTable }
-              <PortfolioFormContainer />
-            </div>
-        );
+            );
+        } else {
+            return (
+                <div></div>
+            );
+        }
     }
 }
 

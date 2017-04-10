@@ -33,10 +33,17 @@ class TradeForm extends React.Component {
         purchaseInfo["purchase_date"] =
           `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate()}`;
         purchaseInfo["number_of_shares"] = this.state.number_of_shares;
-        purchaseInfo["portfolio"] = this.props.portfolio[0];
+        let portfolio;
+        for (let i = 0; i < this.props.portfolio.length; i++) {
+          if (this.props.portfolio[i].main === true) {
+            portfolio = this.props.portfolio[i];
+            break;
+          }
+        }
+        purchaseInfo["portfolio"] = portfolio;
         action = this.props.createStock;
       }
-      let newBalance = Math.round((parseInt(this.props.balance) +
+      let newBalance = Math.round((parseInt(this.props.balance) -
         (price * parseInt(this.state.number_of_shares))));
       this.updateBalance(newBalance);
       action(purchaseInfo).then(hashHistory.push("/portfolio"));
@@ -104,27 +111,33 @@ class TradeForm extends React.Component {
   }
 
   render() {
+
     return (
-      <form className="trade-form" onSubmit={this.handleSubmit}>
-        <label> Action
-          <select className="trade-action" onChange={this.update('action')}>
-            <option value=""></option>
-            <option value="Buy">Buy</option>
-            <option value="Sell">Sell</option>
-          </select>
-        </label>
-        <label> Symbol
-          <input className="form-symbol" onChange={this.update("ticker")} />
-        </label>
+      <div className="trade-form-container">
+        <form className="trade-form" onSubmit={this.handleSubmit}>
+          <label> Action
+            <select className="trade-action" onChange={this.update('action')}>
+              <option value=""></option>
+              <option value="Buy">Buy</option>
+              <option value="Sell">Sell</option>
+            </select>
+          </label>
+          <label> Symbol
+            <input className="form-symbol" onChange={this.update("ticker")} />
+          </label>
 
-        <label> Quantity of Shares
-          <input className="form-shares" onChange={this.update('number_of_shares')} />
-        </label>
+          <label> Quantity(Shares)
+            <input className="form-shares" onChange={this.update('number_of_shares')} />
+          </label>
 
-        <input type="submit" className="form-submit-button" value="Submit"
-          onSubmit={this.handleSubmit}/>
+          <input type="submit" className="form-submit-button" value="Submit"
+            onSubmit={this.handleSubmit}/>
+        </form>
+        <div className="trade-form-popup">
 
-      </form>
+        </div>
+      </div>
+
     );
   }
 }
