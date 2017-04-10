@@ -1,5 +1,4 @@
 export const createStock = stock => {
-  debugger;
   return $.ajax ({
     method: "POST",
     url: 'api/stocks',

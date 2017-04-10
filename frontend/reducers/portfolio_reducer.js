@@ -14,7 +14,6 @@ const PortfolioReducer = (state = [], action) => {
       }
     }
 
-    debugger;
     switch (action.type) {
         case RECEIVE_PORTFOLIOS:
             return action.portfolios;
