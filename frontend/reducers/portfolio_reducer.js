@@ -4,6 +4,17 @@ import { merge } from 'lodash';
 
 const PortfolioReducer = (state = [], action) => {
     let nextState = merge([], state);
+
+    let portfolioIdx;
+    if (action.stock) {
+      for (let i = 0; i < nextState.length; i++) {
+        if (nextState[i].id === action.stock.portfolio) {
+          portfolioIdx = i;
+        }
+      }
+    }
+
+    debugger;
     switch (action.type) {
         case RECEIVE_PORTFOLIOS:
             return action.portfolios;
@@ -19,20 +30,29 @@ const PortfolioReducer = (state = [], action) => {
             }
             return nextState;
         case CREATE_STOCK:
-          nextState[0].stocks.push(action.stock);
+          nextState[portfolioIdx].stocks.push(action.stock);
           return nextState;
         case UPDATE_STOCK:
-          for (let i = 0; i < state[0].stocks.length; i++) {
-            if (state[0].stocks[i].id === action.stock.id) {
-              nextState[0].stocks[i] = action.stock;
+
+          for (let i = 0; i < nextState[portfolioIdx].stocks.length; i++) {
+            if (nextState[portfolioIdx].stocks[i].id === action.stock.id) {
+              nextState[portfolioIdx].stocks[i] = action.stock;
               break;
             }
           }
           return nextState;
         case REMOVE_STOCK:
-          for (let i = 0; i < state[0].stocks.length; i++) {
-            if (state[0].stocks[i].id === action.stock.id) {
-              nextState[0].stocks.splice(i, 1);
+          let idx;
+
+          for (let i = 0; i < nextState.length; i++) {
+            if (nextState[i].main === true) {
+              idx = i;
+            }
+          }
+
+          for (let i = 0; i < nextState[idx].stocks.length; i++) {
+            if (nextState[idx].stocks[i].id === action.stock.id) {
+              nextState[idx].stocks.splice(i, 1);
               break;
             }
           }

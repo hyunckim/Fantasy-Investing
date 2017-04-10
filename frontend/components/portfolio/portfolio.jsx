@@ -17,16 +17,8 @@ class Portfolio extends React.Component {
     }
 
     componentDidMount() {
-      debugger;
       this.props.fetchPortfolios();
     }
-
-    // componentWillReceiveProps(nextProps){
-    //   if (this.props.portfolio[0].stocks !== nextProps.portfolio[0].stocks) {
-    //     debugger;
-    //     this.props.fetchPortfolios();
-    //   }
-    // }
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
