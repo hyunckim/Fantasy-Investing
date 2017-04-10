@@ -48,11 +48,28 @@ class Portfolio extends React.Component {
         ]);
 
         let options = {
-          title: 'Portfolio Breakdown'
+            title: 'Portfolio Breakdown',
+            colors: ['#c1432e', '#ce9e62', '#4b6777' ],
+            is3D: true,
+            backgroundColor: '#2c2c2c',
+            titleTextStyle: {
+                fontName: "Arial",
+                fontSize: 36,
+                color: '#F5F1F2'
+            },
+            legend: {
+                textStyle: {
+                    color: '#F5F1F2', 
+                    fontSize: 16
+                }
+            }
+
         };
         if (document.getElementById('piechart')) {
           let chart = new google.visualization.PieChart(document.getElementById('piechart'));
           chart.draw(data, options);
+
+          
         }
       }
     }
@@ -75,18 +92,22 @@ class Portfolio extends React.Component {
         if (this.props.portfolio.length > 0) {
             portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
                 return (
-                    <button key = {idx} onClick={() => this.handleClick(portfolio)}>
-                        <h5>{portfolio.title}</h5>
+                    <button key={idx} onClick={() => this.handleClick(portfolio)}>
+                        <h5 className='index-dropdown-title' >{portfolio.title}</h5>
                     </button>
                 );
             });
         }
 
+
         if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
 
-            return (<tr key={idx}>
-              <td>{ stock.ticker }</td>
+            return (
+                
+            <tr key={idx} className='lalign'>
+
+              <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
               <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
               <td>${ stock.current_price.toFixed(2) } </td>
@@ -98,7 +119,7 @@ class Portfolio extends React.Component {
                   stock.purchase_price) * 100) }% </td>
             </tr>);
           });
-
+          
           var totalValue = this.props.currentUser.investor.balance;
 
           let unrealizedGain = 0;
@@ -111,51 +132,68 @@ class Portfolio extends React.Component {
           }
           let percentageChange = ((totalValue - initialValue) / initialValue) * 100;
 
-          portfolioTable = <table>
-            <tbody>
-              <tr>
-                <th>Symbol</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Value</th>
-                <th>Purchase Price</th>
-                <th>Cost Basis</th>
-                <th>Unrealiezed Gain / Loss</th>
-                <th>% Change</th>
-              </tr>
-              { stocks }
-              <tr>Cash
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</th>
-              </tr>
-              <tr>Total
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>${this.numberWithCommas(Math.round(totalValue))}</th>
-                <th></th>
-                <th></th>
-                <th>${this.numberWithCommas(Math.round(totalValue - initialValue))}</th>
-                <th>{Math.round(percentageChange)}%</th>
-              </tr>
-
-            </tbody>
-          </table>;
+          portfolioTable =
+              <table id='portfolioTable'>
+                  <thead>
+                      <tr>
+                          <th><span>Symbol</span></th>
+                          <th><span>Title</span></th>
+                          <th><span>Quantity</span></th>
+                          <th><span>Price</span></th>
+                          <th><span>Value</span></th>
+                          <th><span>Purchase Price</span></th>
+                          <th><span>Cost Basis</span></th>
+                          <th><span>Unrealized Gain / Loss</span></th>
+                          <th><span>% Change</span></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {stocks}
+                      <tr>
+                      <td>Cash</td>
+                        <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
+                      </tr>
+                      <tr>
+                      <td>Total</td>
+                        <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(totalValue))}</td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(totalValue - initialValue))}</td>
+                          <td>{Math.round(percentageChange)}%</td>
+                      </tr>
+                  </tbody>
+              </table>;
         }
+
         if (this.props.currentUser && mainPortfolio) {
             return (
                 <div className='main-portfolio-index'>
-                    <div>
+                    <div className='portfolio-title'>
+                        {mainPortfolio.title}
                     </div>
+
+                <div className = 'portfolio-buttons'>
+                    <div className='dropdown'>
+                        <span>Portfolios</span>
+                        <div className="dropdown-content">
+                            {portfolioIndex}
+                            <PortfolioModal />
+                        </div>
+                    </div>
+                    <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
+                </div>
+                
                     <div>
                         {portfolioTable}
                     </div>
-                    {portfolioIndex}
-                    <PortfolioModal />
-                    <button onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
+
+
                     <div id="piechart">
                         {this.pieChart(totalValue - this.props.currentUser.investor.balance,
                             this.props.currentUser.investor.balance)}

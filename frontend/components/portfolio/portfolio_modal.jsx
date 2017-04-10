@@ -43,7 +43,7 @@ class PortfolioModal extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.openModal}>Add Portfolio</button>
+        <button className='dropdown-modal' onClick={this.openModal}>Add Portfolio</button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
