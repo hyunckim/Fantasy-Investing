@@ -9,10 +9,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  createPortfolio: (portfolio) => dispatch(createPortfolio(portfolio)),
-});
+const mapDispatchToProps = (dispatch, ownProps) => {
+
+  return {
+    createPortfolio: (portfolio) => dispatch(createPortfolio(portfolio)),
+    closeModal: () => ownProps.closeModal
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PortfolioForm);
-
-

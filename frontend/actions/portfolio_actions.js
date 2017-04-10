@@ -19,8 +19,7 @@ export const removePortfolio = (portfolio) => ({
 });
 
 export const createPortfolio = (portfolio) => (dispatch) => (
-    PortfolioAPIUtil.createPortfolio(portfolio)
-        .then(newPortfolio => dispatch(receivePortfolio(newPortfolio)))
+    PortfolioAPIUtil.createPortfolio(portfolio).then(newPortfolio => dispatch(receivePortfolio(newPortfolio)))
 );
 
 export const deletePortfolio = (portfolio) => (dispatch) => (
@@ -37,5 +36,3 @@ export const fetchPortfolio = portfolioId => dispatch => (
   PortfolioAPIUtil.fetchPortfolio(portfolioId)
   .then(portfolio => dispatch(receivePortfolio(portfolio)))
 );
-
-

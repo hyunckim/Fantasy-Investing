@@ -15,19 +15,6 @@ class StockSerializer(serializers.ModelSerializer):
         model = Stock
         fields = "__all__"
 
-    def create(self, validated_data):
-        stock = Stock.objects.create(**validated_data)
-        stock.save()
-        return stock
-
-    def update(self, instance, validated_data):
-        instance.ticker = validated_data.get('ticker', instance.ticker)
-        instance.purchase_price = validated_data.get('purchase_price', instance.purchase_price)
-        instance.purchase_date = validated_data.get('purchase_date', instance.purchase_date)
-        instance.number_of_shares = validated_data.get('number_of_shares', instance.number_of_shares)
-        instance.save()
-        return instance
-
     def get_current_price(self, obj):
         stock = Share(obj.ticker)
         return float(stock.get_price())
@@ -50,12 +37,20 @@ class PortfolioSerializer(serializers.ModelSerializer):
         model = Portfolio
         fields = ('id', 'title', 'main', 'stocks')
 
+class PortfolioFormSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Portfolio
+        fields = ('id', 'title', 'main', 'user')
+
     def create(self, validated_data):
         portfolio = Portfolio.objects.create(**validated_data)
         portfolio.save()
         return portfolio
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -67,7 +62,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         investor = Investor(user=user, balance=100000)
         user.save()
         investor.save()
-        p = Portfolio(title="Current holdings", main=True, user=user)
+        p = Portfolio(title="Current Holdings", main=True, user=user)
         p.save()
         return user
 
@@ -82,7 +77,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'investor')
+        fields = ('id', 'username', 'investor')
 
 class CompanySerializer(serializers.Serializer):
     ticker = serializers.CharField(max_length=10)

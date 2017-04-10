@@ -2,11 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import configureStore from './store/store';
 import Root from './components/root';
+import { persistStore, autoRehydrate } from 'redux-persist';
+import { login } from "./actions/session_actions";
 
-import{ createStock, updateStock , deleteStock } from "./actions/stock_actions";
-window.createStock = createStock;
-window.updateStock = updateStock;
-window.deleteStock = deleteStock;
+window.login = login;
 
 document.addEventListener('DOMContentLoaded',() => {
   let store;
@@ -23,6 +22,7 @@ document.addEventListener('DOMContentLoaded',() => {
     localStorage.setItem("currentUser", store.getState().currentUser);
   }
 
+  persistStore(store);
   window.store = store;
 
   const root = document.getElementById('root');

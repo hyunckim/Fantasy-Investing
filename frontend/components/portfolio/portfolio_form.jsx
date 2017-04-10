@@ -10,16 +10,15 @@ class PortfolioForm extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updatePortfolio = this.updatePortfolio.bind(this);
-
     }
 
     componentWillReceiveProps(nextProps) {
     }
-
+    
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state);
-        this.props.createPortfolio(this.state);
+        this.props.createPortfolio(this.state)
+        .then(() => this.props.closeModal());
     }
 
     updatePortfolio(event) {

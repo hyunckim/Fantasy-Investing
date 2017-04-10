@@ -27,12 +27,20 @@ class NavBar extends React.Component {
 
   handleLogOutClick(e) {
     e.preventDefault();
-    this.props.logout().then(() => hashHistory.push("/"));
+    this.props.logout();
+    let timesRun = 0;
+    let interval = setInterval(function(){
+      timesRun += 1;
+      if(timesRun === 1){
+        clearInterval(interval);
+      }
+      hashHistory.push("/");
+    }, 200);
   }
 
   handleGuestClick(e) {
     e.preventDefault();
-    this.props.loginGuest({ user: { username: 'guest@gmail.com', password: 'password' } })
+    this.props.loginGuest({ username: 'Guest', password: 'password' })
       .then(() => hashHistory.push("/login"));
   }
 
@@ -57,7 +65,7 @@ class NavBar extends React.Component {
   render() {
     let logo = (
       <div className="logo-container">
-        <img className='logo' src={'https://ibb.co/k2Tdvk'} alt='Logo' />
+        <img src={'https://s3-us-west-1.amazonaws.com/fantasyinvesting-dev/logo.png'} alt='Logo' height="38" width="35" />
       </div>
     );
 
@@ -70,22 +78,18 @@ class NavBar extends React.Component {
             </div>
           </div>
           <div className='middle-nav'>
-           <form className="header-search">
-            <label className="header-search-label"> Search Company
+            <form className="header-search">
               <input className="search-input"
-                placeholder="Search Ticker Ex: MSFT"
-                onChange={this.handleFilterChange("ticker")} />
-              <button className='header-search-button'
-                onClick={this.handleSearchSubmit}>
-                <i className="fa fa-search" aria-hidden="true"></i>
-              </button>
-            </label>
-          </form>
+                  placeholder="Search Ticker Ex: MSFT"
+                  onChange={this.handleFilterChange("ticker")} />
+                <button className='header-search-button'
+                  onClick={this.handleSearchSubmit}>
+                </button> 
+            </form>
           </div>
           <div className='right-nav'>
-               <TradeModal />
-
             <div className='auth'>
+              <TradeModal />
               <button
                 className="portfolio-button"
                 onClick={this.handlePortfolioButton}>Portfolio
@@ -93,7 +97,7 @@ class NavBar extends React.Component {
               <button
                 className="logout-button"
                 onClick={this.handleLogOutClick}>
-                Log Out
+                Logout
               </button>
             </div>
           </div>

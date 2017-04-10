@@ -8,19 +8,24 @@
     background: #F5F1F2;
     text-align: center;
 }
-
-.login-form-box {
-    background: #F5F1F2
+.session-title-container{
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
+
 .session-form-message {
-    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
     width: 100%;
     font-size: 18px;
     background: #4b6777;
     color: ce9e62;
     line-height: 150%;
-    border-radius: 3px 3px 0 0;
+    border-radius: 10px 10px 0 0;
     box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
 }
 
@@ -30,7 +35,7 @@
 }
 
 .login-form-container input {
-    margin: 40px 25px;
+    margin: 30px 25px;
     width: 200px;
     display: block;
     border: none;
