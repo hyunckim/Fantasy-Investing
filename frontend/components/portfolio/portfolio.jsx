@@ -76,7 +76,7 @@ class Portfolio extends React.Component {
         if (this.props.portfolio.length > 0) {
             portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
                 return (
-                    <button onClick={() => this.handleClick(portfolio)}>
+                    <button key = {idx} onClick={() => this.handleClick(portfolio)}>
                         <h5>{portfolio.title}</h5>
                     </button>
                 );

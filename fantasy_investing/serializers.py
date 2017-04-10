@@ -73,7 +73,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'investor')
+        fields = ('id', 'username', 'investor')
 
 class CompanySerializer(serializers.Serializer):
     ticker = serializers.CharField(max_length=10)
