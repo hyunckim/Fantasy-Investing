@@ -71,15 +71,29 @@ def portfolio_index(request):
 
 class PortfolioView(CreateModelMixin, GenericAPIView):
     serializer_class = PortfolioFormSerializer
+
     def post(self, request):
-        return self.create(request)
+        title = request.POST.get('title', False)
+        if request.POST.get('main', False) != "false":
+            main = True
+        else:
+            main = False
+        portfolio = Portfolio.objects.create(title = title, main = main,
+            user = User.objects.get(pk=request.POST.get('user[id]', False)))
+        serializer = PortfolioFormSerializer(portfolio)
+        if serializer.is_valid:
+            portfolio.save()
+            return Response(serializer.data)
+        else:
+            return HttpResponse("Invalid portfolio", status=404)
+
     def delete(self, request):
         p = Portfolio.objects.get(pk=request.POST.get('id', False))
-        if p:
+        if p and (p.main is False):
             p.delete()
             return HttpResponse(status=200)
         else:
-            return HttpResponse("User does not have portfolio", status=404)
+            return HttpResponse("You cannot delete this portfolio", status=404)
 
 
 def portfolio_detail(request, pk):
@@ -142,7 +156,19 @@ class StockView(CreateModelMixin, GenericAPIView):
     serializer_class = StockSerializer
 
     def post(self, request):
-        return self.create(request)
+        ticker = request.POST.get('ticker', False)
+        purchase_date = request.POST.get('purchase_date', False)
+        purchase_price = request.POST.get('purchase_price', False)
+        number_of_shares = request.POST.get('number_of_shares', False)
+        stock = Stock.objects.create(ticker = ticker, purchase_price = purchase_price,
+            purchase_date = purchase_date, number_of_shares = number_of_shares,
+            portfolio = Portfolio.objects.get(pk=request.POST.get('portfolio[id]', False)))
+        serializer = StockSerializer(stock)
+        if serializer.is_valid:
+            stock.save()
+            return Response(serializer.data)
+        else:
+            return HttpResponse("Invalid stock", status=404)
 
     def patch(self, request):
         instance = Stock.objects.get(pk=request.POST.get('id', False))

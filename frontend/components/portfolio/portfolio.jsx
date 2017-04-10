@@ -1,6 +1,6 @@
 import React from 'react';
 import { fetchStockPrice } from '../../util/stock_api_util';
-import {Link} from 'react-router';  
+import {Link} from 'react-router';
 import PortfolioModal from './portfolio_modal.jsx';
 import PortfolioFormContainer from './portfolio_form_container';
 
@@ -18,10 +18,6 @@ class Portfolio extends React.Component {
 
     componentDidMount() {
       this.props.fetchPortfolios();
-    }
-
-    componentWillReceiveProps(nextProps){
-
     }
 
     handleClick(event){
@@ -72,14 +68,14 @@ class Portfolio extends React.Component {
         if (this.props.portfolio.length > 0) {
             portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
                 return (
-                    <button onClick={() => this.handleClick(portfolio)}>
+                    <button key = {idx} onClick={() => this.handleClick(portfolio)}>
                         <h5>{portfolio.title}</h5>
                     </button>
                 );
             });
         }
 
-        if (mainPortfolio && this.props.currentUser) {
+        if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
 
             return (<tr key={idx}>
@@ -167,4 +163,3 @@ class Portfolio extends React.Component {
 }
 
 export default Portfolio;
-

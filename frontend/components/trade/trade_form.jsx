@@ -33,10 +33,17 @@ class TradeForm extends React.Component {
         purchaseInfo["purchase_date"] =
           `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate()}`;
         purchaseInfo["number_of_shares"] = this.state.number_of_shares;
-        purchaseInfo["portfolio"] = this.props.portfolio[0];
+        let portfolio;
+        for (let i = 0; i < this.props.portfolio.length; i++) {
+          if (this.props.portfolio[i].main === true) {
+            portfolio = this.props.portfolio[i];
+            break;
+          }
+        }
+        purchaseInfo["portfolio"] = portfolio;
         action = this.props.createStock;
       }
-      let newBalance = Math.round((parseInt(this.props.balance) +
+      let newBalance = Math.round((parseInt(this.props.balance) -
         (price * parseInt(this.state.number_of_shares))));
       this.updateBalance(newBalance);
       action(purchaseInfo).then(hashHistory.push("/portfolio"));
