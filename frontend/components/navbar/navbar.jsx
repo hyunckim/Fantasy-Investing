@@ -65,7 +65,7 @@ class NavBar extends React.Component {
   render() {
     let logo = (
       <div className="logo-container">
-        <img className='logo' src={'https://ibb.co/k2Tdvk'} alt='Logo' />
+        <img src={'https://s3-us-west-1.amazonaws.com/fantasyinvesting-dev/logo.png'} alt='Logo' height="38" width="35" />
       </div>
     );
 
@@ -84,7 +84,6 @@ class NavBar extends React.Component {
                   onChange={this.handleFilterChange("ticker")} />
                 <button className='header-search-button'
                   onClick={this.handleSearchSubmit}>
-                  Search
                 </button> 
             </form>
           </div>
@@ -98,7 +97,7 @@ class NavBar extends React.Component {
               <button
                 className="logout-button"
                 onClick={this.handleLogOutClick}>
-                Log Out
+                Logout
               </button>
             </div>
           </div>

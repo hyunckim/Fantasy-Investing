@@ -13,13 +13,13 @@ export const fetchPortfolio = (portfolio) => (
     })
 );
 
-export const createPortfolio = (portfolio) => (
-    $.ajax({
-        method: 'POST',
-        url: `api/portfolio`,
-        data: portfolio
-    })
-);
+export const createPortfolio = (portfolio) => {
+    return $.ajax({
+          method: 'POST',
+          url: `api/portfolio`,
+          data: portfolio
+    });
+};
 
 export const deletePortfolio = (portfolioId) => (
     $.ajax({
@@ -28,9 +28,3 @@ export const deletePortfolio = (portfolioId) => (
         data: portfolioId
     })
 );
-
-
-
-
-
-

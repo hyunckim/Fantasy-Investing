@@ -1,12 +1,12 @@
 table {
   border-collapse: separate;
-  background:#fff;
+  background:#F5F1F2;
   border-radius: 5px;
   margin: 50px auto;
   box-shadow: 0px 0px 5px;
   rgba: 0,0,0,0.3;
 }
-
+c1432e
 thead {
   border-radius: 5px;
 }
@@ -15,12 +15,13 @@ thead th {
   font-family: 'Patua One', cursive;
   font-size:16px;
   font-weight:400;
-  color:#fff;
-  text-shadow: 1px 1px 0px;
+  color:#ce9e62;
+  text-shadow: .5px .5px 0px;
   rgba: 0,0,0,0.5;
   text-align:left;
   padding:20px;
   border-top: 1px solid #858d99;
+  background: #4b6777;
   
 }
 
@@ -35,7 +36,8 @@ tbody tr td {
 }
 
 tbody tr:nth-child(2n) {
-  background:#f0f3f5;
+  background:#ce9e62;
+  color: #c1432e;
 }
 
 tbody tr:last-child td {

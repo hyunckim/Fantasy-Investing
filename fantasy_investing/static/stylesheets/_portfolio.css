@@ -1,11 +1,23 @@
 .main-portfolio-index {
-    margin-top: 46px;
+    margin-top: 60px;
     color: #C74837;
     top: 200px;
     display: flex;
     flex-direction: column;
+    margin: 100px;
 }
 
+.portfolio-title{
+    font-size: 6vh;
+    color: #F5F1F2;
+
+}
+.portfolio-buttons{
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+    margin-top: 20px;
+}
 
 #piechart {
   width: 600px;
@@ -15,23 +27,28 @@
 .dropdown {
     position: relative;
     display: inline-block;
-    width: 20px;
+    width: 50px;
+    padding-right: 75px;
 }
 
+.dropdown-modal {
+    border-top: 1px solid #C1432E;
+    padding: 12px 0;
+}
+.index-dropdown-title{
+    font-size: 16px;
+}
 .dropdown span{
     border:1px solid #943323;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    font-size:12px;
-    font-family:arial,
-    helvetica,
-    sans-serif;
+    font-size:16px;
+    text-transform: uppercase;
     padding: 10px 10px 10px 10px;
     text-decoration:none;
     display:inline-block;
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
-    font-weight:bold;
     color: #F5F1F2;
     background-color: #C1432E;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#C1432E), to(#C74837));
@@ -64,6 +81,7 @@
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     padding: 12px 16px;
     z-index: 1;
+    font-size: 16px;
 }
 
 
@@ -76,6 +94,7 @@
     flex-direction: column;
     width: 100%;
     text-indent: 10px;
+    font-size: 16px;
 
 
 }
@@ -83,6 +102,7 @@
     background: #C74837;
     color: #F5F1F2;
 }
+
 
 
 
