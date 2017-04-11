@@ -53,7 +53,7 @@ class Portfolio extends React.Component {
             is3D: true,
             backgroundColor: '#2c2c2c',
             titleTextStyle: {
-                fontName: "Arial",
+                fontName: "Helvetica",
                 fontSize: 36,
                 color: '#F5F1F2'
             },
@@ -63,7 +63,6 @@ class Portfolio extends React.Component {
                     fontSize: 16
                 }
             }
-
         };
         if (document.getElementById('piechart')) {
           let chart = new google.visualization.PieChart(document.getElementById('piechart'));

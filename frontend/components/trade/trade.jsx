@@ -3,14 +3,26 @@ import Modal from 'react-modal';
 import TradeFormContainer from './trade_form_container';
 
 const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    height                : '300px'
+  content: {
+    width: '300',
+    height: '480',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: '-250px',
+    marginLeft: '-150px',
+    zIndex: 9999,
+    border: '1px solid #ccc',
+    background: '#fffff',
+    overflow: 'auto',
+    WebkitOverflowScrolling: 'touch',
+    borderRadius: '4px',
+    outline: 'none',
+    backgroundColor: '#ffffff'
+  },
+  overlay: {
+    zIndex: 15,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
   }
 };
 
@@ -55,7 +67,8 @@ class TradeModal extends React.Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-        <TradeFormContainer />
+        <button className='trade-close-button' onClick={this.closeModal}>✖</button>
+        <TradeFormContainer className='trade-form-modal'/>
         </Modal>
       </div>
     );
