@@ -41,11 +41,13 @@ class Portfolio extends React.Component {
 
       function drawChart() {
 
-        let data = google.visualization.arrayToDataTable([
+        var data = google.visualization.arrayToDataTable([
           ['Type', 'Amount'],
           ['Equity', equity],
           ['Cash', cash]
         ]);
+        debugger;
+
 
         let options = {
             title: 'Portfolio Breakdown',
@@ -67,8 +69,6 @@ class Portfolio extends React.Component {
         if (document.getElementById('piechart')) {
           let chart = new google.visualization.PieChart(document.getElementById('piechart'));
           chart.draw(data, options);
-
-
         }
       }
     }
@@ -151,11 +151,15 @@ class Portfolio extends React.Component {
                   <tbody>
                       {stocks}
                       <tr>
-                      <td>Cash</td>
+                        <td>Cash</td>
                         <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
+                        <td></td>
+                        <td></td>
+                        <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                       </tr>
                       <tr>
                       <td>Total</td>
