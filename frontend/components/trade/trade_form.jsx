@@ -114,24 +114,27 @@ class TradeForm extends React.Component {
 
     return (
       <div className="trade-form-container">
+        <div>
+          <h3 className='trade-form-title'>Stocks: Buy & Sell</h3>
+        </div>
         <form className="trade-form" onSubmit={this.handleSubmit}>
           <label> Action
             <select className="trade-action" onChange={this.update('action')}>
-              <option value=""></option>
+              <option value="" disabled selected>Buy / Sell</option>
               <option value="Buy">Buy</option>
               <option value="Sell">Sell</option>
             </select>
           </label>
           <label> Symbol
-            <input className="form-symbol" onChange={this.update("ticker")} />
+            <input className="form-symbol" onChange={this.update("ticker")} placeholder='Ex:MSFT'/>
           </label>
 
-          <label> Quantity(Shares)
-            <input className="form-shares" onChange={this.update('number_of_shares')} />
+          <label> Quantity
+            <input className="form-shares" onChange={this.update('number_of_shares')} placeholder='# Of Shares' />
           </label>
 
           <input type="submit" className="form-submit-button" value="Submit"
-            onSubmit={this.handleSubmit}/>
+            onSubmit={this.handleSubmit} />
         </form>
         <div className="trade-form-popup">
 
