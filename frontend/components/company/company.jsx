@@ -16,20 +16,9 @@ class Company extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!this.props.company && nextProps.company) {
       this.props.fetchCompany();
-      $('.detail').remove();
     } else if ( this.props.params.ticker !== nextProps.params.ticker ) {
       nextProps.fetchCompany();
-      $('.detail').remove();
-      $('.detail').remove();
-      $('.detail').remove();
-      $('.detail').remove();
-      $('.detail').remove();
-      $('.detail').remove();
     }
-  }
-
-  renderD3() {
-
   }
 
   receiveNews(ticker) {
@@ -155,7 +144,7 @@ class Company extends React.Component {
       let config = {};
       config.xAxis = "date";
       config.yAxis = ticker;
-      config.width = 700;
+      config.width = 600;
       config.height = 300;
       config.xAxisLabel = "Days";
       config.title = "Company Year History";

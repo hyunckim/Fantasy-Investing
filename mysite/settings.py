@@ -26,7 +26,7 @@ SECRET_KEY = '1l%ia6d$!_v(x!24d*^#4msvd8me7r8*pnbqbx4(kk7-b8-11v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fantasy-investing-app.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', 'fantasy-investing-app.herokuapp.com', '127.0.0.1', '127.0.0.1:5432']
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
