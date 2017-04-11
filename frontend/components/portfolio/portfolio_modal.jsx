@@ -51,7 +51,7 @@ class PortfolioModal extends React.Component {
           style={customStyles}
           contentLabel="Portfolio Modal"
         >
-        <button className='auth-close-button' onClick={this.closeModal}>✖</button>
+        <button className='portfolio-close-button' onClick={this.closeModal}>✖</button>
         <PortfolioFormContainer closeModal={this.closeModal}/> 
         </Modal>
       </div>

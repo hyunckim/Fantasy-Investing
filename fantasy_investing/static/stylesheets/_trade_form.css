@@ -1,0 +1,62 @@
+.trade-form-container{
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+
+}
+
+.trade-form, .portfolio-form{
+    width: 100%;
+    display: flex;
+    flex-direction: column; 
+    margin-left: 20px;
+    overflow-y: hidden;
+}
+
+.trade-form input, .portfolio-form input{
+    margin: 30px 25px;
+    width: 200px;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #4b6777;
+    -webkit-transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 96%, #4b6777 4%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #4b6777 4%);
+    background-position: -200px 0;
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    color: #0e6252;
+}
+
+.trade-form label{
+    display: inline-block;
+    width: 50px;
+    margin: 5px;
+
+}
+.trade-form-title{
+    text-align: center;
+}
+
+.portfolio-form-title{
+    text-align: center;
+
+}
+
+.trade-form label, .trade-form input {
+    float:left;
+}
+
+.form-symbol {
+    border: 1px solid black;
+}
+
+.form-submit-button {
+    text-align: center;
+}
+
+.trade-close-button, .portfolio-close-button{
+    color: lightgrey;
+    float:right;
+}
+
