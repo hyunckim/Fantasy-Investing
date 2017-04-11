@@ -88,7 +88,7 @@
 
 .login-form-container input:focus::-webkit-input-placeholder,
 .login-form-container input:valid::-webkit-input-placeholder {
-    color: #1abc9c;
+    color: #4b6777;
     font-size: 11px;
     -webkit-transform: translateY(-20px);
     transform: translateY(-20px);

@@ -28,7 +28,7 @@ class PortfolioForm extends React.Component {
   render () {
     return (
       <div className='portfolio-form'>
-        <div className='createMessage'>
+        <div className='portfolio-form-title'>
             Create A New Portfolio
         </div>
         <form onSubmit={ this.handleSubmit}>
