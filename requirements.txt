@@ -34,7 +34,6 @@ reportlab==3.3.0
 requests==2.9.1
 simplejson==3.10.0
 six==1.10.0
-unattended-upgrades==0.1
 unity-scope-calculator==0.1
 unity-scope-chromiumbookmarks==0.1
 unity-scope-colourlovers==0.1
