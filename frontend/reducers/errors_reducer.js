@@ -12,8 +12,22 @@ const ErrorsReducer = (state = _nullErrors, action) => {
   Object.freeze(state);
   switch (action.type) {
     case RECEIVE_SESSION_ERRORS:
-      const session = action.errors;
-      return merge({}, _nullErrors, { session });
+      const session = [];
+      let nextState = merge({}, state);
+      if (action.errors.responseText) {
+        session.push(action.errors.responseText);
+      } else {
+        let keys = Object.keys(action.errors);
+        for (let i = 0; i < keys.length; i++) {
+          if (keys[i] === 'username') {
+            session.push("Please input username");
+          } else {
+            session.push("Please input password");
+          }
+        }
+      }
+      nextState.session = session;
+      return nextState;
     case REMOVE_SESSION_ERRORS:
       let newState = merge({}, state);
       newState.session = [];

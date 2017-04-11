@@ -41,13 +41,11 @@ class Portfolio extends React.Component {
 
       function drawChart() {
 
-        var data = google.visualization.arrayToDataTable([
+        let data = google.visualization.arrayToDataTable([
           ['Type', 'Amount'],
           ['Equity', equity],
           ['Cash', cash]
         ]);
-        debugger;
-
 
         let options = {
             title: 'Portfolio Breakdown',
@@ -69,6 +67,7 @@ class Portfolio extends React.Component {
         };
         if (document.getElementById('piechart')) {
           let chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          // delete data.gvjs_S.qg[1];
           chart.draw(data, options);
         }
       }
@@ -120,80 +119,83 @@ class Portfolio extends React.Component {
             </tr>);
           });
 
-          var totalValue = this.props.currentUser.investor.balance;
+          if (this.props.currentUser) {
+            var totalValue = this.props.currentUser.investor.balance;
 
-          let unrealizedGain = 0;
-          let initialValue = 0;
+            let unrealizedGain = 0;
+            let initialValue = 0;
 
-          for (let i = 0; i < mainPortfolio.stocks.length; i++) {
-            let stock = mainPortfolio.stocks[i];
-            totalValue += (stock.current_price * stock.number_of_shares);
-            initialValue += (stock.purchase_price * stock.number_of_shares);
+            for (let i = 0; i < mainPortfolio.stocks.length; i++) {
+              let stock = mainPortfolio.stocks[i];
+              totalValue += (stock.current_price * stock.number_of_shares);
+              initialValue += (stock.purchase_price * stock.number_of_shares);
 
+            }
+            unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
+            let percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
+
+            portfolioTable =
+                <table id='portfolioTable'>
+                    <thead>
+                        <tr>
+                            <th><span>Symbol</span></th>
+                            <th><span>Title</span></th>
+                            <th><span>Quantity</span></th>
+                            <th><span>Price</span></th>
+                            <th><span>Value</span></th>
+                            <th><span>Purchase Price</span></th>
+                            <th><span>Cost Basis</span></th>
+                            <th><span>Unrealized Gain / Loss</span></th>
+                            <th><span>% Change</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {stocks}
+                        <tr>
+                          <td>Cash</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                        <td>Total</td>
+                          <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>${this.numberWithCommas(Math.round(totalValue))}</td>
+                            <td></td>
+                            <td></td>
+                            <td>${this.numberWithCommas(Math.round(unrealizedGain))}</td>
+                            <td>{Math.round(percentageChange)}%</td>
+                        </tr>
+                    </tbody>
+                </table>;
           }
-          unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
-          let percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
 
-          portfolioTable =
-              <table id='portfolioTable'>
-                  <thead>
-                      <tr>
-                          <th><span>Symbol</span></th>
-                          <th><span>Title</span></th>
-                          <th><span>Quantity</span></th>
-                          <th><span>Price</span></th>
-                          <th><span>Value</span></th>
-                          <th><span>Purchase Price</span></th>
-                          <th><span>Cost Basis</span></th>
-                          <th><span>Unrealized Gain / Loss</span></th>
-                          <th><span>% Change</span></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      {stocks}
-                      <tr>
-                        <td>Cash</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                      <td>Total</td>
-                        <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>${this.numberWithCommas(Math.round(totalValue))}</td>
-                          <td></td>
-                          <td></td>
-                          <td>${this.numberWithCommas(Math.round(unrealizedGain))}</td>
-                          <td>{Math.round(percentageChange)}%</td>
-                      </tr>
-                  </tbody>
-              </table>;
         }
 
         if (this.props.currentUser && mainPortfolio) {
             return (
                 <div className='main-portfolio-index'>
-                    <div className='portfolio-title'>
-                        {mainPortfolio.title}
-                    </div>
+                  <div className='portfolio-title'>
+                      {mainPortfolio.title}
+                  </div>
 
-                <div className = 'portfolio-buttons'>
-                    <div className='dropdown'>
-                        <span>Portfolios</span>
-                        <div className="dropdown-content">
-                            {portfolioIndex}
-                            <PortfolioModal />
-                        </div>
-                    </div>
-                    <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
-                </div>
+                  <div className = 'portfolio-buttons'>
+                      <div className='dropdown'>
+                          <span>Portfolios</span>
+                          <div className="dropdown-content">
+                              {portfolioIndex}
+                              <PortfolioModal />
+                          </div>
+                      </div>
+                      <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
+                  </div>
 
                     <div>
                         {portfolioTable}
