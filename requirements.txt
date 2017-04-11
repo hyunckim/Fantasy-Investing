@@ -34,7 +34,6 @@ reportlab==3.3.0
 requests==2.9.1
 simplejson==3.10.0
 six==1.10.0
-system-service==0.3
 ubuntu-drivers-common==0.0.0
 ufw==0.35
 unattended-upgrades==0.1
