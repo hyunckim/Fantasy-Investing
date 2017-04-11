@@ -6,7 +6,7 @@ table {
   box-shadow: 0px 0px 5px;
   rgba: 0,0,0,0.3;
 }
-c1432e
+
 thead {
   border-radius: 5px;
 }
@@ -22,7 +22,7 @@ thead th {
   padding:20px;
   border-top: 1px solid #858d99;
   background: #4b6777;
-  
+
 }
 
 tbody tr td {
@@ -32,7 +32,7 @@ tbody tr td {
   font-size:13px;
   padding:20px 20px 20px 20px;
   border-bottom:1px solid #e0e0e0;
-  
+
 }
 
 tbody tr:nth-child(2n) {
