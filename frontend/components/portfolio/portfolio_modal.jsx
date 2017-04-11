@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Modal from 'react-modal';
 import PortfolioFormContainer from './portfolio_form_container';
+
 const customStyles = {
   content : {
     top                   : '50%',
@@ -12,7 +13,7 @@ const customStyles = {
   }
 };
 
-class PortfolioModal extends React.Component {
+class PortfolioModal extends Component {
   constructor() {
     super();
 
