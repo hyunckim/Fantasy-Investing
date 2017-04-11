@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'fantasyinvesting',
         'USER': '',
         'PASSWORD': ''
-        'HOST': 'localhost',
+        # 'HOST': 'localhost',
         'PORT': '5432',
     }
 }
