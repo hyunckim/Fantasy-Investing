@@ -118,7 +118,7 @@ class Company(object):
 
             for element in response:
                 date = datetime.datetime.strptime(element['Date'], '%Y-%m-%d').strftime('%d-%b-%y')
-                past_year_info.append({ 'date': date, 'close': element['Close'] })
+                past_year_info.append({ 'date': date, 'close': float('%.2f' % float(element['Close'])) })
 
             self.ticker = ticker
             self.prev_close = company.get_prev_close()
@@ -135,6 +135,18 @@ class Company(object):
             self.EPS_estimate_curr_year = company.get_price_EPS_estimate_current_year()
             self.EPS_estimate_next_year = company.get_price_EPS_estimate_next_year()
             self.earnings_growth_ratio = company.get_price_earnings_growth_ratio()
+            self.open = company.get_open()
+            self.market_cap = company.get_market_cap()
+            self.fiftytwo_week_high = company.get_year_high()
+            self.fiftytwo_week_low = company.get_year_low()
+            self.fifty_day_moving_avg = company.get_50day_moving_avg()
+            self.two_hundred_day_moving_avg = company.get_200day_moving_avg()
+            self.ebitda = company.get_ebitda()
+            self.dividend_share = company.get_dividend_share()
+            self.avg_volume = company.get_avg_daily_volume()
+            self.price_per_sale = company.get_price_sales()
+            self.price_per_book = company.get_price_book()
+            self.short_ratio = company.get_short_ratio()
 
         self.title = company.get_name()
         self.price = company.get_price()
