@@ -15,12 +15,21 @@ class Company extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.company && nextProps.company) {
-      d3.select("svg").remove();
       this.props.fetchCompany();
+      $('.detail').remove();
     } else if ( this.props.params.ticker !== nextProps.params.ticker ) {
-      d3.select("svg").remove();
       nextProps.fetchCompany();
+      $('.detail').remove();
+      $('.detail').remove();
+      $('.detail').remove();
+      $('.detail').remove();
+      $('.detail').remove();
+      $('.detail').remove();
     }
+  }
+
+  renderD3() {
+
   }
 
   receiveNews(ticker) {
@@ -70,7 +79,6 @@ class Company extends React.Component {
 }
 
   render() {
-    console.log(this.state);
     let title;
     let price;
     let earningShare;
@@ -99,8 +107,6 @@ class Company extends React.Component {
     let pricePerBook;
     let shortRatio;
     let newsContent;
-
-    let drawD3Document = function() {};
 
     if (this.props.company.title !== undefined ) {
       title = this.props.company.title;
@@ -138,51 +144,152 @@ class Company extends React.Component {
       pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
       shortRatio =   Math.round( this.props.company.short_ratio * 10 ) / 10;
 
-      let WIDTH = 700, HEIGHT = 300;
-
-      let yAxisLabel = "Price ($)";
-
-      let parseDate = d3.time.format("%d-%b-%y").parse;
-
-      let margin = {
-          top: 20,
-          right: 20,
-          bottom: 30,
-          left: 50
-      }, width = WIDTH - margin.left - margin.right, height = HEIGHT - margin.top - margin.bottom;
-
-      let x = d3.time.scale().range([0, width ]);
-      let y = d3.scale.linear().range([height, 0]);
-
-      let xAxis = d3.svg.axis().scale(x).orient("bottom");
-      let yAxis = d3.svg.axis().scale(y).orient("left");
-
-      let line = d3.svg.line().interpolate("basic").x(function(d) {
-        return x(d.date);
-      }).y(function(d) {
-        return y(d.close);
-      });
+      //clear previous graphs
       d3.select("svg").remove();
-      let svg = d3.select("#canvas-svg").append("svg").attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      drawD3Document = function(data) {
-        let summary = jQuery.extend(true, [], data);
-          data.forEach(function(d) {
-              d.date = parseDate(d.date);
-              d.close = parseFloat(d.close).toFixed(2);
-          });
-          x.domain(d3.extent(data, function(d) {
-              return d.date;
-          }));
-          y.domain(d3.extent(data, function(d) {
-              return d.close;
-          }));
-          svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
-          svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end").text(yAxisLabel);
-          svg.append("path").datum(data).attr("class", "line").attr("d", line);
-      };
+      d3.select("svg").remove();
+      d3.select("svg").remove();
+      d3.select("svg").remove();
+      d3.select("svg").remove();
+
+      let seriesDataMap = {};
+      let config = {};
+      config.xAxis = "date";
+      config.yAxis = ticker;
+      config.width = 700;
+      config.height = 300;
+      config.xAxisLabel = "Days";
+      config.title = "Company Year History";
+
+      let data = pastYearInfo;
+      let color = "black";
+          seriesDataMap = {
+            color: color,
+            name: ticker,
+            data: []
+          };
+      let yAxisTypeMap = {};
+      let yAxisType = "";
+
+      let count = 0;
+      for (let i = 0; i < data.length; i++) {
+        seriesDataMap.data.push({x: count, y: data[data.length-1-i].close });
+        count++;
+      }
+
+      let seriesData = [];
+      let darray = seriesDataMap.data;
+        seriesData.push({
+          color: seriesDataMap.color,
+          name: seriesDataMap.name,
+          data: darray
+      });
+      let margin = {top: 20, left: 20, bottom: 30, right: 50};
+      let width = config.width, height = config.height;
+
+      // adjust height
+      if (config.title !== '') {
+        $("#canvas-svg .title").show();
+        $("#canvas-svg .title").html(config.title);
+        height -= $("#canvas-svg .title").height();
+      }
+
+      if ($('#canvas-svg').find('.chart')[0]) {
+        let graph = new Rickshaw.Graph( {
+          element: $('#canvas-svg').find('.chart')[0],
+          width: width - margin.left - margin.right,
+          height: height - margin.top - margin.bottom,
+          min: "auto",
+          renderer: 'line',
+          series: seriesData
+        } );
+
+        graph.render();
+
+        let commaFormat = d3.format("0,000");
+
+        let hoverDetail = new Rickshaw.Graph.HoverDetail( {
+          graph: graph,
+          formatter: function(series, x, y) {
+            let content;
+            if (yAxisTypeMap[series.name] === "$") {
+              content = series.name + ": $" + commaFormat(y);
+            } else {
+              content = series.name + ": " + commaFormat(y);
+            }
+            return content;
+          }
+        } );
+
+        let shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+          graph: graph
+        } );
+
+        let axes = new Rickshaw.Graph.Axis.Time( {
+          graph: graph
+        } );
+
+        function yFormat(n) {
+          if (yAxisType === "$") {
+            return Rickshaw.Fixtures.Number.formatKMBT(n);
+          } else {
+            return Rickshaw.Fixtures.Number.formatKMBT(n);
+          }
+        }
+
+        let yAxis = new Rickshaw.Graph.Axis.Y({
+          graph: graph,
+          orientation: 'left',
+          tickFormat: yFormat,
+          element: $('#canvas-svg').find('.y_axis')[0]
+        });
+        yAxis.render();
+
+        let format = function(n) {
+          if (data[data.length-1-n]) {
+            return data[data.length-1-n][config.xAxis];
+          } else {
+            return "";
+          }
+        }
+
+        let xAxis = new Rickshaw.Graph.Axis.X( {
+          graph: graph,
+          orientation: 'bottom',
+          element: $('#canvas-svg').find('.x_axis')[0],
+          pixelsPerTick: 100,
+          tickFormat: format
+        } );
+        xAxis.render();
+
+        axes.render();
+
+        // append label
+
+        let xAxisBBox = d3.select("#canvas-svg")
+        .select(".x_axis")
+        .select('g.x_ticks_d3').node().getBBox();
+
+        d3.select("#canvas-svg").select(".x_axis").append("div")
+        .attr("class", "xAxisLabel")
+        .style("width", (xAxisBBox.width - 10) + "px")
+        .style("top", (25) + "px")
+        .text(config.xAxisLabel);
+
+        d3.select("#canvas-svg").select(".y_axis").append("div")
+        .attr("class", "yAxisLabel")
+        .html(config.yAxisLabel);
+
+        d3.select("#canvas-svg .legend")
+        .style("left", (width + 20) + 'px');
+
+        // fix x_axis svg width
+        let x_axis_svg = d3.select("#canvas-svg").select(".x_axis").select("svg");
+        x_axis_svg.attr("width", x_axis_svg.select("g.x_ticks_d3").node().getBBox().width + 40);
+
+        // fix up title
+        $("#canvas-svg .title").width($("#canvas-svg .chart_container").width());
+      }
+
 
       if (this.state.news.length) {
         newsContent = this.state.news.map((news, idx) => {
@@ -277,7 +384,13 @@ class Company extends React.Component {
             </div>
           </div>
           <div id="canvas-svg">
-            { drawD3Document(pastYearInfo) }
+            <div className="title">Title</div>
+            <div className="chart_container">
+          	  <div className="chart"></div>
+          	  <div className="y_axis"></div>
+          	  <div className="x_axis"></div>
+            </div>
+            <div className="legend"></div>
           </div>
           <div className="company-news">
             <div className="news-header">
