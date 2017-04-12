@@ -101,9 +101,8 @@ class TradeForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     let price = undefined;
+    debugger;
     fetchStockPrice(this.state.ticker).then(res => this.handlePromise(res));
-
-    $('trade-form-modal').addClass('not_show');
   }
 
   update(field) {
