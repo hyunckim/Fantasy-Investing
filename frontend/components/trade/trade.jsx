@@ -6,13 +6,13 @@ const customStyles = {
   content: {
    top                   : '50%',
    left                  : '50%',
-   width                 : '22%',
+   width                 : '24%',
    right                 : 'auto',
    bottom                : 'auto',
    marginRight           : '-50%',
    transform             : 'translate(-50%, -50%)'
   },
-  
+
   overlay: {
     zIndex: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.7)'
