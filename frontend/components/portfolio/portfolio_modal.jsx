@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import PortfolioFormContainer from './portfolio_form_container';
 
@@ -13,7 +13,7 @@ const customStyles = {
   }
 };
 
-class PortfolioModal extends Component {
+class PortfolioModal extends React.Component {
   constructor() {
     super();
 
