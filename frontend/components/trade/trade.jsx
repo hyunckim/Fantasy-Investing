@@ -4,22 +4,15 @@ import TradeFormContainer from './trade_form_container';
 
 const customStyles = {
   content: {
-    width: '300',
-    height: '480',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: '-250px',
-    marginLeft: '-150px',
-    zIndex: 9999,
-    border: '1px solid #ccc',
-    background: '#fffff',
-    overflow: 'auto',
-    WebkitOverflowScrolling: 'touch',
-    borderRadius: '4px',
-    outline: 'none',
-    backgroundColor: '#ffffff'
+   top                   : '50%',
+   left                  : '50%',
+   width                 : '22%',
+   right                 : 'auto',
+   bottom                : 'auto',
+   marginRight           : '-50%',
+   transform             : 'translate(-50%, -50%)'
   },
+  
   overlay: {
     zIndex: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.7)'
@@ -37,6 +30,7 @@ class TradeModal extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentWillMount() {
@@ -56,7 +50,11 @@ class TradeModal extends React.Component {
     this.setState({modalIsOpen: false});
   }
 
+  handleClick(e) {
+  }
+
   render() {
+
     return (
       <div>
         <button onClick={this.openModal}>Trade</button>
@@ -68,7 +66,7 @@ class TradeModal extends React.Component {
           contentLabel="Example Modal"
         >
         <button className='trade-close-button' onClick={this.closeModal}>✖</button>
-        <TradeFormContainer className='trade-form-modal'/>
+        <TradeFormContainer className='trade-form-modal' />
         </Modal>
       </div>
     );
