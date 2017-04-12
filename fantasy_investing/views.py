@@ -118,7 +118,7 @@ class Company(object):
 
             for element in response:
                 date = datetime.datetime.strptime(element['Date'], '%Y-%m-%d').strftime('%d-%b-%y')
-                past_year_info.append({ 'date': date, 'close': element['Close'] })
+                past_year_info.append({ 'date': date, 'close': float('%.2f' % float(element['Close'])) })
 
             self.ticker = ticker
             self.prev_close = company.get_prev_close()
