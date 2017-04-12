@@ -98,6 +98,7 @@ class Company extends React.Component {
     let pricePerBook;
     let shortRatio;
     let newsContent;
+    let watchlists;
 
     if (this.props.company.title !== undefined ) {
       title = this.props.company.title;
@@ -280,6 +281,19 @@ class Company extends React.Component {
         // fix up title
         $("#canvas-svg .title").width($("#canvas-svg .chart_container").width());
       }
+      if (this.props.portfolio) {
+        watchlists = this.props.portfolio.map(portfolio => {
+          if (portfolio.main === false) {
+            return undefined;
+          } else {
+            return (
+              <p className="portfolio-name">
+                { portfolio.title }
+              </p>
+            );
+          }
+        });
+      }
 
 
       if (this.state.news.length) {
@@ -310,6 +324,7 @@ class Company extends React.Component {
                 <p className="watch-state">Add to Wathlist</p>
               </button>
               <div id="myDropdown" className="watch-list-dropdown">
+                { watchlists }
               </div>
             </div>
           </div>
