@@ -21,7 +21,8 @@ const mapStateToProps = (state) => {
     stock: { ticker: "", purchase_price: "", purchase_date: "", number_of_shares: "",
       action: ""},
     investor: state.currentUser.investor,
-    portfolio: state.portfolio
+    portfolio: state.portfolio,
+    error: state.errors.stock
   };
 
 };

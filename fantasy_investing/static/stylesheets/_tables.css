@@ -55,3 +55,7 @@ tbody:hover > tr:hover td {
   color:#2d2d2d;
   opacity: 1.0;
 }
+
+.total-row {
+  font-weight: bold;
+}

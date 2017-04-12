@@ -27,8 +27,8 @@ const customStyles = {
 };
 
 class TradeModal extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       modalIsOpen: false
@@ -54,6 +54,7 @@ class TradeModal extends React.Component {
 
   closeModal() {
     this.setState({modalIsOpen: false});
+    this.props.removeStockErrors();
   }
 
   render() {

@@ -35,6 +35,8 @@ const ErrorsReducer = (state = _nullErrors, action) => {
     case RECEIVE_STOCK_ERRORS:
       const stock = action.errors;
       return merge({}, _nullErrors, { stock });
+    case REMOVE_STOCK_ERRORS:
+      return _nullErrors;
     default:
       return state;
   }

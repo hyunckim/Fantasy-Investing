@@ -100,6 +100,7 @@ class TradeForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    this.props.removeStockErrors();
     let price = undefined;
     fetchStockPrice(this.state.ticker).then(res => this.handlePromise(res));
   }
@@ -115,8 +116,9 @@ class TradeForm extends React.Component {
     return (
       <div className="trade-form-container">
         <div>
-          <h3 className='trade-form-title'>Stocks: Buy & Sell</h3>
+          <h3 className='trade-form-title'>Submit your order</h3>
         </div>
+        <p className="trade-form-errors">{this.props.error}</p>
         <form className="trade-form" onSubmit={this.handleSubmit}>
           <label> Action
             <select className="trade-action" onChange={this.update('action')}>

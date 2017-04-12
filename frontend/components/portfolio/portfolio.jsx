@@ -35,7 +35,7 @@ class Portfolio extends React.Component {
         this.setState({ currentPortfolio: main});
     }
 
-    pieChart(equity, cash) {
+    portfolioPieChart(equity, cash) {
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -67,6 +67,47 @@ class Portfolio extends React.Component {
         if (document.getElementById('piechart')) {
           let chart = new google.visualization.PieChart(document.getElementById('piechart'));
           // delete data.gvjs_S.qg[1];
+          chart.draw(data, options);
+        }
+      }
+    }
+
+    positionsPieChart(stocks) {
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+
+
+        let data = google.visualization.arrayToDataTable([]);
+
+        data.addColumn('string', "Company");
+        data.addColumn('number', "Value");
+        let positionsArray = [];
+        for (let i = 0; i < stocks.length; i++) {
+          data.addRow([stocks[i].ticker, stocks[i].number_of_shares * stocks[i].current_price]);
+        }
+
+        let options = {
+            title: 'Investments Breakdown',
+            colors: ['#c1432e', '#ce9e62', '#4b6777' ],
+            is3D: true,
+            backgroundColor: '#2c2c2c',
+            titleTextStyle: {
+                fontName: "Helvetica",
+                fontSize: 36,
+                color: '#F5F1F2'
+            },
+            legend: {
+                textStyle: {
+                    color: '#F5F1F2',
+                    fontSize: 16
+                }
+            }
+        };
+        if (document.getElementById('positions-piechart')) {
+          let chart = new google.visualization.PieChart(document.getElementById('positions-piechart'));
           chart.draw(data, options);
         }
       }
@@ -161,7 +202,7 @@ class Portfolio extends React.Component {
                           <td></td>
                           <td></td>
                         </tr>
-                        <tr>
+                        <tr className="total-row">
                         <td>Total</td>
                           <td></td>
                             <td></td>
@@ -177,6 +218,7 @@ class Portfolio extends React.Component {
           }
 
         }
+
 
         if (this.props.currentUser && mainPortfolio) {
             return (
@@ -200,10 +242,14 @@ class Portfolio extends React.Component {
                         {portfolioTable}
                     </div>
 
-
-                    <div id="piechart">
-                        {this.pieChart(totalValue - this.props.currentUser.investor.balance,
-                            this.props.currentUser.investor.balance)}
+                    <div className='piechart-container'>
+                      <div id="piechart">
+                          {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
+                              this.props.currentUser.investor.balance)}
+                      </div>
+                      <div id="positions-piechart">
+                        {this.positionsPieChart(mainPortfolio.stocks)}
+                      </div>
                     </div>
                 </div>
             );
