@@ -89,7 +89,6 @@ class TradeForm extends React.Component {
         break;
       }
     }
-
     if (this.state.action === "Buy") {
 
       this.buyStock(existingPosition, price);
@@ -112,6 +111,7 @@ class TradeForm extends React.Component {
   }
 
   render() {
+
 
     return (
       <div className="trade-form-container">

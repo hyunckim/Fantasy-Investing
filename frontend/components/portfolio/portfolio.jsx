@@ -120,7 +120,6 @@ class Portfolio extends React.Component {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     }
 
-
     render() {
         let portfolioTable;
         let portfolioIndex = [];
@@ -134,7 +133,7 @@ class Portfolio extends React.Component {
             portfolioIndex = this.props.portfolio.map((portfolio, idx) => {
                 return (
                     <button key={idx} onClick={() => this.handleClick(portfolio)}>
-                        <h5 className='index-dropdown-title' >{portfolio.title}</h5>
+                        <div className='index-dropdown-title' >{portfolio.title}</div>
                     </button>
                 );
             });
@@ -225,20 +224,23 @@ class Portfolio extends React.Component {
         if (this.props.currentUser && mainPortfolio) {
             return (
                 <div className='main-portfolio-index'>
-                  <div className='portfolio-title'>
-                      {mainPortfolio.title}
-                  </div>
 
-                  <div className = 'portfolio-buttons'>
+                  <div className="portfolio-header">
+                    <div className='portfolio-title'>
+                      {mainPortfolio.title}
+                    </div>
+
+                    <div className = 'portfolio-buttons'>
                       <div className='dropdown'>
-                          <span>Portfolios</span>
-                          <div className="dropdown-content">
-                              {portfolioIndex}
-                              <PortfolioModal />
-                          </div>
+                        <span>Portfolios</span>
+                        <div className="dropdown-content">
+                          {portfolioIndex}
+                          <PortfolioModal />
+                        </div>
                       </div>
                       <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
                   </div>
+                </div>
 
                     <div>
                         {portfolioTable}
