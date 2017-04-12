@@ -91,7 +91,9 @@ class Portfolio extends React.Component {
 
         let options = {
             title: 'Investments Breakdown',
-            colors: ['#c1432e', '#ce9e62', '#4b6777' ],
+            colors: ['#c1432e', '#ce9e62', '#4b6777', "#AD1457", "#AB47BC",
+              "#90CAF9", "#6D4C41", "#9E9E9E", "#00838F", "#9CCC65", "#A1887F",
+              "#616161", "#EF9A9A", "#004D40", "#CDDC39", "#FB8C00", "#263238"],
             is3D: true,
             backgroundColor: '#2c2c2c',
             titleTextStyle: {

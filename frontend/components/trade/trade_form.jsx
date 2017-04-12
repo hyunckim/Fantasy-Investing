@@ -135,7 +135,7 @@ class TradeForm extends React.Component {
             <input className="form-shares" onChange={this.update('number_of_shares')} placeholder='# Of Shares' />
           </label>
 
-          <input type="submit" className="form-submit-button" value="Submit"
+          <input type="submit" id="submit-button" className="form-submit-button" value="Submit"
             onSubmit={this.handleSubmit} />
         </form>
         <div className="trade-form-popup">
