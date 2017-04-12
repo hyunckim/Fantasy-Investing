@@ -84,7 +84,7 @@ class TradeForm extends React.Component {
     let price = res.price;
     let existingPosition = undefined;
     for (let i = 0; i < this.props.currentStocks.length; i++) {
-      if (this.props.currentStocks[i].ticker === this.state.ticker) {
+      if (this.props.currentStocks[i].ticker === this.state.ticker.toUpperCase()) {
         existingPosition = this.props.currentStocks[i];
         break;
       }
@@ -101,7 +101,7 @@ class TradeForm extends React.Component {
     e.preventDefault();
     this.props.removeStockErrors();
     let price = undefined;
-    fetchStockPrice(this.state.ticker).then(res => this.handlePromise(res));
+    fetchStockPrice(this.state.ticker.toUpperCase()).then(res => this.handlePromise(res));
   }
 
   update(field) {

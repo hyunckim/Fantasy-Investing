@@ -155,8 +155,8 @@ class Portfolio extends React.Component {
               <td>${ stock.purchase_price.toFixed(2) }</td>
               <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
               <td>${ this.numberWithCommas(Math.round((stock.current_price - stock.purchase_price)  * stock.number_of_shares))}</td>
-              <td>{ Math.round(((stock.current_price - stock.purchase_price) /
-                  stock.purchase_price) * 100) }% </td>
+              <td>{ (((stock.current_price - stock.purchase_price) /
+                  stock.purchase_price) * 100).toFixed(1) }% </td>
             </tr>);
           });
 
@@ -203,16 +203,16 @@ class Portfolio extends React.Component {
                           <td></td>
                           <td></td>
                         </tr>
-                        <tr className="total-row">
-                        <td>Total</td>
+                        <tr id="total-row">
+                          <td>Total</td>
                           <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>${this.numberWithCommas(Math.round(totalValue))}</td>
-                            <td></td>
-                            <td></td>
-                            <td>${this.numberWithCommas(Math.round(unrealizedGain))}</td>
-                            <td>{Math.round(percentageChange)}%</td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(totalValue))}</td>
+                          <td></td>
+                          <td></td>
+                          <td>${this.numberWithCommas(Math.round(unrealizedGain))}</td>
+                          <td>{percentageChange.toFixed(1)}%</td>
                         </tr>
                     </tbody>
                 </table>;
