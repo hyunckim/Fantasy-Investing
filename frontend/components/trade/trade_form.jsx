@@ -122,7 +122,7 @@ class TradeForm extends React.Component {
         <form className="trade-form" onSubmit={this.handleSubmit}>
           <label> Action
             <select className="trade-action" onChange={this.update('action')}>
-              <option value="" disabled selected>Buy / Sell</option>
+              <option value="" disabled selected></option>
               <option value="Buy">Buy</option>
               <option value="Sell">Sell</option>
             </select>

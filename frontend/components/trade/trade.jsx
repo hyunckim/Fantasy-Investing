@@ -6,7 +6,7 @@ const customStyles = {
   content: {
    top                   : '50%',
    left                  : '50%',
-   width                 : '24%',
+   width                 : '350px',
    right                 : 'auto',
    bottom                : 'auto',
    marginRight           : '-50%',
