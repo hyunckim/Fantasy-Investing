@@ -37,6 +37,7 @@ class TradeModal extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentWillMount() {
@@ -56,7 +57,11 @@ class TradeModal extends React.Component {
     this.setState({modalIsOpen: false});
   }
 
+  handleClick(e) {
+  }
+
   render() {
+
     return (
       <div>
         <button onClick={this.openModal}>Trade</button>
@@ -68,7 +73,7 @@ class TradeModal extends React.Component {
           contentLabel="Example Modal"
         >
         <button className='trade-close-button' onClick={this.closeModal}>✖</button>
-        <TradeFormContainer className='trade-form-modal'/>
+        <TradeFormContainer className='trade-form-modal' />
         </Modal>
       </div>
     );
