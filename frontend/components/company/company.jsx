@@ -10,18 +10,35 @@ class Company extends React.Component {
 
   componentDidMount() {
     this.props.fetchCompany();
+    this.props.fetchPortfolios();
     this.receiveNews(this.props.ticker);
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.company && nextProps.company) {
       this.props.fetchCompany();
+      this.receiveNews(nextProps.ticker);
     } else if ( this.props.params.ticker !== nextProps.params.ticker ) {
       nextProps.fetchCompany();
+      this.receiveNews(nextProps.ticker);
     }
   }
 
-
+  addToWatchlist(watchlist) {
+    return (event) => {
+      event.preventDefault();
+      let stock = {
+        ticker: this.props.ticker
+      };
+      stock["purchase_price"] = 0;
+      let today = new Date();
+      stock["purchase_date"] =
+        `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate()}`;
+      stock["number_of_shares"] = 1;
+      stock["portfolio"] = watchlist;
+      this.props.createStock(stock);
+    }
+  }
 
   receiveNews(ticker) {
     let username = "d6166222f6cd23d2214f20c0de1d4cc3";
@@ -136,13 +153,6 @@ class Company extends React.Component {
       pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
       shortRatio =   Math.round( this.props.company.short_ratio * 10 ) / 10;
 
-      //clear previous graphs
-      d3.select("svg").remove();
-      d3.select("svg").remove();
-      d3.select("svg").remove();
-      d3.select("svg").remove();
-      d3.select("svg").remove();
-
       let seriesDataMap = {};
       let config = {};
       config.xAxis = "date";
@@ -157,6 +167,7 @@ class Company extends React.Component {
           seriesDataMap = {
             color: color,
             name: ticker,
+            date: [],
             data: []
           };
       let yAxisTypeMap = {};
@@ -165,6 +176,7 @@ class Company extends React.Component {
       let count = 0;
       for (let i = 0; i < data.length; i++) {
         seriesDataMap.data.push({x: count, y: data[data.length-1-i].close });
+        seriesDataMap.date.push(data[data.length-1-i].date);
         count++;
       }
 
@@ -173,6 +185,7 @@ class Company extends React.Component {
         seriesData.push({
           color: seriesDataMap.color,
           name: seriesDataMap.name,
+          date: seriesDataMap.date,
           data: darray
       });
       let margin = {top: 20, left: 20, bottom: 30, right: 50};
@@ -186,6 +199,8 @@ class Company extends React.Component {
       }
 
       if ($('#canvas-svg').find('.chart')[0]) {
+        $('#canvas-svg').find('svg').remove();
+        $('#canvas-svg').find('.chart').empty();
         let graph = new Rickshaw.Graph( {
           element: $('#canvas-svg').find('.chart')[0],
           width: width - margin.left - margin.right,
@@ -202,13 +217,9 @@ class Company extends React.Component {
         let hoverDetail = new Rickshaw.Graph.HoverDetail( {
           graph: graph,
           formatter: function(series, x, y) {
-            let content;
-            if (yAxisTypeMap[series.name] === "$") {
-              content = series.name + ": $" + commaFormat(y);
-            } else {
-              content = series.name + ": " + commaFormat(y);
-            }
-            return content;
+            let content = ": $" + commaFormat(y);
+            let date = series.date[x];
+            return date + content;
           }
         } );
 
@@ -281,17 +292,14 @@ class Company extends React.Component {
         // fix up title
         $("#canvas-svg .title").width($("#canvas-svg .chart_container").width());
       }
-      if (this.props.portfolio) {
-        watchlists = this.props.portfolio.map(portfolio => {
-          if (portfolio.main === false) {
-            return undefined;
-          } else {
-            return (
-              <p className="portfolio-name">
-                { portfolio.title }
-              </p>
-            );
-          }
+
+      if (this.props.watchlists) {
+        watchlists = this.props.watchlists.map((watchlist, idx) => {
+          return (
+            <button key={idx} onClick={ this.addToWatchlist(watchlist) }>
+              <div className='index-dropdown-title' >{watchlist.title}</div>
+            </button>
+          );
         });
       }
 
@@ -319,12 +327,12 @@ class Company extends React.Component {
               <span className="company-title">{ title } { ticker }</span>
               <span className="company-price">${ price } ({ percentChange })</span>
             </div>
-            <div className="watchlist-dropdown">
-              <button className="watchlist-button">
-                <p className="watch-state">Add to Wathlist</p>
-              </button>
-              <div id="myDropdown" className="watch-list-dropdown">
-                { watchlists }
+            <div className="watchlist-button">
+              <div className='watchlist-dropdown'>
+                <span>Add to Watchlist</span>
+                <div className="dropdown-content">
+                  { watchlists }
+                </div>
               </div>
             </div>
           </div>
