@@ -15,8 +15,7 @@ thead th {
   font-family: 'Patua One', cursive;
   font-size:16px;
   font-weight:400;
-  color:#ce9e62;
-  text-shadow: .5px .5px 0px;
+  color:white;
   rgba: 0,0,0,0.5;
   text-align:left;
   padding:20px;
@@ -28,7 +27,7 @@ thead th {
 tbody tr td {
   font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
   font-weight:400;
-  color:#5f6062;
+  color: inherit;
   font-size:13px;
   padding:20px 20px 20px 20px;
   border-bottom:1px solid #e0e0e0;
@@ -36,8 +35,8 @@ tbody tr td {
 }
 
 tbody tr:nth-child(2n) {
-  background:#ce9e62;
-  color: #c1432e;
+  background:#4b6777;
+  color: white;
 }
 
 tbody tr:last-child td {
@@ -52,6 +51,6 @@ tbody:hover > tr td {
 
 tbody:hover > tr:hover td {
   text-shadow: none;
-  color:#2d2d2d;
   opacity: 1.0;
+  color: inherit;
 }

@@ -10,7 +10,7 @@ const WelcomePage = () => {
               <h1>
           Welcome to Fantasy Investing
         </h1>
-        <h2>
+        <h2 className="splash_stock">
           Your Future in Stocks...
         </h2>
       </div>
@@ -27,7 +27,3 @@ const WelcomePage = () => {
 };
 
 export default WelcomePage;
-
-
-
-    
