@@ -6,14 +6,14 @@
 .trade-form, .portfolio-form{
     width: 100%;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     margin-left: 20px;
     overflow-y: hidden;
 }
 
 .trade-form input, .portfolio-form input{
     margin: 30px 25px;
-    width: 200px;
+    width: 220px;
     display: block;
     border: none;
     padding: 10px 0;
@@ -59,4 +59,3 @@
     color: lightgrey;
     float:right;
 }
-
