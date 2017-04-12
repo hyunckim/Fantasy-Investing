@@ -101,6 +101,7 @@ class TradeForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     let price = undefined;
+    debugger;
     fetchStockPrice(this.state.ticker).then(res => this.handlePromise(res));
   }
 
@@ -112,6 +113,7 @@ class TradeForm extends React.Component {
 
   render() {
 
+
     return (
       <div className="trade-form-container">
         <div>
@@ -120,7 +122,7 @@ class TradeForm extends React.Component {
         <form className="trade-form" onSubmit={this.handleSubmit}>
           <label> Action
             <select className="trade-action" onChange={this.update('action')}>
-              <option value="" disabled selected>Buy / Sell</option>
+              <option value="" disabled defaultValue>Buy / Sell</option>
               <option value="Buy">Buy</option>
               <option value="Sell">Sell</option>
             </select>
