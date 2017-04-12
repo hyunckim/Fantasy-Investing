@@ -79,12 +79,13 @@ class NavBar extends React.Component {
           </div>
           <div className='middle-nav'>
             <form className="header-search">
+              <i className="fa fa-search"></i>
               <input className="search-input"
-                  placeholder="Search Ticker Ex: MSFT"
-                  onChange={this.handleFilterChange("ticker")} />
-                <button className='header-search-button'
-                  onClick={this.handleSearchSubmit}>
-                </button> 
+                placeholder="Search Ticker Ex: MSFT"
+                onChange={this.handleFilterChange("ticker")} />
+              <button className='header-search-button'
+                onClick={this.handleSearchSubmit}>
+              </button>
             </form>
           </div>
           <div className='right-nav'>
