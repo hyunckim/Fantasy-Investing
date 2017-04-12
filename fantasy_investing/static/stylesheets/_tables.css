@@ -3,7 +3,7 @@ table {
   background:#F5F1F2;
   border-radius: 5px;
   margin: 50px auto;
-  box-shadow: 0px 0px 5px;
+  /*box-shadow: 0px 0px 5px;*/
   rgba: 0,0,0,0.3;
 }
 
@@ -19,9 +19,7 @@ thead th {
   rgba: 0,0,0,0.5;
   text-align:left;
   padding:20px;
-  border-top: 1px solid #858d99;
   background: #4b6777;
-
 }
 
 tbody tr td {
@@ -30,8 +28,6 @@ tbody tr td {
   color: inherit;
   font-size:13px;
   padding:20px 20px 20px 20px;
-  border-bottom:1px solid #e0e0e0;
-
 }
 
 tbody tr:nth-child(2n) {
@@ -41,12 +37,10 @@ tbody tr:nth-child(2n) {
 
 tbody tr:last-child td {
   border-bottom:none;
-
 }
 
 tbody:hover > tr td {
   opacity: 0.5;
-
 }
 
 tbody:hover > tr:hover td {

@@ -10,6 +10,12 @@
   border: 1px solid white;
 }
 
+.company-header {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .company-info {
   display: flex;
   flex-direction: row;

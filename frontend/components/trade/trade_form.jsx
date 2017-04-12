@@ -113,7 +113,7 @@ class TradeForm extends React.Component {
   }
 
   render() {
-    
+
 
     return (
       <div className="trade-form-container">
