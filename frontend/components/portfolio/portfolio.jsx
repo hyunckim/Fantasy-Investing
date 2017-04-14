@@ -78,8 +78,6 @@ class Portfolio extends React.Component {
 
       function drawChart() {
 
-
-
         let data = google.visualization.arrayToDataTable([]);
 
         data.addColumn('string', "Company");
@@ -225,15 +223,24 @@ class Portfolio extends React.Component {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
-          value = (
-            <div className='portfolio-performance'>
-              <p>Total Value: ${this.numberWithCommas(Math.round(totalValue))}</p>
-              <p className={className} id="portfolio-change"> {percentageChange.toFixed(1)}%</p>
-            </div>
-            );
+          if (percentageChange) {
+            value = (
+              <div className='portfolio-performance'>
+                <p>Total Value: ${this.numberWithCommas(Math.round(totalValue))}</p>
+                <p className={className} id="portfolio-change"> {percentageChange.toFixed(1)}%</p>
+              </div>
+              );
+          }
+
         }
 
         if (this.props.currentUser && mainPortfolio) {
+            let posChart = "";
+            if (mainPortfolio.stocks.length > 0) {
+              posChart = (<div id="positions-piechart">
+                {this.positionsPieChart(mainPortfolio.stocks)}
+              </div>);
+            }
             return (
                 <div className='main-portfolio-index'>
 
@@ -264,9 +271,7 @@ class Portfolio extends React.Component {
                           {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
                               this.props.currentUser.investor.balance)}
                       </div>
-                      <div id="positions-piechart">
-                        {this.positionsPieChart(mainPortfolio.stocks)}
-                      </div>
+                      {posChart}
                     </div>
                 </div>
             );
