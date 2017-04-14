@@ -90,7 +90,7 @@ class NavBar extends React.Component {
           </div>
           <div className='right-nav'>
             <div className='auth'>
-              <TradeModal />
+              <TradeModal removeStockErrors={this.props.removeStockErrors}/>
               <button
                 className="portfolio-button"
                 onClick={this.handlePortfolioButton}>Portfolio
