@@ -6,7 +6,7 @@ const customStyles = {
   content: {
    top                   : '50%',
    left                  : '50%',
-   width                 : '24%',
+   width                 : '350px',
    right                 : 'auto',
    bottom                : 'auto',
    marginRight           : '-50%',
@@ -20,8 +20,8 @@ const customStyles = {
 };
 
 class TradeModal extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       modalIsOpen: false
@@ -48,6 +48,7 @@ class TradeModal extends React.Component {
 
   closeModal() {
     this.setState({modalIsOpen: false});
+    this.props.removeStockErrors();
   }
 
   handleClick(e) {
