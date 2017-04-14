@@ -173,7 +173,7 @@ class Portfolio extends React.Component {
 
             }
             unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
-            let percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
+            var percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
 
             portfolioTable =
                 <table id='portfolioTable'>
@@ -219,7 +219,19 @@ class Portfolio extends React.Component {
           }
 
         }
-
+        let value = (<p></p>);
+        let className = 'portfolio-green';
+        if (mainPortfolio.main) {
+          if (percentageChange < 0) {
+            className = 'portfolio-red';
+          }
+          value = (
+            <div className='portfolio-performance'>
+              <p>Total Value: ${this.numberWithCommas(Math.round(totalValue))}</p>
+              <p className={className} id="portfolio-change"> {percentageChange.toFixed(1)}%</p>
+            </div>
+            );
+        }
 
         if (this.props.currentUser && mainPortfolio) {
             return (
@@ -228,6 +240,7 @@ class Portfolio extends React.Component {
                   <div className="portfolio-header">
                     <div className='portfolio-title'>
                       {mainPortfolio.title}
+                      {value}
                     </div>
 
                     <div className = 'portfolio-buttons'>

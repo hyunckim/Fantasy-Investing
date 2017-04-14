@@ -105,3 +105,20 @@
     background: #C1432E;
     color: #F5F1F2;
 }
+
+.portfolio-performance {
+  display: flex;
+}
+
+
+.portfolio-green {
+  color: green;
+}
+
+.portfolio-red {
+  color: red;
+}
+
+#portfolio-change {
+  margin-left: 50px;
+}
