@@ -197,10 +197,19 @@ class Company extends React.Component {
         $("#canvas-svg .title").html(config.title);
         height -= $("#canvas-svg .title").height();
       }
-
-      if ($('#canvas-svg').find('.chart')[0]) {
+      if ($('#canvas-svg')) {
         $('#canvas-svg').find('svg').remove();
-        $('#canvas-svg').find('.chart').empty();
+
+        if ($('#canvas-svg').find('.x_axis')) {
+          $('#canvas-svg').find('.x_axis').remove();
+          $('#canvas-svg').find('.y_axis').remove();
+          $('#canvas-svg').find('.chart').remove();
+        }
+
+        $('<div class="chart"></div>').appendTo($(".chart_container"));
+        $('<div class="y_axis"></div>').appendTo($(".chart_container"));
+        $('<div class="x_axis"></div>').appendTo($(".chart_container"));
+
         let graph = new Rickshaw.Graph( {
           element: $('#canvas-svg').find('.chart')[0],
           width: width - margin.left - margin.right,
@@ -245,7 +254,6 @@ class Company extends React.Component {
           tickFormat: yFormat,
           element: $('#canvas-svg').find('.y_axis')[0]
         });
-        yAxis.render();
 
         let format = function(n) {
           if (data[data.length-1-n]) {
@@ -262,12 +270,12 @@ class Company extends React.Component {
           pixelsPerTick: 100,
           tickFormat: format
         } );
+        yAxis.render();
         xAxis.render();
 
         axes.render();
 
         // append label
-
         let xAxisBBox = d3.select("#canvas-svg")
         .select(".x_axis")
         .select('g.x_ticks_d3').node().getBBox();
@@ -408,11 +416,7 @@ class Company extends React.Component {
           <div id="canvas-svg">
             <div className="title">Title</div>
             <div className="chart_container">
-          	  <div className="chart"></div>
-          	  <div className="y_axis"></div>
-          	  <div className="x_axis"></div>
             </div>
-            <div className="legend"></div>
           </div>
           <div className="company-news">
             <div className="news-header">
