@@ -89,6 +89,7 @@ class TradeForm extends React.Component {
         break;
       }
     }
+
     if (this.state.action === "Buy") {
 
       this.buyStock(existingPosition, price);
@@ -101,7 +102,14 @@ class TradeForm extends React.Component {
     e.preventDefault();
     this.props.removeStockErrors();
     let price = undefined;
-    fetchStockPrice(this.state.ticker.toUpperCase()).then(res => this.handlePromise(res));
+    let today = new Date();
+    if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
+        today.getHours() + (today.getTimezoneOffset() / 60) < 20) {
+        fetchStockPrice(this.state.ticker.toUpperCase()).then(res => this.handlePromise(res));
+    } else {
+      this.props.receiveStockErrors("The U.S. equity market is currently closed");
+    }
+
   }
 
   update(field) {

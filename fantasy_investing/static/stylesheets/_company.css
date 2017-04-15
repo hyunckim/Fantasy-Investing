@@ -114,48 +114,38 @@
   opacity: 0.8;
 }
 
+.watchlist-button{
+  display: flex;
+  flex-direction: row;
+}
+
 .watchlist-dropdown {
   position: relative;
+  bottom: 15px;
   display: inline-block;
+  width: 50px;
+  padding-right: 75px;
 }
 
-.watchlist-button {
-  font-weight: 700;
-  padding: 12px 17px 10px 17px;
-  border: 1px solid #e2e2e2;
-  color: #757575;
-  border-radius: 7px;
-  cursor: pointer;
-  height: 16px;
-  min-width: 75px;
-  font-size: 12px;
-  justify-content: center;
-  text-align: center;
+.watchlist-dropdown span{
+    border:1px solid #943323;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size:16px;
+    text-transform: uppercase;
+    padding: 10px 10px 10px 10px;
+    text-decoration:none;
+    display:inline-block;
+    color: #F5F1F2;
+    background-color: #C1432E;
 }
 
-.portfolio-name {
-  position: relative;
-  justify-content: space-between;
+.watchlist-dropdown span:hover{
+     border:1px solid #6f261a;
+     background-color: #983524;
 }
 
-.watch-list-dropdown {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  width: 240px;
-  overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  right: 0;
-  z-index: 1;
-}
-
-.watch-list-dropdown p {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
+.watchlist-dropdown:hover .dropdown-content {
     display: block;
 }
-
-.watch-list-dropdown p:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
