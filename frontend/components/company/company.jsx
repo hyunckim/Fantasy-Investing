@@ -21,6 +21,8 @@ class Company extends React.Component {
     }
   }
 
+
+
   receiveNews(ticker) {
     let username = "d6166222f6cd23d2214f20c0de1d4cc3";
     let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
@@ -96,6 +98,7 @@ class Company extends React.Component {
     let pricePerBook;
     let shortRatio;
     let newsContent;
+    let watchlists;
 
     if (this.props.company.title !== undefined ) {
       title = this.props.company.title;
@@ -278,6 +281,19 @@ class Company extends React.Component {
         // fix up title
         $("#canvas-svg .title").width($("#canvas-svg .chart_container").width());
       }
+      if (this.props.portfolio) {
+        watchlists = this.props.portfolio.map(portfolio => {
+          if (portfolio.main === false) {
+            return undefined;
+          } else {
+            return (
+              <p className="portfolio-name">
+                { portfolio.title }
+              </p>
+            );
+          }
+        });
+      }
 
 
       if (this.state.news.length) {
@@ -298,10 +314,19 @@ class Company extends React.Component {
     return (
       <div className="company-content">
         <div className="company-info">
-
-          <div className="company-name-price">
-            <span className="company-title">{ title } { ticker }</span>
-            <span className="company-price">${ price } ({ percentChange })</span>
+          <div className="company-header">
+            <div className="company-name-price">
+              <span className="company-title">{ title } { ticker }</span>
+              <span className="company-price">${ price } ({ percentChange })</span>
+            </div>
+            <div className="watchlist-dropdown">
+              <button className="watchlist-button">
+                <p className="watch-state">Add to Wathlist</p>
+              </button>
+              <div id="myDropdown" className="watch-list-dropdown">
+                { watchlists }
+              </div>
+            </div>
           </div>
         </div>
         <div className="company-summary">
