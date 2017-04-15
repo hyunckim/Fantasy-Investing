@@ -30,7 +30,12 @@
   bottom: 15px;
 }
 
-#piechart {
+.piechart-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+#piechart, #positions-piechart {
   width: 600px;
   height: 500px;
 }
