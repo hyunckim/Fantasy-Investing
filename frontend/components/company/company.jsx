@@ -197,19 +197,19 @@ class Company extends React.Component {
         $("#canvas-svg .title").html(config.title);
         height -= $("#canvas-svg .title").height();
       }
-      if ($('#canvas-svg')) {
+
+      if ($('#canvas-svg').find('.x_axis')) {
         $('#canvas-svg').find('svg').remove();
+        $('#canvas-svg').find('.x_axis').remove();
+        $('#canvas-svg').find('.y_axis').remove();
+        $('#canvas-svg').find('.chart').remove();
+      }
 
-        if ($('#canvas-svg').find('.x_axis')) {
-          $('#canvas-svg').find('.x_axis').remove();
-          $('#canvas-svg').find('.y_axis').remove();
-          $('#canvas-svg').find('.chart').remove();
-        }
+      $('<div class="chart"></div>').appendTo($(".chart_container"));
+      $('<div class="y_axis"></div>').appendTo($(".chart_container"));
+      $('<div class="x_axis"></div>').appendTo($(".chart_container"));
 
-        $('<div class="chart"></div>').appendTo($(".chart_container"));
-        $('<div class="y_axis"></div>').appendTo($(".chart_container"));
-        $('<div class="x_axis"></div>').appendTo($(".chart_container"));
-
+      if ($('#canvas-svg').find('.chart')[0]) {
         let graph = new Rickshaw.Graph( {
           element: $('#canvas-svg').find('.chart')[0],
           width: width - margin.left - margin.right,
