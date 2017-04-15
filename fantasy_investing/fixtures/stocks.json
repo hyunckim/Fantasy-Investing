@@ -1,0 +1,16 @@
+[{
+    "model": "fantasy_investing.stock",
+    "fields": {
+      "make_id": "acura",
+      "make_display": "Acura",
+      "make_country": "USA"
+    }
+}, {
+    "model": "car.make",
+    "fields": {
+      "ticker": "audi",
+      "purchase_price": "Audi",
+      "purchase_date": "Germany",
+      "number_of_shares": "Germany",
+      "portfolio": "Germany"
+    }
