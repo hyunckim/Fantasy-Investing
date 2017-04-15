@@ -1,0 +1,7 @@
+[{
+    "model": "fantasy_investing.user",
+    "fields": {
+      "username": "Guest",
+      "password": "password"
+    }
+}]
