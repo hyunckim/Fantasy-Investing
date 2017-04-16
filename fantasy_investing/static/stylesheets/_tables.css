@@ -35,7 +35,7 @@ tbody tr:nth-child(2n) {
 
 tbody tr:last-child td {
   border-bottom:none;
-  background-color: #C1432E;
+  background-color: #ce9e62;
 }
 
 /*tbody:hover > tr td {

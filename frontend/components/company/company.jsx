@@ -24,6 +24,10 @@ class Company extends React.Component {
     }
   }
 
+  numberWithCommas (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+
   addToWatchlist(watchlist) {
     return (event) => {
       event.preventDefault();
@@ -128,7 +132,7 @@ class Company extends React.Component {
       if (this.props.company.dividend === null) {
         dividend = "N/A";
       } else {
-        dividend = this.props.company.dividend;
+        dividend = this.props.company.dividend.toFixed(2);
       }
       yearHigh = this.props.company.year_high;
       yearLow = this.props.company.year_low;
@@ -140,13 +144,13 @@ class Company extends React.Component {
       if (this.props.company.dividend_share === null) {
         dividendShare = "N/A";
       } else {
-        dividendShare = this.props.company.dividend_share;
+        dividendShare = this.props.company.dividend_share.toFixed(2);
       }
       fiftyDayMovingAvg = this.props.company.fifty_day_moving_avg;
       twoHundredDayMovingAvg = this.props.company.two_hundred_day_moving_avg;
       ebitda = this.props.company.ebitda;
       eps = this.props.company.EPS_next_year;
-      avgVolume = this.props.company.avg_volume;
+      avgVolume = this.numberWithCommas(this.props.company.avg_volume);
       forwardPE = Math.round( this.props.company.EPS_estimate_next_year * 10 ) / 10;
       peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10
       pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
@@ -157,10 +161,11 @@ class Company extends React.Component {
       let config = {};
       config.xAxis = "date";
       config.yAxis = ticker;
-      config.width = 600;
-      config.height = 300;
-      config.xAxisLabel = "Days";
-      config.title = "Company Year History";
+      config.width = 700;
+      config.height = 500;
+      config.xAxisLabel = "Date";
+      config.yAxisLabel = "Price";
+      config.title = "1-year Price History";
 
       let data = pastYearInfo;
       let color = "black";
@@ -188,6 +193,7 @@ class Company extends React.Component {
           date: seriesDataMap.date,
           data: darray
       });
+
       let margin = {top: 20, left: 20, bottom: 30, right: 50};
       let width = config.width, height = config.height;
 
@@ -377,11 +383,15 @@ class Company extends React.Component {
             </div>
             <div className="company-nums">
               <p>Dividend per Share</p>
-              <p className='value'>{ dividendShare }</p>
+              <p className='value'>${ dividendShare }</p>
             </div>
             <div className="company-nums">
               <p>Dividend Yield</p>
-              <p className='value'>{ dividend }</p>
+              <p className='value'>{ dividend }%</p>
+            </div>
+            <div className="company-nums">
+              <p>Trailing EBITDA</p>
+              <p className='value'>${ ebitda }</p>
             </div>
             <div className="company-nums">
               <p>50-day Moving Avg</p>

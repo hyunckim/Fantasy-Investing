@@ -236,9 +236,16 @@ class Portfolio extends React.Component {
 
         if (this.props.currentUser && mainPortfolio) {
             let posChart = "";
-            if (mainPortfolio.stocks.length > 0) {
+            if (mainPortfolio.stocks.length > 0 && mainPortfolio.main) {
               posChart = (<div id="positions-piechart">
                 {this.positionsPieChart(mainPortfolio.stocks)}
+              </div>);
+            }
+            let portChart = "";
+            if (mainPortfolio.main) {
+              portChart = (<div id="piechart">
+                  {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
+                      this.props.currentUser.investor.balance)}
               </div>);
             }
             return (
@@ -267,10 +274,7 @@ class Portfolio extends React.Component {
                     </div>
 
                     <div className='piechart-container'>
-                      <div id="piechart">
-                          {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
-                              this.props.currentUser.investor.balance)}
-                      </div>
+                      {portChart}
                       {posChart}
                     </div>
                 </div>
