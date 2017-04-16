@@ -163,15 +163,15 @@ class Portfolio extends React.Component {
 
             let unrealizedGain = 0;
             let initialValue = 0;
+            let costBasis = 0
 
             for (let i = 0; i < mainPortfolio.stocks.length; i++) {
               let stock = mainPortfolio.stocks[i];
               totalValue += (stock.current_price * stock.number_of_shares);
               initialValue += (stock.purchase_price * stock.number_of_shares);
-
             }
             unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
-            var percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
+            var percentageChange = (unrealizedGain / initialValue) * 100;
 
             portfolioTable =
                 <table id='portfolioTable'>
