@@ -326,6 +326,12 @@ class Company extends React.Component {
         });
       }
     }
+    let change;
+    if (percentChange) {
+      if (percentChange[0] == "-") {
+        change = "portfolio-red";
+      } else { change = "portfolio-green"}
+    }
 
     return (
       <div className="company-content">
@@ -333,7 +339,7 @@ class Company extends React.Component {
           <div className="company-header">
             <div className="company-name-price">
               <span className="company-title">{ title } { ticker }</span>
-              <span className="company-price">${ price } ({ percentChange })</span>
+              <span className="company-price">${ price } <span className={change}>({ percentChange })</span></span>
             </div>
             <div className="watchlist-button">
               <div className='watchlist-dropdown'>
