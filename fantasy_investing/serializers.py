@@ -110,3 +110,5 @@ class CompanySerializer(serializers.Serializer):
     price_per_sale = serializers.FloatField(default=0)
     price_per_book = serializers.FloatField(default=0)
     short_ratio = serializers.FloatField(default=0)
+    days_low = serializers.FloatField(default=0)
+    days_high = serializers.FloatField(default=0)

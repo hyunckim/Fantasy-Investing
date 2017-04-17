@@ -13,7 +13,6 @@
 .company-header {
   width: 70%;
   display: flex;
-  justify-content: space-between;
 }
 
 .company-info {
@@ -123,10 +122,10 @@
 .watchlist-button{
   display: flex;
   flex-direction: row;
+  margin-left: 10%;
 }
 
 .watchlist-dropdown {
-  position: relative;
   bottom: 15px;
   display: inline-block;
   width: 50px;

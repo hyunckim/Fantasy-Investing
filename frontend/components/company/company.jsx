@@ -120,6 +120,8 @@ class Company extends React.Component {
     let shortRatio;
     let newsContent;
     let watchlists;
+    let daysLow;
+    let daysHigh;
 
     if (this.props.company.title !== undefined ) {
       title = this.props.company.title;
@@ -127,19 +129,19 @@ class Company extends React.Component {
       earningShare = this.props.company.earning_share;
       percentChange = this.props.company.percent_change;
       ticker = this.props.company.ticker;
-      volume = this.props.company.volume;
+      volume = this.numberWithCommas(this.props.company.volume);
       prevClose = this.props.company.prev_close.toFixed(2 );
       if (this.props.company.dividend === null) {
         dividend = "N/A";
       } else {
         dividend = this.props.company.dividend.toFixed(2);
       }
-      yearHigh = this.props.company.year_high.toFixed(2);
-      yearLow = this.props.company.year_low.toFixed(2);
+      yearHigh = this.props.company.year_high;
+      yearLow = this.props.company.year_low;
       pastYearInfo = jQuery.extend(true, [], this.props.company.past_year_info);
       open = this.props.company.open.toFixed(2);
-      fiftytwoWeekHigh = this.props.company.fiftytwo_week_high;
-      fiftytwoWeekLow = this.props.company.fiftytwo_week_low;
+      fiftytwoWeekHigh = this.props.company.fiftytwo_week_high.toFixed(2);
+      fiftytwoWeekLow = this.props.company.fiftytwo_week_low.toFixed(2);
       marketCap = this.props.company.market_cap;
       if (this.props.company.dividend_share === null) {
         dividendShare = "N/A";
@@ -155,8 +157,13 @@ class Company extends React.Component {
       peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10;
       pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
       pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
-      shortRatio =   Math.round( this.props.company.short_ratio * 10 ) / 10;
-
+      shortRatio = Math.round( this.props.company.short_ratio * 10 ) / 10;
+      if (this.props.company.days_low) {
+        daysLow = this.props.company.days_low.toFixed(2);
+      }
+      if (this.props.company.days_high) {
+        daysHigh = this.props.company.days_high.toFixed(2);
+      }
       let seriesDataMap = {};
       let config = {};
       config.xAxis = "date";
@@ -362,6 +369,10 @@ class Company extends React.Component {
               <p className='value'>${ prevClose }</p>
             </div>
             <div className="company-nums">
+              <p>Day's Range</p>
+              <p className='value'>${ daysLow } - { daysHigh }</p>
+            </div>
+            <div className="company-nums">
               <p >EPS</p>
               <p className='value'>${ eps }</p>
             </div>
@@ -376,6 +387,10 @@ class Company extends React.Component {
             <div className="company-nums">
               <p >Market Cap</p>
               <p className='value'>${ marketCap }</p>
+            </div>
+            <div className="company-nums">
+              <p>Volume</p>
+              <p className='value'>{ volume }</p>
             </div>
             <div className="company-nums">
               <p>Daily Avg. Volume</p>
