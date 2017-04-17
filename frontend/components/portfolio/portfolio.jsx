@@ -54,7 +54,7 @@ class Portfolio extends React.Component {
             backgroundColor: '#2c2c2c',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 36,
+                fontSize: 30,
                 color: '#F5F1F2'
             },
             legend: {
@@ -96,7 +96,7 @@ class Portfolio extends React.Component {
             backgroundColor: '#2c2c2c',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 36,
+                fontSize: 30,
                 color: '#F5F1F2'
             },
             legend: {
@@ -228,7 +228,7 @@ class Portfolio extends React.Component {
         }
         let value = (<p></p>);
         let className = 'portfolio-green';
-        if (mainPortfolio.main) {
+        if (mainPortfolio && mainPortfolio.main) {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
@@ -244,21 +244,19 @@ class Portfolio extends React.Component {
         }
 
         if (this.props.currentUser && mainPortfolio) {
-            let pieChartContainer;
-            if (mainPortfolio.stocks.length > 0 && mainPortfolio.main === true) {
-              pieChartContainer = (
-                <div className='piechart-container'>
-                  <div id="positions-piechart">
-                    {this.positionsPieChart(mainPortfolio.stocks)}
-                  </div>
-                  <div id="piechart">
-                    {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
-                        this.props.currentUser.investor.balance)}
-                  </div>
-                </div>
-              );
-            } else {
-              pieChartContainer = (<div className='piechart-container'></div>);
+
+          if ($('#positions-piechart')) {
+            $('#piechart').remove();
+            $('#positions-piechart').remove();
+          }
+
+            if (mainPortfolio.stocks.length > 0 && mainPortfolio.main) {
+              $('.piechart-container').append('<div id="positions-piechart"></div>');
+               $('#positions-piechart').append(this.positionsPieChart(mainPortfolio.stocks));
+            }
+            if (mainPortfolio.main) {
+                $('.piechart-container').append('<div id="piechart"></div>');
+                $('#piechart').append(this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,this.props.currentUser.investor.balance));
             }
             return (
                 <div className='main-portfolio-index'>
@@ -285,7 +283,12 @@ class Portfolio extends React.Component {
                         {portfolioTable}
                     </div>
 
+<<<<<<< HEAD
                     {pieChartContainer}
+=======
+                    <div className='piechart-container'>
+                    </div>
+>>>>>>> 31e34fdecbd0ed01177608933f9eda05bcb9bce5
                 </div>
             );
         } else {

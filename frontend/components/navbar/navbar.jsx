@@ -36,7 +36,7 @@ class NavBar extends React.Component {
         clearInterval(interval);
       }
       hashHistory.push("/");
-    }, 200);
+    }, 2000);
   }
 
   handleGuestClick(e) {
