@@ -2,11 +2,17 @@
   color: #ce9e62;
   display: flex;
   width: 92vw;
-  height: 500px;
+  height: 700px;
   flex-direction: column;
   margin-top: 100px;
   margin-left: 4vw;;
   background: #4F6E7C;
+  border: 1px solid white;
+}
+
+.company-header {
+  width: 70%;
+  display: flex;
 }
 
 .company-info {
@@ -34,6 +40,9 @@
   flex-direction: column;
   width: 200px;
   background: #4F6E7C;
+  line-height: 3;
+  /*margin-right: 6%;*/
+  width: 50%;
 }
 
 .company-nums {
@@ -41,6 +50,8 @@
   justify-content: space-between;
   padding-right: 15px;
   font-size: 12px;
+  max-width: 300px;
+  min-width: 200px;
 }
 
 #canvas-svg {
@@ -81,6 +92,8 @@
   font-size: 12px;
   color: #ce9e62;
   text-align: left;
+  width: 23vw;
+  align-self: center;
 }
 
 .news-content {
@@ -104,4 +117,40 @@
 .news-date {
   text-align: right;
   opacity: 0.8;
+}
+
+.watchlist-button{
+  display: flex;
+  flex-direction: row;
+  margin-left: 10%;
+}
+
+.watchlist-dropdown {
+  bottom: 15px;
+  display: inline-block;
+  width: 50px;
+  padding-right: 75px;
+}
+
+.watchlist-dropdown span{
+    border:1px solid #943323;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size:16px;
+    text-transform: uppercase;
+    padding: 10px 10px 10px 10px;
+    text-decoration:none;
+    display:inline-block;
+    color: #F5F1F2;
+    background-color: #C1432E;
+}
+
+.watchlist-dropdown span:hover{
+     border:1px solid #6f261a;
+     background-color: #983524;
+}
+
+.watchlist-dropdown:hover .dropdown-content {
+    display: block;
 }

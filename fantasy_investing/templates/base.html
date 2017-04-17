@@ -17,8 +17,15 @@
   <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_portfolio.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_tables.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_trade_form.css' %}" />
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/_graph.css' %}" />
+
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.10.0/d3-legend.min.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/vida-public/rickshaw.min.js"></script>
 
   <title>Fantasy Investing</title>
 
@@ -26,7 +33,7 @@
 </head>
 
 <body>
-  <div id="root">I am root</div>
+  <div id="root"></div>
   {% render_bundle 'main' %}
 </body>
 

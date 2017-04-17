@@ -5,6 +5,7 @@ import TradeModal from '../trade/trade';
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { ticker: "", populate: []};
     this.handleSignUpClick = this.handleSignUpClick.bind(this);
     this.handleLogInClick = this.handleLogInClick.bind(this);
     this.handleLogOutClick = this.handleLogOutClick.bind(this);
@@ -49,9 +50,31 @@ class NavBar extends React.Component {
     hashHistory.push('/portfolio');
   }
 
-  handleFilterChange(filter) {
+  handleFilterChange() {
+    let username = "d6166222f6cd23d2214f20c0de1d4cc3";
+    let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
+    let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
+
     return e => {
-      this.setState({ [filter]: e.target.value });
+      this.setState({ ticker: e.target.value });
+      // $.ajax({
+      //   url: `https://api.intrinio.com/companies?query=${e.target.value}`,
+      //   method: 'GET',
+      //   dataType: 'json',
+      //   headers: {
+      //     "Authorization": "Basic " + btoa(username + ":" + password)
+      //   },
+      //   success: (res) => {
+      //     let array =[];
+      //     res.data.forEach(company => {
+      //       array.push(company.ticker);
+      //     });
+      //     this.setState({ populate: array });
+      //     $( "#search" ).autocomplete({
+      //       source: array
+      //     });
+      //   }
+      // });
     };
   }
 
@@ -59,7 +82,7 @@ class NavBar extends React.Component {
     e.preventDefault();
     let ticker = this.state.ticker.toUpperCase();
     hashHistory.push(`/company/${ticker}`);
-    this.setState({ ["ticker"]: "" });
+    this.setState({ "ticker": "" });
   }
 
   render() {
@@ -82,7 +105,8 @@ class NavBar extends React.Component {
               <i className="fa fa-search"></i>
               <input className="search-input"
                 placeholder="Search Ticker Ex: MSFT"
-                onChange={this.handleFilterChange("ticker")} />
+                onChange={this.handleFilterChange("ticker")} id="search"
+                value={ `${this.state.ticker}` }/>
               <button className='header-search-button'
                 onClick={this.handleSearchSubmit}>
               </button>
@@ -90,7 +114,7 @@ class NavBar extends React.Component {
           </div>
           <div className='right-nav'>
             <div className='auth'>
-              <TradeModal />
+              <TradeModal removeStockErrors={this.props.removeStockErrors}/>
               <button
                 className="portfolio-button"
                 onClick={this.handlePortfolioButton}>Portfolio

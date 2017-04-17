@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { logout, removeErrors, login } from '../../actions/session_actions';
-// import { updateFilter } from "../../actions/filters_actions";
+import { removeStockErrors} from '../../actions/stock_actions';
 import NavBar from './navbar';
 
 const mapStateToProps = state => ({
@@ -11,8 +11,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logout()),
   removeErrors: () => dispatch(removeErrors()),
-  loginGuest: user => dispatch(login(user))
-  // updateFilter: (filter, value) => dispatch(updateFilter(filter, value))
+  loginGuest: user => dispatch(login(user)),
+  removeStockErrors: () => dispatch(removeStockErrors()),
 });
 
 export default connect(

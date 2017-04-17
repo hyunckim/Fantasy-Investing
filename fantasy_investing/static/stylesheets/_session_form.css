@@ -94,3 +94,9 @@
     transform: translateY(-20px);
     visibility: visible !important;
 }
+
+.login-form-errors {
+  list-style-type: none;
+  color: #C74837;
+  padding-top: 10px;
+}

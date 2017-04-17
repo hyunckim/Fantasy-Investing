@@ -84,7 +84,7 @@ class TradeForm extends React.Component {
     let price = res.price;
     let existingPosition = undefined;
     for (let i = 0; i < this.props.currentStocks.length; i++) {
-      if (this.props.currentStocks[i].ticker === this.state.ticker) {
+      if (this.props.currentStocks[i].ticker === this.state.ticker.toUpperCase()) {
         existingPosition = this.props.currentStocks[i];
         break;
       }
@@ -100,8 +100,16 @@ class TradeForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    this.props.removeStockErrors();
     let price = undefined;
-    fetchStockPrice(this.state.ticker).then(res => this.handlePromise(res));
+    let today = new Date();
+    if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
+        today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
+        fetchStockPrice(this.state.ticker.toUpperCase()).then(res => this.handlePromise(res));
+    } else {
+      this.props.receiveStockErrors("The U.S. equity market is currently closed");
+    }
+
   }
 
   update(field) {
@@ -112,15 +120,17 @@ class TradeForm extends React.Component {
 
   render() {
 
+
     return (
       <div className="trade-form-container">
         <div>
-          <h3 className='trade-form-title'>Stocks: Buy & Sell</h3>
+          <h3 className='trade-form-title'>Submit your order</h3>
         </div>
+        <p className="trade-form-errors">{this.props.error}</p>
         <form className="trade-form" onSubmit={this.handleSubmit}>
           <label> Action
             <select className="trade-action" onChange={this.update('action')}>
-              <option value="" disabled selected>Buy / Sell</option>
+              <option value="" disabled selected></option>
               <option value="Buy">Buy</option>
               <option value="Sell">Sell</option>
             </select>
@@ -133,7 +143,7 @@ class TradeForm extends React.Component {
             <input className="form-shares" onChange={this.update('number_of_shares')} placeholder='# Of Shares' />
           </label>
 
-          <input type="submit" className="form-submit-button" value="Submit"
+          <input type="submit" id="submit-button" className="form-submit-button" value="Submit"
             onSubmit={this.handleSubmit} />
         </form>
         <div className="trade-form-popup">
