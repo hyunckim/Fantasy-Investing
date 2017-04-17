@@ -152,7 +152,7 @@ class Company extends React.Component {
       eps = this.props.company.EPS_next_year;
       avgVolume = this.numberWithCommas(this.props.company.avg_volume);
       forwardPE = Math.round( this.props.company.EPS_estimate_next_year * 10 ) / 10;
-      peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10
+      peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10;
       pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
       pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
       shortRatio =   Math.round( this.props.company.short_ratio * 10 ) / 10;
@@ -338,7 +338,7 @@ class Company extends React.Component {
         <div className="company-info">
           <div className="company-header">
             <div className="company-name-price">
-              <span className="company-title">{ title } { ticker }</span>
+              <span className="company-title">{ title } { ticker } </span>
               <span className="company-price">${ price } ({ percentChange })</span>
             </div>
             <div className="watchlist-button">
