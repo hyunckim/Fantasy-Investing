@@ -56,6 +56,10 @@
     text-align: center;
 }
 
+.form-submit-button:hover {
+    cursor: pointer;
+}
+
 #submit-button {
   margin-left: 5px;
 }
