@@ -28,6 +28,8 @@
 .delete-button {
   position: relative;
   bottom: 15px;
+  max-height: 38px;
+  margin-left: 12px;
 }
 
 .piechart-container {

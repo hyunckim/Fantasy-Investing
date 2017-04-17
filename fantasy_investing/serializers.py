@@ -10,6 +10,7 @@ class StockSerializer(serializers.ModelSerializer):
 
     current_price = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
+    prev_close = serializers.SerializerMethodField()
 
     class Meta:
         model = Stock
@@ -22,6 +23,10 @@ class StockSerializer(serializers.ModelSerializer):
     def get_title(self, obj):
         stock = Share(obj.ticker)
         return stock.get_name()
+
+    def get_prev_close(self, obj):
+        stock = Share(obj.ticker)
+        return float(stock.get_prev_close())
 
 class StockPriceSerializer(serializers.Serializer):
     price = serializers.FloatField(default=0)
@@ -105,3 +110,5 @@ class CompanySerializer(serializers.Serializer):
     price_per_sale = serializers.FloatField(default=0)
     price_per_book = serializers.FloatField(default=0)
     short_ratio = serializers.FloatField(default=0)
+    days_low = serializers.FloatField(default=0)
+    days_high = serializers.FloatField(default=0)

@@ -104,7 +104,7 @@ class TradeForm extends React.Component {
     let price = undefined;
     let today = new Date();
     if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
-        today.getHours() + (today.getTimezoneOffset() / 60) < 20) {
+        today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
         fetchStockPrice(this.state.ticker.toUpperCase()).then(res => this.handlePromise(res));
     } else {
       this.props.receiveStockErrors("The U.S. equity market is currently closed");

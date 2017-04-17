@@ -24,6 +24,10 @@ class Company extends React.Component {
     }
   }
 
+  numberWithCommas (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+
   addToWatchlist(watchlist) {
     return (event) => {
       event.preventDefault();
@@ -116,51 +120,59 @@ class Company extends React.Component {
     let shortRatio;
     let newsContent;
     let watchlists;
+    let daysLow;
+    let daysHigh;
 
     if (this.props.company.title !== undefined ) {
       title = this.props.company.title;
-      price = this.props.company.price;
+      price = this.props.company.price.toFixed(2);
       earningShare = this.props.company.earning_share;
       percentChange = this.props.company.percent_change;
       ticker = this.props.company.ticker;
-      volume = this.props.company.volume;
-      prevClose = this.props.company.prev_close;
+      volume = this.numberWithCommas(this.props.company.volume);
+      prevClose = this.props.company.prev_close.toFixed(2 );
       if (this.props.company.dividend === null) {
         dividend = "N/A";
       } else {
-        dividend = this.props.company.dividend;
+        dividend = this.props.company.dividend.toFixed(2);
       }
       yearHigh = this.props.company.year_high;
       yearLow = this.props.company.year_low;
       pastYearInfo = jQuery.extend(true, [], this.props.company.past_year_info);
-      open = this.props.company.open;
-      fiftytwoWeekHigh = this.props.company.fiftytwo_week_high;
-      fiftytwoWeekLow = this.props.company.fiftytwo_week_low;
+      open = this.props.company.open.toFixed(2);
+      fiftytwoWeekHigh = this.props.company.fiftytwo_week_high.toFixed(2);
+      fiftytwoWeekLow = this.props.company.fiftytwo_week_low.toFixed(2);
       marketCap = this.props.company.market_cap;
       if (this.props.company.dividend_share === null) {
         dividendShare = "N/A";
       } else {
-        dividendShare = this.props.company.dividend_share;
+        dividendShare = this.props.company.dividend_share.toFixed(2);
       }
       fiftyDayMovingAvg = this.props.company.fifty_day_moving_avg;
       twoHundredDayMovingAvg = this.props.company.two_hundred_day_moving_avg;
       ebitda = this.props.company.ebitda;
       eps = this.props.company.EPS_next_year;
-      avgVolume = this.props.company.avg_volume;
+      avgVolume = this.numberWithCommas(this.props.company.avg_volume);
       forwardPE = Math.round( this.props.company.EPS_estimate_next_year * 10 ) / 10;
-      peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10
+      peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10;
       pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
       pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
-      shortRatio =   Math.round( this.props.company.short_ratio * 10 ) / 10;
-
+      shortRatio = Math.round( this.props.company.short_ratio * 10 ) / 10;
+      if (this.props.company.days_low) {
+        daysLow = this.props.company.days_low.toFixed(2);
+      }
+      if (this.props.company.days_high) {
+        daysHigh = this.props.company.days_high.toFixed(2);
+      }
       let seriesDataMap = {};
       let config = {};
       config.xAxis = "date";
       config.yAxis = ticker;
-      config.width = 600;
-      config.height = 300;
-      config.xAxisLabel = "Days";
-      config.title = "Company Year History";
+      config.width = 700;
+      config.height = 500;
+      config.xAxisLabel = "Date";
+      config.yAxisLabel = "Price";
+      config.title = "1-year Price History";
 
       let data = pastYearInfo;
       let color = "black";
@@ -188,6 +200,7 @@ class Company extends React.Component {
           date: seriesDataMap.date,
           data: darray
       });
+
       let margin = {top: 20, left: 20, bottom: 30, right: 50};
       let width = config.width, height = config.height;
 
@@ -332,7 +345,7 @@ class Company extends React.Component {
         <div className="company-info">
           <div className="company-header">
             <div className="company-name-price">
-              <span className="company-title">{ title } { ticker }</span>
+              <span className="company-title">{ title } { ticker } </span>
               <span className="company-price">${ price } ({ percentChange })</span>
             </div>
             <div className="watchlist-button">
@@ -356,6 +369,10 @@ class Company extends React.Component {
               <p className='value'>${ prevClose }</p>
             </div>
             <div className="company-nums">
+              <p>Day's Range</p>
+              <p className='value'>${ daysLow } - { daysHigh }</p>
+            </div>
+            <div className="company-nums">
               <p >EPS</p>
               <p className='value'>${ eps }</p>
             </div>
@@ -372,16 +389,24 @@ class Company extends React.Component {
               <p className='value'>${ marketCap }</p>
             </div>
             <div className="company-nums">
+              <p>Volume</p>
+              <p className='value'>{ volume }</p>
+            </div>
+            <div className="company-nums">
               <p>Daily Avg. Volume</p>
               <p className='value'>{ avgVolume }</p>
             </div>
             <div className="company-nums">
               <p>Dividend per Share</p>
-              <p className='value'>{ dividendShare }</p>
+              <p className='value'>${ dividendShare }</p>
             </div>
             <div className="company-nums">
               <p>Dividend Yield</p>
-              <p className='value'>{ dividend }</p>
+              <p className='value'>{ dividend }%</p>
+            </div>
+            <div className="company-nums">
+              <p>Trailing EBITDA</p>
+              <p className='value'>${ ebitda }</p>
             </div>
             <div className="company-nums">
               <p>50-day Moving Avg</p>

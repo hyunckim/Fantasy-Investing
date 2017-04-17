@@ -2,7 +2,7 @@
   color: #ce9e62;
   display: flex;
   width: 92vw;
-  height: 500px;
+  height: 700px;
   flex-direction: column;
   margin-top: 100px;
   margin-left: 4vw;;
@@ -13,7 +13,6 @@
 .company-header {
   width: 70%;
   display: flex;
-  justify-content: space-between;
 }
 
 .company-info {
@@ -41,6 +40,9 @@
   flex-direction: column;
   width: 200px;
   background: #4F6E7C;
+  line-height: 3;
+  /*margin-right: 6%;*/
+  width: 50%;
 }
 
 .company-nums {
@@ -48,6 +50,8 @@
   justify-content: space-between;
   padding-right: 15px;
   font-size: 12px;
+  max-width: 300px;
+  min-width: 200px;
 }
 
 #canvas-svg {
@@ -89,6 +93,7 @@
   color: #ce9e62;
   text-align: left;
   width: 23vw;
+  align-self: center;
 }
 
 .news-content {
@@ -117,10 +122,10 @@
 .watchlist-button{
   display: flex;
   flex-direction: row;
+  margin-left: 10%;
 }
 
 .watchlist-dropdown {
-  position: relative;
   bottom: 15px;
   display: inline-block;
   width: 50px;
