@@ -107,6 +107,7 @@ class Portfolio extends React.Component {
             }
         };
         if (document.getElementById('positions-piechart')) {
+          debugger;
           let chart = new google.visualization.PieChart(document.getElementById('positions-piechart'));
           chart.draw(data, options);
         }
@@ -243,18 +244,21 @@ class Portfolio extends React.Component {
         }
 
         if (this.props.currentUser && mainPortfolio) {
-            let posChart = "";
-            if (mainPortfolio.stocks.length > 0 && mainPortfolio.main) {
-              posChart = (<div id="positions-piechart">
-                {this.positionsPieChart(mainPortfolio.stocks)}
-              </div>);
-            }
-            let portChart = "";
-            if (mainPortfolio.main) {
-              portChart = (<div id="piechart">
-                  {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
-                      this.props.currentUser.investor.balance)}
-              </div>);
+            let pieChartContainer;
+            if (mainPortfolio.stocks.length > 0 && mainPortfolio.main === true) {
+              pieChartContainer = (
+                <div className='piechart-container'>
+                  <div id="positions-piechart">
+                    {this.positionsPieChart(mainPortfolio.stocks)}
+                  </div>
+                  <div id="piechart">
+                    {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
+                        this.props.currentUser.investor.balance)}
+                  </div>
+                </div>
+              );
+            } else {
+              pieChartContainer = (<div className='piechart-container'></div>);
             }
             return (
                 <div className='main-portfolio-index'>
@@ -281,10 +285,7 @@ class Portfolio extends React.Component {
                         {portfolioTable}
                     </div>
 
-                    <div className='piechart-container'>
-                      {portChart}
-                      {posChart}
-                    </div>
+                    {pieChartContainer}
                 </div>
             );
         } else {
