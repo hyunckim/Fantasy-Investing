@@ -147,6 +147,8 @@ class Company(object):
             self.price_per_sale = company.get_price_sales()
             self.price_per_book = company.get_price_book()
             self.short_ratio = company.get_short_ratio()
+            self.days_low = company.get_days_low()
+            self.days_high = company.get_days_high()
 
         self.title = company.get_name()
         self.price = company.get_price()
