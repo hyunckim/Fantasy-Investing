@@ -123,21 +123,21 @@ class Company extends React.Component {
 
     if (this.props.company.title !== undefined ) {
       title = this.props.company.title;
-      price = this.props.company.price;
+      price = this.props.company.price.toFixed(2);
       earningShare = this.props.company.earning_share;
       percentChange = this.props.company.percent_change;
       ticker = this.props.company.ticker;
       volume = this.props.company.volume;
-      prevClose = this.props.company.prev_close;
+      prevClose = this.props.company.prev_close.toFixed(2 );
       if (this.props.company.dividend === null) {
         dividend = "N/A";
       } else {
         dividend = this.props.company.dividend.toFixed(2);
       }
-      yearHigh = this.props.company.year_high;
-      yearLow = this.props.company.year_low;
+      yearHigh = this.props.company.year_high.toFixed(2);
+      yearLow = this.props.company.year_low.toFixed(2);
       pastYearInfo = jQuery.extend(true, [], this.props.company.past_year_info);
-      open = this.props.company.open;
+      open = this.props.company.open.toFixed(2);
       fiftytwoWeekHigh = this.props.company.fiftytwo_week_high;
       fiftytwoWeekLow = this.props.company.fiftytwo_week_low;
       marketCap = this.props.company.market_cap;

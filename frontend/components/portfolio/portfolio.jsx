@@ -149,6 +149,8 @@ class Portfolio extends React.Component {
               <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
               <td>${ stock.current_price.toFixed(2) } </td>
+              <td>{ ((stock.current_price - stock.prev_close) / stock.prev_close * 100).toFixed(1) }% </td>
+
               <td>${ this.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))}</td>
               <td>${ stock.purchase_price.toFixed(2) }</td>
               <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
@@ -163,16 +165,19 @@ class Portfolio extends React.Component {
 
             let unrealizedGain = 0;
             let initialValue = 0;
-            let costBasis = 0
+            let costBasis = 0;
+            let prevDayValue = 0;
 
             for (let i = 0; i < mainPortfolio.stocks.length; i++) {
               let stock = mainPortfolio.stocks[i];
               totalValue += (stock.current_price * stock.number_of_shares);
               initialValue += (stock.purchase_price * stock.number_of_shares);
+              prevDayValue += (stock.prev_close * stock.number_of_shares);
             }
+            prevDayValue += this.props.currentUser.investor.balance;
             unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
             var percentageChange = (unrealizedGain / initialValue) * 100;
-
+            let totalDailyChange = ((totalValue  - prevDayValue) / prevDayValue * 100).toFixed(1);
             portfolioTable =
                 <table id='portfolioTable'>
                     <thead>
@@ -181,6 +186,7 @@ class Portfolio extends React.Component {
                             <th><span>Title</span></th>
                             <th><span>Quantity</span></th>
                             <th><span>Price</span></th>
+                            <th><span>Daily Change</span></th>
                             <th><span>Value</span></th>
                             <th><span>Purchase Price</span></th>
                             <th><span>Cost Basis</span></th>
@@ -195,6 +201,7 @@ class Portfolio extends React.Component {
                           <td></td>
                           <td></td>
                           <td></td>
+                          <td></td>
                           <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
                           <td></td>
                           <td></td>
@@ -206,6 +213,7 @@ class Portfolio extends React.Component {
                           <td></td>
                           <td></td>
                           <td></td>
+                          <td>{totalDailyChange}%</td>
                           <td>${this.numberWithCommas(Math.round(totalValue))}</td>
                           <td></td>
                           <td></td>
