@@ -227,7 +227,7 @@ class Portfolio extends React.Component {
         }
         let value = (<p></p>);
         let className = 'portfolio-green';
-        if (mainPortfolio.main) {
+        if (mainPortfolio && mainPortfolio.main) {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
