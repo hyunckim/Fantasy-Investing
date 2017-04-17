@@ -54,7 +54,7 @@ class Portfolio extends React.Component {
             backgroundColor: '#2c2c2c',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 36,
+                fontSize: 30,
                 color: '#F5F1F2'
             },
             legend: {
@@ -96,7 +96,7 @@ class Portfolio extends React.Component {
             backgroundColor: '#2c2c2c',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 36,
+                fontSize: 30,
                 color: '#F5F1F2'
             },
             legend: {
@@ -243,18 +243,18 @@ class Portfolio extends React.Component {
         }
 
         if (this.props.currentUser && mainPortfolio) {
-            let posChart = "";
+          if ($('#positions-piechart')) {
+            $('#piechart').remove();
+            $('#positions-piechart').remove();
+          }
+
             if (mainPortfolio.stocks.length > 0 && mainPortfolio.main) {
-              posChart = (<div id="positions-piechart">
-                {this.positionsPieChart(mainPortfolio.stocks)}
-              </div>);
+              $('.piechart-container').append('<div id="positions-piechart"></div>');
+               $('#positions-piechart').append(this.positionsPieChart(mainPortfolio.stocks));
             }
-            let portChart = "";
             if (mainPortfolio.main) {
-              portChart = (<div id="piechart">
-                  {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
-                      this.props.currentUser.investor.balance)}
-              </div>);
+                $('.piechart-container').append('<div id="piechart"></div>');
+                $('#piechart').append(this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,this.props.currentUser.investor.balance));
             }
             return (
                 <div className='main-portfolio-index'>
@@ -282,8 +282,6 @@ class Portfolio extends React.Component {
                     </div>
 
                     <div className='piechart-container'>
-                      {portChart}
-                      {posChart}
                     </div>
                 </div>
             );
