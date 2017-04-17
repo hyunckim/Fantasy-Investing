@@ -139,7 +139,9 @@ class Company extends React.Component {
       yearHigh = this.props.company.year_high;
       yearLow = this.props.company.year_low;
       pastYearInfo = jQuery.extend(true, [], this.props.company.past_year_info);
-      open = this.props.company.open.toFixed(2);
+      if (this.props.company.open !== null) {
+        open = this.props.company.open.toFixed(2);
+      }
       fiftytwoWeekHigh = this.props.company.fiftytwo_week_high.toFixed(2);
       fiftytwoWeekLow = this.props.company.fiftytwo_week_low.toFixed(2);
       marketCap = this.props.company.market_cap;
