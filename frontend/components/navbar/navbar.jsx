@@ -28,6 +28,8 @@ class NavBar extends React.Component {
 
   handleLogOutClick(e) {
     e.preventDefault();
+    debugger;
+    this.props.clearPortfolio();
     this.props.logout();
     let timesRun = 0;
     let interval = setInterval(function(){
