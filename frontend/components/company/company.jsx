@@ -41,7 +41,7 @@ class Company extends React.Component {
       stock["number_of_shares"] = 1;
       stock["portfolio"] = watchlist;
       this.props.createStock(stock);
-    }
+    };
   }
 
   receiveNews(ticker) {

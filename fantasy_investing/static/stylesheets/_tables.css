@@ -35,7 +35,6 @@ tbody tr:nth-child(2n) {
 
 tbody tr:last-child td {
   border-bottom:none;
-  background-color: #ce9e62;
 }
 
 /*tbody:hover > tr td {
@@ -48,7 +47,7 @@ tbody tr:last-child td {
   color: inherit;
 }*/
 
-#total-row {
+.total-row {
   font-weight: bold;
-
+  background-color: #ce9e62;
 }
