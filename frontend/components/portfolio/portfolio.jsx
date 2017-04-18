@@ -107,7 +107,6 @@ class Portfolio extends React.Component {
             }
         };
         if (document.getElementById('positions-piechart')) {
-          debugger;
           let chart = new google.visualization.PieChart(document.getElementById('positions-piechart'));
           chart.draw(data, options);
         }
@@ -141,6 +140,14 @@ class Portfolio extends React.Component {
 
         if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
+            let percentChange;
+            if (stock.percent_change) {
+              let percentNumber = stock.percent_change.slice(1, stock.percent_change.length - 1);
+              percentNumber = parseFloat(percentNumber).toFixed(2);
+              percentChange = `${stock.percent_change[0]}${percentNumber}%`;
+            } else {
+              percentChange = "N/A";
+            }
 
             return (
 
@@ -150,7 +157,7 @@ class Portfolio extends React.Component {
               <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
               <td>${ stock.current_price.toFixed(2) } </td>
-              <td>{ ((stock.current_price - stock.prev_close) / stock.prev_close * 100).toFixed(1) }% </td>
+              <td>{ percentChange } </td>
 
               <td>${ this.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))}</td>
               <td>${ stock.purchase_price.toFixed(2) }</td>
@@ -209,9 +216,9 @@ class Portfolio extends React.Component {
                           <td></td>
                           <td></td>
                         </tr>
-                        <tr id="total-row">
+                        <tr className="total-row">
                           <td>Total</td>
-                          <td></td>
+                          <td ></td>
                           <td></td>
                           <td></td>
                           <td>{totalDailyChange}%</td>
@@ -243,6 +250,14 @@ class Portfolio extends React.Component {
 
         } else if (mainPortfolio && mainPortfolio.main === false) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
+            let percentChange;
+            if (stock.percent_change) {
+              let percentNumber = stock.percent_change.slice(1, stock.percent_change.length - 1);
+              percentNumber = parseFloat(percentNumber).toFixed(2);
+              percentChange = `${stock.percent_change[0]}${percentNumber}%`;
+            } else {
+              percentChange = "N/A";
+            }
 
             return (
 
@@ -251,11 +266,11 @@ class Portfolio extends React.Component {
               <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
               <td>{ stock.title }</td>
               <td>${ stock.current_price.toFixed(2) } </td>
-              <td>{ stock.change.toFixed(2) }% </td>
-              <td>${stock.percent_change.toFixed(2)}</td>
-              <td>${ stock.currency }</td>
-              <td>${stock.volume }</td>
-              <td>${ stock.avg_daily_volume }</td>
+              <td>{ stock.change }</td>
+              <td>{percentChange}</td>
+              <td>{ stock.currency }</td>
+              <td>{this.numberWithCommas(stock.volume)}</td>
+              <td>{ this.numberWithCommas(stock.avg_daily_volume) }</td>
               <td>${ stock.days_range}</td>
               <td>${ stock.year_range }</td>
               <td>${ stock.market_cap }</td>
