@@ -241,6 +241,47 @@ class Portfolio extends React.Component {
               );
           }
 
+        } else if (mainPortfolio && mainPortfolio.main === false) {
+          let stocks = mainPortfolio.stocks.map((stock, idx) => {
+
+            return (
+
+            <tr key={idx} className='lalign'>
+
+              <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
+              <td>{ stock.title }</td>
+              <td>${ stock.current_price.toFixed(2) } </td>
+              <td>{ stock.change.toFixed(2) }% </td>
+              <td>${stock.percent_change.toFixed(2)}</td>
+              <td>${ stock.currency }</td>
+              <td>${stock.volume }</td>
+              <td>${ stock.avg_daily_volume }</td>
+              <td>${ stock.days_range}</td>
+              <td>${ stock.year_range }</td>
+              <td>${ stock.market_cap }</td>
+            </tr>);
+          });
+
+          portfolioTable = (<table id='portfolioTable'>
+              <thead>
+                  <tr>
+                      <th><span>Symbol</span></th>
+                      <th><span>Title</span></th>
+                      <th><span>Price</span></th>
+                      <th><span>Change</span></th>
+                      <th><span>Daily Change</span></th>
+                      <th><span>Currency</span></th>
+                      <th><span>Volume</span></th>
+                      <th><span>Avg Volume</span></th>
+                      <th><span>Day Range</span></th>
+                      <th><span>52-week Range</span></th>
+                      <th><span>Market Cap</span></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {stocks}
+              </tbody>
+          </table>);
         }
 
         if (this.props.currentUser && mainPortfolio) {
@@ -283,12 +324,8 @@ class Portfolio extends React.Component {
                         {portfolioTable}
                     </div>
 
-<<<<<<< HEAD
-                    {pieChartContainer}
-=======
                     <div className='piechart-container'>
                     </div>
->>>>>>> 31e34fdecbd0ed01177608933f9eda05bcb9bce5
                 </div>
             );
         } else {

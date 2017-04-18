@@ -11,6 +11,14 @@ class StockSerializer(serializers.ModelSerializer):
     current_price = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
     prev_close = serializers.SerializerMethodField()
+    change = serializers.SerializerMethodField()
+    percent_change = serializers.SerializerMethodField()
+    currency = serializers.SerializerMethodField()
+    volume = serializers.SerializerMethodField()
+    avg_daily_volume = serializers.SerializerMethodField()
+    days_range = serializers.SerializerMethodField()
+    year_range = serializers.SerializerMethodField()
+    market_cap = serializers.SerializerMethodField()
 
     class Meta:
         model = Stock
@@ -27,6 +35,38 @@ class StockSerializer(serializers.ModelSerializer):
     def get_prev_close(self, obj):
         stock = Share(obj.ticker)
         return float(stock.get_prev_close())
+
+    def get_change(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_change()
+
+    def get_percent_change(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_percent_change()
+
+    def get_currency(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_currency()
+
+    def get_volume(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_volume()
+
+    def get_avg_daily_volume(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_avg_daily_volume()
+
+    def get_days_range(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_days_range()
+
+    def get_year_range(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_year_range()
+
+    def get_market_cap(self, obj):
+        stock = Share(obj.ticker)
+        return stock.get_market_cap()
 
 class StockPriceSerializer(serializers.Serializer):
     price = serializers.FloatField(default=0)
