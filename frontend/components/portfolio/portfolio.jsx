@@ -11,13 +11,58 @@ class Portfolio extends React.Component {
         this.state = {
             currentPortfolio: undefined
         };
+        this.data = {};
         this.handleClick = this.handleClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleData = this.handleData.bind(this);
+        this.handleCompanyData = this.handleCompanyData.bind(this);
     }
 
     componentDidMount() {
-      this.props.fetchPortfolios();
+      let stockTicker = [];
+      this.props.fetchPortfolios().then(portfolios => this.handleData(portfolios));
     }
+
+    handleData(portfolios) {
+      let tickers = ``;
+      for (let i = 0; i < portfolios.portfolios.length; i++) {
+        for (let j = 0; j < portfolios.portfolios[i].stocks.length; j++) {
+          tickers += `${portfolios.portfolios[i].stocks[j].ticker},`;
+        }
+      }
+      tickers = tickers.slice(0,-1);
+      let tickersArray = tickers.split(",");
+      let priceData = [];
+
+      let username = "d6166222f6cd23d2214f20c0de1d4cc3";
+      let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
+      let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
+
+      for (let i = 0; i < tickersArray.length; i++) {
+        $.ajax({
+          type: "GET",
+          url: `https://api.intrinio.com/prices?identifier=${tickersArray[i]}`,
+          dataType: 'json',
+          headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+          },
+          success: (res) => {
+            this.handleCompanyData(res, tickersArray[i]);
+          }
+        });
+      }
+    }
+
+    handleCompanyData(data, ticker) {
+      if (!this.data[ticker]) {
+        this.data[ticker] = {};
+      }
+      this.data[ticker]['currentPrice'] = data.data[0]['adj_close'];
+      this.data[ticker]['previousClose'] = data.data[1]['adj_close'];
+      this.data[ticker]['dailyHigh'] = data.data[0]['high'];
+      this.data[ticker]['dailyLow'] = data.data[0]['low'];
+    }
+
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
@@ -216,7 +261,7 @@ class Portfolio extends React.Component {
                           <td></td>
                           <td></td>
                         </tr>
-                        <tr className="total-row">
+                        <tr id="total-row">
                           <td>Total</td>
                           <td ></td>
                           <td></td>
