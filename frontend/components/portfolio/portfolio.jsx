@@ -9,7 +9,8 @@ class Portfolio extends React.Component {
     constructor(props) {
       super(props);
         this.state = {
-            currentPortfolio: undefined
+            currentPortfolio: undefined,
+            data: false
         };
         this.data = {};
         this.handleClick = this.handleClick.bind(this);
@@ -65,7 +66,7 @@ class Portfolio extends React.Component {
 
       $.ajax({
           type: "GET",
-          url: `https://api.intrinio.com/data_point?identifier=${watchlistTickers}&item=${'last_price,change,adj_high_price'}`,
+          url: `https://api.intrinio.com/data_point?identifier=${watchlistTickers}&item=${'last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group'}`,
           dataType: 'json',
           headers: {
             "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
@@ -89,6 +90,7 @@ class Portfolio extends React.Component {
         }
         this.data[ticker][data.data[i].item] = data.data[i].value;
       }
+      this.setState({data:true});
     }
 
     handleClick(event){
@@ -210,11 +212,13 @@ class Portfolio extends React.Component {
         }
 
 
-        if (mainPortfolio) {
+        if (mainPortfolio && Object.keys(this.data).length > 0) {
+
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             let percentChange = ((this.data[stock.ticker]['change'] /
               this.data[stock.ticker]['last_price'] -
               this.data[stock.ticker]['change']) * 100).toFixed(1);
+
 
             return (
 
@@ -317,30 +321,25 @@ class Portfolio extends React.Component {
 
         } else if (mainPortfolio && mainPortfolio.main === false) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
-            let percentChange;
-            if (stock.percent_change) {
-              let percentNumber = stock.percent_change.slice(1, stock.percent_change.length - 1);
-              percentNumber = parseFloat(percentNumber).toFixed(2);
-              percentChange = `${stock.percent_change[0]}${percentNumber}%`;
-            } else {
-              percentChange = "N/A";
-            }
+            let percentChange = ((this.data[stock.ticker]['change'] /
+              this.data[stock.ticker]['last_price'] -
+              this.data[stock.ticker]['change']) * 100).toFixed(1);
 
             return (
 
             <tr key={idx} className='lalign'>
 
               <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
-              <td>{ stock.title }</td>
-              <td>${ stock.current_price.toFixed(2) } </td>
-              <td>{ stock.change }</td>
-              <td>{percentChange}</td>
-              <td>{ stock.currency }</td>
-              <td>{this.numberWithCommas(stock.volume)}</td>
-              <td>{ this.numberWithCommas(stock.avg_daily_volume) }</td>
-              <td>${ stock.days_range}</td>
-              <td>${ stock.year_range }</td>
-              <td>${ stock.market_cap }</td>
+              <td>{ this.data[stock.ticker]['name'] }</td>
+              <td>${ this.data[stock.ticker]['last_price'] } </td>
+              <td>{ this.data[stock.ticker]['change'] }</td>
+              <td>{percentChange}%</td>
+              <td>{ this.data[stock.ticker]['industry_group'] }</td>
+              <td>{this.numberWithCommas(Math.round(this.data[stock.ticker]['volume']))}</td>
+              <td>{ this.numberWithCommas(Math.round(this.data[stock.ticker]['average_daily_volume'])) }</td>
+              <td>${this.data[stock.ticker]['adj_low_price']} - {this.data[stock.ticker]['adj_high_price']}</td>
+              <td>${this.data[stock.ticker]['52_week_low']} - {this.data[stock.ticker]['52_week_high']}</td>
+              <td>${ this.data[stock.ticker]['marketcap'] }</td>
             </tr>);
           });
 

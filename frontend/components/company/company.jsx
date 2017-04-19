@@ -45,7 +45,6 @@ class Company extends React.Component {
       this.data[ticker]['previousClose'] * 100).toFixed(2);
     this.data[ticker]['adj_open'] = data.data[0]['adj_open'];
     this.data[ticker]['volume'] = data.data[0]['adj_volume'];
-    debugger;
   }
 
 
