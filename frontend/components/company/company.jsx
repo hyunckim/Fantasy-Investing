@@ -24,6 +24,31 @@ class Company extends React.Component {
     }
   }
 
+  handle52WeekLow(data, ticker) {
+    this.data[ticker]['52WeekLow'] = data.data[0].value;
+  }
+
+  handle52WeekHigh(data, ticker) {
+    this.data[ticker]['52WeekHigh'] = data.data[0].value;
+  }
+
+  handlePriceData(data, ticker) {
+    if (!this.data[ticker]) {
+      this.data[ticker] = {};
+    }
+    this.data[ticker]['currentPrice'] = data.data[0]['adj_close'];
+    this.data[ticker]['previousClose'] = data.data[1]['adj_close'];
+    this.data[ticker]['dailyHigh'] = data.data[0]['adj_high'];
+    this.data[ticker]['dailyLow'] = data.data[0]['adj_low'];
+    this.data[ticker]['percentChange'] =
+      ((this.data[ticker]['currentPrice'] - this.data[ticker]['previousClose']) /
+      this.data[ticker]['previousClose'] * 100).toFixed(2);
+    this.data[ticker]['adj_open'] = data.data[0]['adj_open'];
+    this.data[ticker]['volume'] = data.data[0]['adj_volume'];
+    debugger;
+  }
+
+
   numberWithCommas (num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }

@@ -23,46 +23,73 @@ class Portfolio extends React.Component {
       this.props.fetchPortfolios().then(portfolios => this.handleData(portfolios));
     }
 
-    handleData(portfolios) {
-      let tickers = ``;
+
+
+    handleData(portfolios, index = 0) {
+
+      let mainTickers = ``;
+      let watchlistTickers = ``;
       for (let i = 0; i < portfolios.portfolios.length; i++) {
         for (let j = 0; j < portfolios.portfolios[i].stocks.length; j++) {
-          tickers += `${portfolios.portfolios[i].stocks[j].ticker},`;
+          if (portfolios.portfolios[i].main === true) {
+            mainTickers += `${portfolios.portfolios[i].stocks[j].ticker},`;
+          } else {
+            watchlistTickers += `${portfolios.portfolios[i].stocks[j].ticker},`;
+          }
         }
       }
-      tickers = tickers.slice(0,-1);
-      let tickersArray = tickers.split(",");
+      mainTickers = mainTickers.slice(0,-1);
+      watchlistTickers = watchlistTickers.slice(0,-1);
+      let mainTickersArray = mainTickers.split(",");
+      let watchlistTickersArray = watchlistTickers.split(",");
       let priceData = [];
 
-      let username = "d6166222f6cd23d2214f20c0de1d4cc3";
-      let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
-      let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
+      let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
+      let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
 
-      for (let i = 0; i < tickersArray.length; i++) {
-        $.ajax({
+      $.ajax({
           type: "GET",
-          url: `https://api.intrinio.com/prices?identifier=${tickersArray[i]}`,
+          url: `https://api.intrinio.com/data_point?identifier=${mainTickers}&item=${'last_price,change'}`,
           dataType: 'json',
           headers: {
-            "Authorization": "Basic " + btoa(username + ":" + password)
+            "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
           },
           success: (res) => {
-            this.handleCompanyData(res, tickersArray[i]);
+            if (res.missing_access_codes) {
+              this.handleData(portfolios, index + 1);
+            } else {
+              this.handleCompanyData(res);
+            }
           }
         });
-      }
+
+      $.ajax({
+          type: "GET",
+          url: `https://api.intrinio.com/data_point?identifier=${watchlistTickers}&item=${'last_price,change,adj_high_price'}`,
+          dataType: 'json',
+          headers: {
+            "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+          },
+          success: (res) => {
+            if (res.missing_access_codes) {
+              this.handleData(portfolios, index + 1);
+            } else {
+              this.handleCompanyData(res);
+            }
+          }
+        });
+
     }
 
-    handleCompanyData(data, ticker) {
-      if (!this.data[ticker]) {
-        this.data[ticker] = {};
+    handleCompanyData(data) {
+      for (let i = 0; i < data.data.length; i++) {
+        let ticker = data.data[i].identifier;
+        if (!this.data[ticker]) {
+          this.data[ticker] = {};
+        }
+        this.data[ticker][data.data[i].item] = data.data[i].value;
       }
-      this.data[ticker]['currentPrice'] = data.data[0]['adj_close'];
-      this.data[ticker]['previousClose'] = data.data[1]['adj_close'];
-      this.data[ticker]['dailyHigh'] = data.data[0]['high'];
-      this.data[ticker]['dailyLow'] = data.data[0]['low'];
     }
-
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
@@ -185,26 +212,20 @@ class Portfolio extends React.Component {
 
         if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
-            let percentChange;
-            if (stock.percent_change) {
-              let percentNumber = stock.percent_change.slice(1, stock.percent_change.length - 1);
-              percentNumber = parseFloat(percentNumber).toFixed(2);
-              percentChange = `${stock.percent_change[0]}${percentNumber}%`;
-            } else {
-              percentChange = "N/A";
-            }
+            let percentChange = ((this.data[stock.ticker]['change'] /
+              this.data[stock.ticker]['last_price'] -
+              this.data[stock.ticker]['change']) * 100).toFixed(1);
 
             return (
 
             <tr key={idx} className='lalign'>
 
               <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
-              <td>{ stock.title }</td>
+              <td>{ this.data[stock.ticker]['name'] }</td>
               <td>{ stock.number_of_shares }</td>
-              <td>${ stock.current_price.toFixed(2) } </td>
-              <td>{ percentChange } </td>
-
-              <td>${ this.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))}</td>
+              <td>${ this.data[stock.ticker]['last_price'] } </td>
+              <td>{ percentChange }% </td>
+              <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
               <td>${ stock.purchase_price.toFixed(2) }</td>
               <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
               <td>${ this.numberWithCommas(Math.round((stock.current_price - stock.purchase_price)  * stock.number_of_shares))}</td>
@@ -223,9 +244,10 @@ class Portfolio extends React.Component {
 
             for (let i = 0; i < mainPortfolio.stocks.length; i++) {
               let stock = mainPortfolio.stocks[i];
-              totalValue += (stock.current_price * stock.number_of_shares);
+              totalValue += (this.data[stock.ticker]['last_price'] * stock.number_of_shares);
               initialValue += (stock.purchase_price * stock.number_of_shares);
-              prevDayValue += (stock.prev_close * stock.number_of_shares);
+              prevDayValue += ((this.data[stock.ticker]['last_price'] - this.data[stock.ticker]['change'])
+              * stock.number_of_shares);
             }
             prevDayValue += this.props.currentUser.investor.balance;
             unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
