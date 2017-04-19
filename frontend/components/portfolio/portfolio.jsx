@@ -379,8 +379,7 @@ class Portfolio extends React.Component {
               for (let i = 0; i < mainPortfolio.stocks.length; i++) {
                 let ticker = mainPortfolio.stocks[i].ticker;
                 if (this.data[ticker]) {
-                  debugger;
-                  stocks.push([ticker, this.data[ticker]['last_price']]);
+                  stocks.push([ticker, this.data[ticker]['last_price'] * mainPortfolio.stocks[i].number_of_shares]);
                 }
               }
               $('.piechart-container').append('<div id="positions-piechart"></div>');
