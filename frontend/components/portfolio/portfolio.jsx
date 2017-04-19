@@ -17,6 +17,7 @@ class Portfolio extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleData = this.handleData.bind(this);
         this.handleCompanyData = this.handleCompanyData.bind(this);
+        this.positionsPieChart = this.positionsPieChart.bind(this);
     }
 
     componentDidMount() {
@@ -73,7 +74,6 @@ class Portfolio extends React.Component {
           },
           success: (res) => {
             if (res.missing_access_codes) {
-              console.log(res.missing_access_codes);
               this.fetchData(tickers, items, index + 1);
             } else {
               this.handleCompanyData(res);
@@ -158,7 +158,7 @@ class Portfolio extends React.Component {
         data.addColumn('number', "Value");
         let positionsArray = [];
         for (let i = 0; i < stocks.length; i++) {
-          data.addRow([stocks[i].ticker, stocks[i].number_of_shares * stocks[i].current_price]);
+          data.addRow([stocks[i][0], stocks[i][1]]);
         }
 
         let options = {
@@ -213,7 +213,6 @@ class Portfolio extends React.Component {
 
 
         if (mainPortfolio && mainPortfolio.main && Object.keys(this.data).length > 0) {
-          console.log(this.data);
           let percentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             if (this.data[stock.ticker]) {
@@ -227,7 +226,7 @@ class Portfolio extends React.Component {
                 <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
                 <td>{ this.data[stock.ticker]['name'] }</td>
                 <td>{ stock.number_of_shares }</td>
-                <td>${ this.data[stock.ticker]['last_price'] } </td>
+                <td>${ Math.round(this.data[stock.ticker]['last_price'] * 100) / 100 } </td>
                 <td>{ percentChange }% </td>
                 <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
                 <td>${ stock.purchase_price.toFixed(2) }</td>
@@ -323,7 +322,6 @@ class Portfolio extends React.Component {
           }
 
         } else if (mainPortfolio && mainPortfolio.main === false && Object.keys(this.data).length > 0) {
-          debugger;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             let percentChange = (this.data[stock.ticker]['change'] /
               (this.data[stock.ticker]['last_price'] -
@@ -335,11 +333,11 @@ class Portfolio extends React.Component {
 
               <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
               <td>{ this.data[stock.ticker]['name'] }</td>
-              <td>${ this.data[stock.ticker]['last_price'] } </td>
+              <td>${ Math.round(this.data[stock.ticker]['last_price'] * 100) / 100} </td>
               <td>{ this.data[stock.ticker]['change'] }</td>
               <td>{percentChange}%</td>
               <td>{ this.data[stock.ticker]['industry_group'] }</td>
-              <td>{this.numberWithCommas(Math.round(this.data[stock.ticker]['volume']))}</td>
+              <td>{this.numberWithCommas(Math.round(this.data[stock.ticker]['adj_volume']))}</td>
               <td>{ this.numberWithCommas(Math.round(this.data[stock.ticker]['average_daily_volume'])) }</td>
               <td>${this.data[stock.ticker]['adj_low_price']} - {this.data[stock.ticker]['adj_high_price']}</td>
               <td>${this.data[stock.ticker]['52_week_low']} - {this.data[stock.ticker]['52_week_high']}</td>
@@ -355,7 +353,7 @@ class Portfolio extends React.Component {
                       <th><span>Price</span></th>
                       <th><span>Change</span></th>
                       <th><span>Daily Change</span></th>
-                      <th><span>Currency</span></th>
+                      <th><span>Industry</span></th>
                       <th><span>Volume</span></th>
                       <th><span>Avg Volume</span></th>
                       <th><span>Day Range</span></th>
@@ -377,8 +375,16 @@ class Portfolio extends React.Component {
           }
 
             if (mainPortfolio.stocks.length > 0 && mainPortfolio.main) {
+              let stocks = [];
+              for (let i = 0; i < mainPortfolio.stocks.length; i++) {
+                let ticker = mainPortfolio.stocks[i].ticker;
+                if (this.data[ticker]) {
+                  debugger;
+                  stocks.push([ticker, this.data[ticker]['last_price']]);
+                }
+              }
               $('.piechart-container').append('<div id="positions-piechart"></div>');
-               $('#positions-piechart').append(this.positionsPieChart(mainPortfolio.stocks));
+               $('#positions-piechart').append(this.positionsPieChart(stocks));
             }
             if (mainPortfolio.main) {
                 $('.piechart-container').append('<div id="piechart"></div>');
