@@ -24,6 +24,21 @@ class Portfolio extends React.Component {
       this.props.fetchPortfolios().then(portfolios => this.handleData(portfolios));
     }
 
+    componentWillReceiveProps(nextProps) {
+      for (let i = 0; i < nextProps.portfolio.length; i++) {
+        if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
+          var newStock = nextProps.portfolio[i].stocks[nextProps.portfolio[i].stocks.length - 1].ticker;
+          var portfolioType = nextProps.portfolio[i].main;
+          let items = 'last_price,change,name';
+          if (!portfolioType) {
+            items += ',adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group';
+          }
+          this.fetchData(newStock, items);
+          break;
+        }
+      }
+    }
+
     handleData(portfolios, index = 0) {
 
       let mainTickers = ``;
@@ -39,45 +54,32 @@ class Portfolio extends React.Component {
       }
       mainTickers = mainTickers.slice(0,-1);
       watchlistTickers = watchlistTickers.slice(0,-1);
-      let mainTickersArray = mainTickers.split(",");
-      let watchlistTickersArray = watchlistTickers.split(",");
       let priceData = [];
 
+      this.fetchData(mainTickers, 'name,last_price,change');
+      this.fetchData(watchlistTickers, 'name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group');
+    }
+
+    fetchData(tickers, items, index = 0) {
       let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
       let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
 
       $.ajax({
           type: "GET",
-          url: `https://api.intrinio.com/data_point?identifier=${mainTickers}&item=${'last_price,change'}`,
+          url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
           dataType: 'json',
           headers: {
             "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
           },
           success: (res) => {
             if (res.missing_access_codes) {
-              this.handleData(portfolios, index + 1);
+              console.log(res.missing_access_codes);
+              this.fetchData(tickers, items, index + 1);
             } else {
               this.handleCompanyData(res);
             }
           }
-        });
-
-      $.ajax({
-          type: "GET",
-          url: `https://api.intrinio.com/data_point?identifier=${watchlistTickers}&item=${'last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group'}`,
-          dataType: 'json',
-          headers: {
-            "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
-          },
-          success: (res) => {
-            if (res.missing_access_codes) {
-              this.handleData(portfolios, index + 1);
-            } else {
-              this.handleCompanyData(res);
-            }
-          }
-        });
-
+      });
     }
 
     handleCompanyData(data) {
@@ -211,29 +213,30 @@ class Portfolio extends React.Component {
 
 
         if (mainPortfolio && mainPortfolio.main && Object.keys(this.data).length > 0) {
-          debugger;
+          console.log(this.data);
+          let percentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
-            let percentChange = (this.data[stock.ticker]['change'] /
-              (this.data[stock.ticker]['last_price'] -
-              this.data[stock.ticker]['change']) * 100).toFixed(1);
+            if (this.data[stock.ticker]) {
+              percentChange = (this.data[stock.ticker]['change'] /
+                (this.data[stock.ticker]['last_price'] -
+                this.data[stock.ticker]['change']) * 100).toFixed(1);
+              return (
 
+              <tr key={idx} className='lalign'>
 
-            return (
-
-            <tr key={idx} className='lalign'>
-
-              <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
-              <td>{ this.data[stock.ticker]['name'] }</td>
-              <td>{ stock.number_of_shares }</td>
-              <td>${ this.data[stock.ticker]['last_price'] } </td>
-              <td>{ percentChange }% </td>
-              <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
-              <td>${ stock.purchase_price.toFixed(2) }</td>
-              <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
-              <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
-              <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
-                  stock.purchase_price) * 100).toFixed(1) }% </td>
-              </tr>);
+                <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
+                <td>{ this.data[stock.ticker]['name'] }</td>
+                <td>{ stock.number_of_shares }</td>
+                <td>${ this.data[stock.ticker]['last_price'] } </td>
+                <td>{ percentChange }% </td>
+                <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
+                <td>${ stock.purchase_price.toFixed(2) }</td>
+                <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+                <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
+                <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
+                    stock.purchase_price) * 100).toFixed(1) }% </td>
+                </tr>);
+            }
           });
 
           if (this.props.currentUser) {
@@ -246,10 +249,12 @@ class Portfolio extends React.Component {
 
             for (let i = 0; i < mainPortfolio.stocks.length; i++) {
               let stock = mainPortfolio.stocks[i];
-              totalValue += (this.data[stock.ticker]['last_price'] * stock.number_of_shares);
-              initialValue += (stock.purchase_price * stock.number_of_shares);
-              prevDayValue += ((this.data[stock.ticker]['last_price'] - this.data[stock.ticker]['change'])
-              * stock.number_of_shares);
+              if (this.data[stock.ticker]) {
+                totalValue += (this.data[stock.ticker]['last_price'] * stock.number_of_shares);
+                initialValue += (stock.purchase_price * stock.number_of_shares);
+                prevDayValue += ((this.data[stock.ticker]['last_price'] - this.data[stock.ticker]['change'])
+                * stock.number_of_shares);
+              }
             }
             prevDayValue += this.props.currentUser.investor.balance;
             unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
@@ -338,7 +343,7 @@ class Portfolio extends React.Component {
               <td>{ this.numberWithCommas(Math.round(this.data[stock.ticker]['average_daily_volume'])) }</td>
               <td>${this.data[stock.ticker]['adj_low_price']} - {this.data[stock.ticker]['adj_high_price']}</td>
               <td>${this.data[stock.ticker]['52_week_low']} - {this.data[stock.ticker]['52_week_high']}</td>
-              <td>${ this.data[stock.ticker]['marketcap'] }</td>
+              <td>${ (this.data[stock.ticker]['marketcap'] / 1000000000).toFixed(1)}B</td>
             </tr>);
           });
 
