@@ -24,8 +24,6 @@ class Portfolio extends React.Component {
       this.props.fetchPortfolios().then(portfolios => this.handleData(portfolios));
     }
 
-
-
     handleData(portfolios, index = 0) {
 
       let mainTickers = ``;
@@ -212,11 +210,11 @@ class Portfolio extends React.Component {
         }
 
 
-        if (mainPortfolio && Object.keys(this.data).length > 0) {
-
+        if (mainPortfolio && mainPortfolio.main && Object.keys(this.data).length > 0) {
+          debugger;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
-            let percentChange = ((this.data[stock.ticker]['change'] /
-              this.data[stock.ticker]['last_price'] -
+            let percentChange = (this.data[stock.ticker]['change'] /
+              (this.data[stock.ticker]['last_price'] -
               this.data[stock.ticker]['change']) * 100).toFixed(1);
 
 
@@ -232,10 +230,10 @@ class Portfolio extends React.Component {
               <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
               <td>${ stock.purchase_price.toFixed(2) }</td>
               <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
-              <td>${ this.numberWithCommas(Math.round((stock.current_price - stock.purchase_price)  * stock.number_of_shares))}</td>
-              <td>{ (((stock.current_price - stock.purchase_price) /
+              <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
+              <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
                   stock.purchase_price) * 100).toFixed(1) }% </td>
-            </tr>);
+              </tr>);
           });
 
           if (this.props.currentUser) {
@@ -319,10 +317,11 @@ class Portfolio extends React.Component {
               );
           }
 
-        } else if (mainPortfolio && mainPortfolio.main === false) {
+        } else if (mainPortfolio && mainPortfolio.main === false && Object.keys(this.data).length > 0) {
+          debugger;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
-            let percentChange = ((this.data[stock.ticker]['change'] /
-              this.data[stock.ticker]['last_price'] -
+            let percentChange = (this.data[stock.ticker]['change'] /
+              (this.data[stock.ticker]['last_price'] -
               this.data[stock.ticker]['change']) * 100).toFixed(1);
 
             return (
