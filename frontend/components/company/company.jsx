@@ -17,11 +17,8 @@ class Company extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.company && nextProps.company) {
-      this.props.fetchCompany();
-      this.receiveNews(nextProps.ticker);
-    } else if ( this.props.params.ticker !== nextProps.params.ticker ) {
-      nextProps.fetchCompany();
+    if ( this.props.params.ticker !== nextProps.params.ticker ) {
+      this.fetchData(nextProps.ticker);
       this.receiveNews(nextProps.ticker);
     }
   }
@@ -36,9 +33,9 @@ class Company extends React.Component {
       pricetobook";
 
     let today = new Date();
-    let endDate = `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate}`;
+    let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     let yearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-    let startDate = `${yearAgo.getFullYear}-${yearAgo.getMonth() + 1}-${yearAgo.getDate}`;
+    let startDate = `${yearAgo.getFullYear()}-${yearAgo.getMonth() + 1}-${yearAgo.getDate()}`;
 
     $.ajax({
         type: "GET",
@@ -58,7 +55,7 @@ class Company extends React.Component {
 
     $.ajax({
         type: "GET",
-        url: `https://api.intrinio.com/historical_data?identifier=${ticker}&item=adj_close_price&start_date=${startDate}&end_date=${endDate}`,
+        url: `https://api.intrinio.com/historical_data?identifier=${ticker}&item=adj_close_price&start_date=${startDate}&end_date=${endDate}&page_size=350`,
         dataType: 'json',
         headers: {
           "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
@@ -85,11 +82,7 @@ class Company extends React.Component {
   }
 
   handlePriceData(data) {
-    this.data['historical'] =
-    for (let i = 0; i < data.data.length; i++) {
-
-      data.data[i]
-    }
+    this.data['historical'] = data.data;
   }
 
 
@@ -193,7 +186,7 @@ class Company extends React.Component {
     let daysHigh;
 
     if (this.props.company.title !== undefined ) {
-      title = this.props.company.title;
+      title = this.props.company.current_price;
       price = this.props.company.price.toFixed(2);
       earningShare = this.props.company.earning_share;
       percentChange = this.props.company.percent_change;
@@ -207,7 +200,6 @@ class Company extends React.Component {
       }
       yearHigh = this.props.company.year_high;
       yearLow = this.props.company.year_low;
-      pastYearInfo = jQuery.extend(true, [], this.props.company.past_year_info);
       if (this.props.company.open !== null) {
         open = this.props.company.open.toFixed(2);
       }
@@ -245,7 +237,7 @@ class Company extends React.Component {
       config.yAxisLabel = "Price";
       config.title = "1-year Price History";
 
-      let data = pastYearInfo;
+      let data = this.data['historical'];
       let color = "black";
           seriesDataMap = {
             color: color,
@@ -257,132 +249,134 @@ class Company extends React.Component {
       let yAxisType = "";
 
       let count = 0;
-      for (let i = 0; i < data.length; i++) {
-        seriesDataMap.data.push({x: count, y: data[data.length-1-i].close });
-        seriesDataMap.date.push(data[data.length-1-i].date);
-        count++;
-      }
-
-      let seriesData = [];
-      let darray = seriesDataMap.data;
-        seriesData.push({
-          color: seriesDataMap.color,
-          name: seriesDataMap.name,
-          date: seriesDataMap.date,
-          data: darray
-      });
-
-      let margin = {top: 20, left: 20, bottom: 30, right: 50};
-      let width = config.width, height = config.height;
-
-      // adjust height
-      if (config.title !== '') {
-        $("#canvas-svg .title").show();
-        $("#canvas-svg .title").html(config.title);
-        height -= $("#canvas-svg .title").height();
-      }
-
-      if ($('#canvas-svg').find('.x_axis')) {
-        $('#canvas-svg').find('svg').remove();
-        $('#canvas-svg').find('.x_axis').remove();
-        $('#canvas-svg').find('.y_axis').remove();
-        $('#canvas-svg').find('.chart').remove();
-      }
-
-      $('<div class="chart"></div>').appendTo($(".chart_container"));
-      $('<div class="y_axis"></div>').appendTo($(".chart_container"));
-      $('<div class="x_axis"></div>').appendTo($(".chart_container"));
-
-      if ($('#canvas-svg').find('.chart')[0]) {
-        let graph = new Rickshaw.Graph( {
-          element: $('#canvas-svg').find('.chart')[0],
-          width: width - margin.left - margin.right,
-          height: height - margin.top - margin.bottom,
-          min: "auto",
-          renderer: 'line',
-          series: seriesData
-        } );
-
-        graph.render();
-
-        let commaFormat = d3.format("0,000");
-
-        let hoverDetail = new Rickshaw.Graph.HoverDetail( {
-          graph: graph,
-          formatter: function(series, x, y) {
-            let content = ": $" + commaFormat(y);
-            let date = series.date[x];
-            return date + content;
-          }
-        } );
-
-        let shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
-          graph: graph
-        } );
-
-        let axes = new Rickshaw.Graph.Axis.Time( {
-          graph: graph
-        } );
-
-        function yFormat(n) {
-          if (yAxisType === "$") {
-            return Rickshaw.Fixtures.Number.formatKMBT(n);
-          } else {
-            return Rickshaw.Fixtures.Number.formatKMBT(n);
-          }
+      if (data) {
+        for (let i = 0; i < data.length; i++) {
+          seriesDataMap.data.push({x: count, y: data[data.length-1-i].value });
+          seriesDataMap.date.push(data[data.length-1-i].date);
+          count++;
         }
 
-        let yAxis = new Rickshaw.Graph.Axis.Y({
-          graph: graph,
-          orientation: 'left',
-          tickFormat: yFormat,
-          element: $('#canvas-svg').find('.y_axis')[0]
+        let seriesData = [];
+        let darray = seriesDataMap.data;
+          seriesData.push({
+            color: seriesDataMap.color,
+            name: seriesDataMap.name,
+            date: seriesDataMap.date,
+            data: darray
         });
 
-        let format = function(n) {
-          if (data[data.length-1-n]) {
-            return data[data.length-1-n][config.xAxis];
-          } else {
-            return "";
-          }
+        let margin = {top: 20, left: 20, bottom: 30, right: 50};
+        let width = config.width, height = config.height;
+
+        // adjust height
+        if (config.title !== '') {
+          $("#canvas-svg .title").show();
+          $("#canvas-svg .title").html(config.title);
+          height -= $("#canvas-svg .title").height();
         }
 
-        let xAxis = new Rickshaw.Graph.Axis.X( {
-          graph: graph,
-          orientation: 'bottom',
-          element: $('#canvas-svg').find('.x_axis')[0],
-          pixelsPerTick: 100,
-          tickFormat: format
-        } );
-        yAxis.render();
-        xAxis.render();
+        if ($('#canvas-svg').find('.x_axis')) {
+          $('#canvas-svg').find('svg').remove();
+          $('#canvas-svg').find('.x_axis').remove();
+          $('#canvas-svg').find('.y_axis').remove();
+          $('#canvas-svg').find('.chart').remove();
+        }
 
-        axes.render();
+        $('<div class="chart"></div>').appendTo($(".chart_container"));
+        $('<div class="y_axis"></div>').appendTo($(".chart_container"));
+        $('<div class="x_axis"></div>').appendTo($(".chart_container"));
 
-        // append label
-        let xAxisBBox = d3.select("#canvas-svg")
-        .select(".x_axis")
-        .select('g.x_ticks_d3').node().getBBox();
+        if ($('#canvas-svg').find('.chart')[0]) {
+          let graph = new Rickshaw.Graph( {
+            element: $('#canvas-svg').find('.chart')[0],
+            width: width - margin.left - margin.right,
+            height: height - margin.top - margin.bottom,
+            min: "auto",
+            renderer: 'line',
+            series: seriesData
+          } );
 
-        d3.select("#canvas-svg").select(".x_axis").append("div")
-        .attr("class", "xAxisLabel")
-        .style("width", (xAxisBBox.width - 10) + "px")
-        .style("top", (25) + "px")
-        .text(config.xAxisLabel);
+          graph.render();
 
-        d3.select("#canvas-svg").select(".y_axis").append("div")
-        .attr("class", "yAxisLabel")
-        .html(config.yAxisLabel);
+          let commaFormat = d3.format("0,000");
 
-        d3.select("#canvas-svg .legend")
-        .style("left", (width + 20) + 'px');
+          let hoverDetail = new Rickshaw.Graph.HoverDetail( {
+            graph: graph,
+            formatter: function(series, x, y) {
+              let content = ": $" + commaFormat(y);
+              let date = series.date[x];
+              return date + content;
+            }
+          } );
 
-        // fix x_axis svg width
-        let x_axis_svg = d3.select("#canvas-svg").select(".x_axis").select("svg");
-        x_axis_svg.attr("width", x_axis_svg.select("g.x_ticks_d3").node().getBBox().width + 40);
+          let shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+            graph: graph
+          } );
 
-        // fix up title
-        $("#canvas-svg .title").width($("#canvas-svg .chart_container").width());
+          let axes = new Rickshaw.Graph.Axis.Time( {
+            graph: graph
+          } );
+
+          function yFormat(n) {
+            if (yAxisType === "$") {
+              return Rickshaw.Fixtures.Number.formatKMBT(n);
+            } else {
+              return Rickshaw.Fixtures.Number.formatKMBT(n);
+            }
+          }
+
+          let yAxis = new Rickshaw.Graph.Axis.Y({
+            graph: graph,
+            orientation: 'left',
+            tickFormat: yFormat,
+            element: $('#canvas-svg').find('.y_axis')[0]
+          });
+
+          let format = function(n) {
+            if (data[data.length-1-n]) {
+              return data[data.length-1-n][config.xAxis];
+            } else {
+              return "";
+            }
+          }
+
+          let xAxis = new Rickshaw.Graph.Axis.X( {
+            graph: graph,
+            orientation: 'bottom',
+            element: $('#canvas-svg').find('.x_axis')[0],
+            pixelsPerTick: 100,
+            tickFormat: format
+          } );
+          yAxis.render();
+          xAxis.render();
+
+          axes.render();
+
+          // append label
+          let xAxisBBox = d3.select("#canvas-svg")
+          .select(".x_axis")
+          .select('g.x_ticks_d3').node().getBBox();
+
+          d3.select("#canvas-svg").select(".x_axis").append("div")
+          .attr("class", "xAxisLabel")
+          .style("width", (xAxisBBox.width - 10) + "px")
+          .style("top", (25) + "px")
+          .text(config.xAxisLabel);
+
+          d3.select("#canvas-svg").select(".y_axis").append("div")
+          .attr("class", "yAxisLabel")
+          .html(config.yAxisLabel);
+
+          d3.select("#canvas-svg .legend")
+          .style("left", (width + 20) + 'px');
+
+          // fix x_axis svg width
+          let x_axis_svg = d3.select("#canvas-svg").select(".x_axis").select("svg");
+          x_axis_svg.attr("width", x_axis_svg.select("g.x_ticks_d3").node().getBBox().width + 40);
+
+          // fix up title
+          $("#canvas-svg .title").width($("#canvas-svg .chart_container").width());
+        }
       }
 
       if (this.props.watchlists) {
@@ -410,11 +404,12 @@ class Company extends React.Component {
         });
       }
     }
+
     let change;
     if (percentChange) {
       if (percentChange[0] == "-") {
         change = "portfolio-red";
-      } else { change = "portfolio-green"}
+      } else { change = "portfolio-green";}
     }
 
     return (
