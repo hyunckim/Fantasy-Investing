@@ -6,11 +6,13 @@ class Company extends React.Component {
   constructor(props) {
     super(props);
     this.state = {news : ""};
+    this.data = {};
   }
 
   componentDidMount() {
-    this.props.fetchCompany();
+    // this.props.fetchCompany();
     this.props.fetchPortfolios();
+    this.fetchData(this.props.ticker);
     this.receiveNews(this.props.ticker);
   }
 
@@ -24,27 +26,68 @@ class Company extends React.Component {
     }
   }
 
-  handle52WeekLow(data, ticker) {
-    this.data[ticker]['52WeekLow'] = data.data[0].value;
+  fetchData(ticker, index = 0) {
+    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
+    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
+    let items = "name,last_price,change,adj_high_price,adj_low_price,\
+      52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,\
+      adj_open_price,cashdividendpershare,dividendyield,ebitda,totalrevenue,\
+      dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,\
+      pricetobook";
+
+    let today = new Date();
+    let endDate = `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate}`;
+    let yearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+    let startDate = `${yearAgo.getFullYear}-${yearAgo.getMonth() + 1}-${yearAgo.getDate}`;
+
+    $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/data_point?identifier=${ticker}&item=${items}`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.fetchData(ticker, index + 1);
+          } else {
+            this.handleCompanyData(res);
+          }
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/historical_data?identifier=${ticker}&item=adj_close_price&start_date=${startDate}&end_date=${endDate}`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.fetchData(ticker, index + 1);
+          } else {
+            this.handlePriceData(res);
+          }
+        }
+    });
   }
 
-  handle52WeekHigh(data, ticker) {
-    this.data[ticker]['52WeekHigh'] = data.data[0].value;
-  }
-
-  handlePriceData(data, ticker) {
-    if (!this.data[ticker]) {
-      this.data[ticker] = {};
+  handleCompanyData(data) {
+    for (let i = 0; i < data.data.length; i++) {
+      let ticker = data.data[i].identifier;
+      if (!this.data[ticker]) {
+        this.data[ticker] = {};
+      }
+      this.data[ticker][data.data[i].item] = data.data[i].value;
     }
-    this.data[ticker]['currentPrice'] = data.data[0]['adj_close'];
-    this.data[ticker]['previousClose'] = data.data[1]['adj_close'];
-    this.data[ticker]['dailyHigh'] = data.data[0]['adj_high'];
-    this.data[ticker]['dailyLow'] = data.data[0]['adj_low'];
-    this.data[ticker]['percentChange'] =
-      ((this.data[ticker]['currentPrice'] - this.data[ticker]['previousClose']) /
-      this.data[ticker]['previousClose'] * 100).toFixed(2);
-    this.data[ticker]['adj_open'] = data.data[0]['adj_open'];
-    this.data[ticker]['volume'] = data.data[0]['adj_volume'];
+    this.setState({data:true});
+  }
+
+  handlePriceData(data) {
+    for (let i = 0; i < data.data.length; i++) {
+      data.data[i]
+    }
   }
 
 
