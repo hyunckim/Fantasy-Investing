@@ -155,14 +155,12 @@ class Company extends React.Component {
   render() {
     let title;
     let price;
-    let earningShare;
+    let change;
     let percentChange;
     let ticker;
     let volume;
     let prevClose;
-    let dividend;
-    let yearHigh;
-    let yearLow;
+    let dividendYield;
     let pastYearInfo;
     let sample;
     let open;
@@ -170,13 +168,10 @@ class Company extends React.Component {
     let fiftytwoWeekLow;
     let marketCap;
     let dividendShare;
-    let fiftyDayMovingAvg;
-    let twoHundredDayMovingAvg;
     let ebitda;
     let eps;
     let avgVolume;
     let forwardPE;
-    let peg;
     let pricePerSale;
     let pricePerBook;
     let shortRatio;
@@ -184,49 +179,33 @@ class Company extends React.Component {
     let watchlists;
     let daysLow;
     let daysHigh;
+    let evToEbitda;
 
-    if (this.props.company.title !== undefined ) {
-      title = this.props.company.current_price;
-      price = this.props.company.price.toFixed(2);
-      earningShare = this.props.company.earning_share;
-      percentChange = this.props.company.percent_change;
-      ticker = this.props.company.ticker;
-      volume = this.numberWithCommas(this.props.company.volume);
-      prevClose = this.props.company.prev_close.toFixed(2 );
-      if (this.props.company.dividend === null) {
-        dividend = "N/A";
-      } else {
-        dividend = this.props.company.dividend.toFixed(2);
-      }
-      yearHigh = this.props.company.year_high;
-      yearLow = this.props.company.year_low;
-      if (this.props.company.open !== null) {
-        open = this.props.company.open.toFixed(2);
-      }
-      fiftytwoWeekHigh = this.props.company.fiftytwo_week_high.toFixed(2);
-      fiftytwoWeekLow = this.props.company.fiftytwo_week_low.toFixed(2);
-      marketCap = this.props.company.market_cap;
-      if (this.props.company.dividend_share === null) {
-        dividendShare = "N/A";
-      } else {
-        dividendShare = this.props.company.dividend_share.toFixed(2);
-      }
-      fiftyDayMovingAvg = this.props.company.fifty_day_moving_avg;
-      twoHundredDayMovingAvg = this.props.company.two_hundred_day_moving_avg;
-      ebitda = this.props.company.ebitda;
-      eps = this.props.company.EPS_next_year;
-      avgVolume = this.numberWithCommas(this.props.company.avg_volume);
-      forwardPE = Math.round( this.props.company.EPS_estimate_next_year * 10 ) / 10;
-      peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10;
-      pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
-      pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
-      shortRatio = Math.round( this.props.company.short_ratio * 10 ) / 10;
-      if (this.props.company.days_low) {
-        daysLow = this.props.company.days_low.toFixed(2);
-      }
-      if (this.props.company.days_high) {
-        daysHigh = this.props.company.days_high.toFixed(2);
-      }
+    if (this.data[this.props.ticker] ) {
+      title = this.data[this.props.ticker]['name'];
+      price = Math.round(this.data[this.props.ticker]['last_price'] * 100) / 100;
+      change = this.data[this.props.ticker]['change'];
+      percentChange = (this.data[this.props.ticker]['change'] /
+        (this.data[this.props.ticker]['last_price'] -
+        this.data[this.props.ticker]['change']) * 100).toFixed(1);
+      ticker = this.props.ticker;
+      volume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['adj_volume']));
+      prevClose = Math.round((this.data[this.props.ticker]['last_price'] - this.data[this.props.ticker]['change']) * 100) / 100;
+      dividendYield = this.data[this.props.ticker]['dividendyield'];
+      open = Math.round(this.data[this.props.ticker]['adj_open_price'] * 100) / 100;
+      fiftytwoWeekHigh = Math.round(this.data[this.props.ticker]['52_week_high'] * 100) / 100;
+      fiftytwoWeekLow = Math.round(this.data[this.props.ticker]['52_week_low'] * 100) / 100;
+      marketCap = (this.data[this.props.ticker]['marketcap'] / 1000000000).toFixed(1);
+      dividendShare = this.data[this.props.ticker]['cashdividendpershare'];
+      ebitda = this.data[this.props.ticker]['ebitda'];
+      eps = this.data[this.props.ticker]['dilutedeps'];
+      avgVolume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['average_daily_volume']));
+      forwardPE = this.data[this.props.ticker]['pricetonextyearrevenue'];
+      pricePerSale = this.data[this.props.ticker]['pricetonextyearrevenue'];
+      pricePerBook = this.data[this.props.ticker]['pricetobook'];
+      evToEbitda = this.data[this.props.ticker]['evtoebitda'];
+      daysLow = Math.round(this.data[this.props.ticker]['adj_low_price'] * 100) / 100;
+      daysHigh = Math.round(this.data[this.props.ticker]['adj_high_price'] * 100) / 100;
       let seriesDataMap = {};
       let config = {};
       config.xAxis = "date";
@@ -474,7 +453,7 @@ class Company extends React.Component {
             </div>
             <div className="company-nums">
               <p>Dividend Yield</p>
-              <p className='value'>{ dividend }%</p>
+              <p className='value'>{ dividendYield }%</p>
             </div>
             <div className="company-nums">
               <p>Trailing EBITDA</p>
