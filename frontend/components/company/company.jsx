@@ -85,7 +85,9 @@ class Company extends React.Component {
   }
 
   handlePriceData(data) {
+    this.data['historical'] =
     for (let i = 0; i < data.data.length; i++) {
+
       data.data[i]
     }
   }
