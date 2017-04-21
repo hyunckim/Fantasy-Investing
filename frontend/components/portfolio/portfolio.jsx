@@ -353,7 +353,7 @@ class Portfolio extends React.Component {
                       <th><span>Price</span></th>
                       <th><span>Change</span></th>
                       <th><span>Daily Change</span></th>
-                      <th><span>Industry</span></th>
+                      <th><span>Sector</span></th>
                       <th><span>Volume</span></th>
                       <th><span>Avg Volume</span></th>
                       <th><span>Day Range</span></th>

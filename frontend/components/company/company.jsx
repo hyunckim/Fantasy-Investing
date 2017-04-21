@@ -178,30 +178,30 @@ class Company extends React.Component {
 
     if (this.data[this.props.ticker] ) {
       title = this.data[this.props.ticker]['name'];
-      price = Math.round(this.data[this.props.ticker]['last_price'] * 100) / 100;
-      priceChange = this.data[this.props.ticker]['change'];
+      price = (Math.round(this.data[this.props.ticker]['last_price'] * 100) / 100).toFixed(2);
+      priceChange = (this.data[this.props.ticker]['change']).toFixed(2);
       percentChange = Math.round(this.data[this.props.ticker]['change'] /
         (this.data[this.props.ticker]['last_price'] -
         this.data[this.props.ticker]['change']) * 10000) / 100;
       ticker = this.props.ticker;
       volume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['adj_volume']));
-      prevClose = Math.round((this.data[this.props.ticker]['last_price'] - this.data[this.props.ticker]['change']) * 100) / 100;
+      prevClose = (Math.round((this.data[this.props.ticker]['last_price'] - this.data[this.props.ticker]['change']) * 100) / 100).toFixed(2);
       dividendYield = (Math.round(this.data[this.props.ticker]['forward_dividend_yield']* 1000) / 10).toFixed(2);
-      open = Math.round(this.data[this.props.ticker]['adj_open_price'] * 100) / 100;
+      open = (Math.round(this.data[this.props.ticker]['adj_open_price'] * 100) / 100).toFixed(2);
       fiftytwoWeekHigh = (Math.round(this.data[this.props.ticker]['52_week_high'] * 100) / 100).toFixed(2);
       fiftytwoWeekLow = (Math.round(this.data[this.props.ticker]['52_week_low'] * 100) / 100).toFixed(2);
       marketCap = (this.data[this.props.ticker]['marketcap'] / 1000000000).toFixed(1);
       dividendShare = (this.data[this.props.ticker]['forward_dividend_rate']).toFixed(2);
       revenue = (this.data[this.props.ticker]['totalrevenue'] / 1000000000).toFixed(1);
       ebitda = (this.data[this.props.ticker]['ebitda'] / 1000000000).toFixed(1);
-      eps = this.data[this.props.ticker]['dilutedeps'];
+      eps = (this.data[this.props.ticker]['dilutedeps']).toFixed(2);
       avgVolume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['average_daily_volume']));
       forwardPE = (Math.round(this.data[this.props.ticker]['pricetonextyearearnings'] * 10) / 10).toFixed(1);
       pricePerSale = (Math.round(this.data[this.props.ticker]['pricetonextyearrevenue'] * 10) / 10).toFixed(1);
       pricePerBook = (Math.round(this.data[this.props.ticker]['pricetobook'] * 10) / 10).toFixed(1);
       evToEbitda = (Math.round(this.data[this.props.ticker]['evtoebitda'] * 10) / 10).toFixed(1);
-      daysLow = Math.round(this.data[this.props.ticker]['adj_low_price'] * 100) / 100;
-      daysHigh = Math.round(this.data[this.props.ticker]['adj_high_price'] * 100) / 100;
+      daysLow = (Math.round(this.data[this.props.ticker]['adj_low_price'] * 100) / 100).toFixed(2);
+      daysHigh = (Math.round(this.data[this.props.ticker]['adj_high_price'] * 100) / 100).toFixed(2);
       let seriesDataMap = {};
       let config = {};
       config.xAxis = "date";
