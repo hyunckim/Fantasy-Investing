@@ -11,6 +11,58 @@ class TradeForm extends React.Component {
     this.updateBalance = this.updateBalance.bind(this);
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.removeStockErrors();
+    let price = undefined;
+    let today = new Date();
+    if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
+        today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
+        this.fetchData(this.state.ticker.toUpperCase());
+    } else {
+      this.props.receiveStockErrors("The U.S. equity market is currently closed");
+    }
+
+  }
+
+  fetchData(ticker, index = 0) {
+    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
+    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
+
+    $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/data_point?identifier=${ticker}&item=last_price`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.fetchData(ticker, index + 1);
+          } else {
+            this.handlePromise(res);
+          }
+        }
+    });
+  }
+
+  handlePromise(res) {
+    let price = res.value;
+    let existingPosition = undefined;
+    for (let i = 0; i < this.props.currentStocks.length; i++) {
+      if (this.props.currentStocks[i].ticker === this.state.ticker.toUpperCase()) {
+        existingPosition = this.props.currentStocks[i];
+        break;
+      }
+    }
+
+    if (this.state.action === "Buy") {
+      this.buyStock(existingPosition, price);
+    } else if (this.state.action === "Sell") {
+      this.sellStock(existingPosition, price);
+    }
+  }
+
   buyStock(existingPosition, price) {
     if (parseInt(this.props.balance) >= (price * parseInt(this.state.number_of_shares))) {
 
@@ -78,38 +130,6 @@ class TradeForm extends React.Component {
 
   updateBalance(newBalance) {
     this.props.updateInvestor( {id: this.props.investor.id, balance: newBalance});
-  }
-
-  handlePromise(res) {
-    let price = res.price;
-    let existingPosition = undefined;
-    for (let i = 0; i < this.props.currentStocks.length; i++) {
-      if (this.props.currentStocks[i].ticker === this.state.ticker.toUpperCase()) {
-        existingPosition = this.props.currentStocks[i];
-        break;
-      }
-    }
-
-    if (this.state.action === "Buy") {
-
-      this.buyStock(existingPosition, price);
-    } else if (this.state.action === "Sell") {
-      this.sellStock(existingPosition, price);
-    }
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.removeStockErrors();
-    let price = undefined;
-    let today = new Date();
-    if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
-        today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
-        fetchStockPrice(this.state.ticker.toUpperCase()).then(res => this.handlePromise(res));
-    } else {
-      this.props.receiveStockErrors("The U.S. equity market is currently closed");
-    }
-
   }
 
   update(field) {

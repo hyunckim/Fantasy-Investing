@@ -26,7 +26,7 @@ class Company extends React.Component {
   fetchData(ticker, index = 0) {
     let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
     let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
-    let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,cashdividendspershare,dividendyield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
+    let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,forward_dividend_rate,forward_dividend_yield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
     let today = new Date();
     let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     let yearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
@@ -186,20 +186,20 @@ class Company extends React.Component {
       ticker = this.props.ticker;
       volume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['adj_volume']));
       prevClose = Math.round((this.data[this.props.ticker]['last_price'] - this.data[this.props.ticker]['change']) * 100) / 100;
-      dividendYield = Math.round(this.data[this.props.ticker]['dividendyield']* 1000) / 10;
+      dividendYield = (Math.round(this.data[this.props.ticker]['forward_dividend_yield']* 1000) / 10).toFixed(2);
       open = Math.round(this.data[this.props.ticker]['adj_open_price'] * 100) / 100;
-      fiftytwoWeekHigh = Math.round(this.data[this.props.ticker]['52_week_high'] * 100) / 100;
-      fiftytwoWeekLow = Math.round(this.data[this.props.ticker]['52_week_low'] * 100) / 100;
+      fiftytwoWeekHigh = (Math.round(this.data[this.props.ticker]['52_week_high'] * 100) / 100).toFixed(2);
+      fiftytwoWeekLow = (Math.round(this.data[this.props.ticker]['52_week_low'] * 100) / 100).toFixed(2);
       marketCap = (this.data[this.props.ticker]['marketcap'] / 1000000000).toFixed(1);
-      dividendShare = this.data[this.props.ticker]['cashdividendspershare'];
+      dividendShare = (this.data[this.props.ticker]['forward_dividend_rate']).toFixed(2);
       revenue = (this.data[this.props.ticker]['totalrevenue'] / 1000000000).toFixed(1);
       ebitda = (this.data[this.props.ticker]['ebitda'] / 1000000000).toFixed(1);
       eps = this.data[this.props.ticker]['dilutedeps'];
       avgVolume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['average_daily_volume']));
-      forwardPE = Math.round(this.data[this.props.ticker]['pricetonextyearearnings'] * 10) / 10;
-      pricePerSale = Math.round(this.data[this.props.ticker]['pricetonextyearrevenue'] * 10) / 10;
-      pricePerBook = Math.round(this.data[this.props.ticker]['pricetobook'] * 10) / 10;
-      evToEbitda = Math.round(this.data[this.props.ticker]['evtoebitda'] * 10) / 10;
+      forwardPE = (Math.round(this.data[this.props.ticker]['pricetonextyearearnings'] * 10) / 10).toFixed(1);
+      pricePerSale = (Math.round(this.data[this.props.ticker]['pricetonextyearrevenue'] * 10) / 10).toFixed(1);
+      pricePerBook = (Math.round(this.data[this.props.ticker]['pricetobook'] * 10) / 10).toFixed(1);
+      evToEbitda = (Math.round(this.data[this.props.ticker]['evtoebitda'] * 10) / 10).toFixed(1);
       daysLow = Math.round(this.data[this.props.ticker]['adj_low_price'] * 100) / 100;
       daysHigh = Math.round(this.data[this.props.ticker]['adj_high_price'] * 100) / 100;
       let seriesDataMap = {};
@@ -433,7 +433,7 @@ class Company extends React.Component {
             </div>
             <div className="company-nums">
               <p >Market Cap</p>
-              <p className='value'>${ marketCap }</p>
+              <p className='value'>${ marketCap }Bn</p>
             </div>
             <div className="company-nums">
               <p>Volume</p>
@@ -453,11 +453,11 @@ class Company extends React.Component {
             </div>
             <div className="company-nums">
               <p>Trailing EBITDA</p>
-              <p className='value'>${ ebitda }</p>
+              <p className='value'>${ ebitda }Bn</p>
             </div>
             <div className="company-nums">
               <p>Revenue</p>
-              <p className='value'>${ revenue }</p>
+              <p className='value'>${ revenue }Bn</p>
             </div>
             <br></br>
             <div className="company-nums">
@@ -465,7 +465,7 @@ class Company extends React.Component {
               <p className='value'>{ forwardPE }x</p>
             </div>
             <div className="company-nums">
-              <p>PEG</p>
+              <p>EV/EBITDA</p>
               <p className='value'>{ evToEbitda }x</p>
             </div>
             <div className="company-nums">
