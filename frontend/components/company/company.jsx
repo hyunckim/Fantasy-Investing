@@ -26,12 +26,7 @@ class Company extends React.Component {
   fetchData(ticker, index = 0) {
     let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
     let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
-    let items = "name,last_price,change,adj_high_price,adj_low_price,\
-      52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,\
-      adj_open_price,cashdividendpershare,dividendyield,ebitda,totalrevenue,\
-      dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,\
-      pricetobook";
-
+    let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,cashdividendspershare,dividendyield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
     let today = new Date();
     let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     let yearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
@@ -155,7 +150,7 @@ class Company extends React.Component {
   render() {
     let title;
     let price;
-    let change;
+    let priceChange;
     let percentChange;
     let ticker;
     let volume;
@@ -174,36 +169,37 @@ class Company extends React.Component {
     let forwardPE;
     let pricePerSale;
     let pricePerBook;
-    let shortRatio;
     let newsContent;
     let watchlists;
     let daysLow;
     let daysHigh;
     let evToEbitda;
+    let revenue;
 
     if (this.data[this.props.ticker] ) {
       title = this.data[this.props.ticker]['name'];
       price = Math.round(this.data[this.props.ticker]['last_price'] * 100) / 100;
-      change = this.data[this.props.ticker]['change'];
-      percentChange = (this.data[this.props.ticker]['change'] /
+      priceChange = this.data[this.props.ticker]['change'];
+      percentChange = Math.round(this.data[this.props.ticker]['change'] /
         (this.data[this.props.ticker]['last_price'] -
-        this.data[this.props.ticker]['change']) * 100).toFixed(1);
+        this.data[this.props.ticker]['change']) * 10000) / 100;
       ticker = this.props.ticker;
       volume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['adj_volume']));
       prevClose = Math.round((this.data[this.props.ticker]['last_price'] - this.data[this.props.ticker]['change']) * 100) / 100;
-      dividendYield = this.data[this.props.ticker]['dividendyield'];
+      dividendYield = Math.round(this.data[this.props.ticker]['dividendyield']* 1000) / 10;
       open = Math.round(this.data[this.props.ticker]['adj_open_price'] * 100) / 100;
       fiftytwoWeekHigh = Math.round(this.data[this.props.ticker]['52_week_high'] * 100) / 100;
       fiftytwoWeekLow = Math.round(this.data[this.props.ticker]['52_week_low'] * 100) / 100;
       marketCap = (this.data[this.props.ticker]['marketcap'] / 1000000000).toFixed(1);
-      dividendShare = this.data[this.props.ticker]['cashdividendpershare'];
-      ebitda = this.data[this.props.ticker]['ebitda'];
+      dividendShare = this.data[this.props.ticker]['cashdividendspershare'];
+      revenue = (this.data[this.props.ticker]['totalrevenue'] / 1000000000).toFixed(1);
+      ebitda = (this.data[this.props.ticker]['ebitda'] / 1000000000).toFixed(1);
       eps = this.data[this.props.ticker]['dilutedeps'];
       avgVolume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['average_daily_volume']));
-      forwardPE = this.data[this.props.ticker]['pricetonextyearrevenue'];
-      pricePerSale = this.data[this.props.ticker]['pricetonextyearrevenue'];
-      pricePerBook = this.data[this.props.ticker]['pricetobook'];
-      evToEbitda = this.data[this.props.ticker]['evtoebitda'];
+      forwardPE = Math.round(this.data[this.props.ticker]['pricetonextyearearnings'] * 10) / 10;
+      pricePerSale = Math.round(this.data[this.props.ticker]['pricetonextyearrevenue'] * 10) / 10;
+      pricePerBook = Math.round(this.data[this.props.ticker]['pricetobook'] * 10) / 10;
+      evToEbitda = Math.round(this.data[this.props.ticker]['evtoebitda'] * 10) / 10;
       daysLow = Math.round(this.data[this.props.ticker]['adj_low_price'] * 100) / 100;
       daysHigh = Math.round(this.data[this.props.ticker]['adj_high_price'] * 100) / 100;
       let seriesDataMap = {};
@@ -397,7 +393,7 @@ class Company extends React.Component {
           <div className="company-header">
             <div className="company-name-price">
               <span className="company-title">{ title } { ticker }</span>
-              <span className="company-price">${ price } <span className={change}>({ percentChange })</span></span>
+              <span className="company-price">${ price } <span className={change}>{priceChange}  ({ percentChange })%</span></span>
             </div>
             <div className="watchlist-button">
               <div className='watchlist-dropdown'>
@@ -460,12 +456,8 @@ class Company extends React.Component {
               <p className='value'>${ ebitda }</p>
             </div>
             <div className="company-nums">
-              <p>50-day Moving Avg</p>
-              <p className='value'>${ fiftyDayMovingAvg }</p>
-            </div>
-            <div className="company-nums">
-              <p>200-day Moving Avg</p>
-              <p className='value'>${ twoHundredDayMovingAvg }</p>
+              <p>Revenue</p>
+              <p className='value'>${ revenue }</p>
             </div>
             <br></br>
             <div className="company-nums">
@@ -474,7 +466,7 @@ class Company extends React.Component {
             </div>
             <div className="company-nums">
               <p>PEG</p>
-              <p className='value'>{ peg }x</p>
+              <p className='value'>{ evToEbitda }x</p>
             </div>
             <div className="company-nums">
               <p>Price / Sales</p>
@@ -483,10 +475,6 @@ class Company extends React.Component {
             <div className="company-nums">
               <p>Price / Book</p>
               <p className='value'>{ pricePerBook }x</p>
-            </div>
-            <div className="company-nums">
-              <p>Short Ratio</p>
-              <p className='value'>{ shortRatio }%</p>
             </div>
           </div>
           <div id="canvas-svg">
