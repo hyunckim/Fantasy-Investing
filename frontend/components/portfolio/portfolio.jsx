@@ -264,7 +264,12 @@ class Portfolio extends React.Component {
             }
             prevDayValue += this.props.currentUser.investor.balance;
             unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
-            var percentageChange = (unrealizedGain / initialValue) * 100;
+            var percentageChange;
+            if (initialValue === 0) {
+              percentageChange = 0;
+            } else {
+              percentageChange = (unrealizedGain / initialValue) * 100;
+            }
             let totalDailyChange = ((totalValue  - prevDayValue) / prevDayValue * 100).toFixed(1);
             portfolioTable =
                 <table id='portfolioTable'>
@@ -394,6 +399,12 @@ class Portfolio extends React.Component {
           </table>);
         }
 
+        let deleteButton = (<div></div>);
+        if (mainPortfolio && !mainPortfolio.main) {
+          deleteButton = (<button className = 'delete-button'
+            onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>);
+        }
+
         if (this.props.currentUser && mainPortfolio) {
 
           if ($('#positions-piechart')) {
@@ -433,7 +444,7 @@ class Portfolio extends React.Component {
                           <PortfolioModal />
                         </div>
                       </div>
-                      <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
+                      {deleteButton}
                   </div>
                 </div>
 
