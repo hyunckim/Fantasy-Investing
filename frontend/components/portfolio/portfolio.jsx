@@ -372,6 +372,26 @@ class Portfolio extends React.Component {
                   {stocks}
               </tbody>
           </table>);
+        } else {
+          portfolioTable = (<table id='portfolioTable'>
+              <thead>
+                  <tr>
+                      <th><span>Symbol</span></th>
+                      <th><span>Title</span></th>
+                      <th><span>Price</span></th>
+                      <th><span>Change</span></th>
+                      <th><span>Daily Change</span></th>
+                      <th><span>Sector</span></th>
+                      <th><span>Volume</span></th>
+                      <th><span>Avg Volume</span></th>
+                      <th><span>Day Range</span></th>
+                      <th><span>52-week Range</span></th>
+                      <th><span>Market Cap</span></th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>);
         }
 
         if (this.props.currentUser && mainPortfolio) {
