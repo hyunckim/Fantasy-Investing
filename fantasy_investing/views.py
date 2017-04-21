@@ -14,11 +14,8 @@ from .utils import AtomicMixin
 from fantasy_investing.models import Investor
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
-from fantasy_investing.serializers import CompanySerializer
-from yahoo_finance import Share
 from fantasy_investing.serializers import PortfolioSerializer, PortfolioFormSerializer
 from fantasy_investing.models import Portfolio
-from fantasy_investing.serializers import StockPriceSerializer
 import datetime
 from fantasy_investing.models import Investor, Stock
 import pdb
@@ -105,67 +102,6 @@ def portfolio_detail(request, pk):
         serializer = PortfolioSerializer(portfolio)
         return JsonResponse(serializer.data)
 
-class Company(object):
-    def __init__(self, ticker, detail=False):
-        company = Share(ticker)
-
-        if detail==True:
-            end_date = datetime.date.today().strftime("%Y-%m-%d")
-            year_ago = datetime.date.today() - datetime.timedelta(days=365)
-            start_date = year_ago.strftime("%Y-%m-%d")
-            response  = company.get_historical(start_date, end_date)
-            past_year_info = []
-
-            for element in response:
-                date = datetime.datetime.strptime(element['Date'], '%Y-%m-%d').strftime('%d-%b-%y')
-                past_year_info.append({ 'date': date, 'close': float('%.2f' % float(element['Close'])) })
-
-            self.ticker = ticker
-            self.prev_close = company.get_prev_close()
-            self.year_high = company.get_year_high()
-            self.year_low = company.get_year_low()
-            self.change = company.get_change()
-            self.percent_change = company.get_percent_change()
-            self.volume = company.get_volume()
-            self.dividend = company.get_dividend_yield()
-            self.earning_share = company.get_earnings_share()
-            self.past_year_info = past_year_info
-            self.EPS_next_quarter = company.get_EPS_estimate_next_quarter()
-            self.EPS_next_year = company.get_EPS_estimate_next_year()
-            self.EPS_estimate_curr_year = company.get_price_EPS_estimate_current_year()
-            self.EPS_estimate_next_year = company.get_price_EPS_estimate_next_year()
-            self.earnings_growth_ratio = company.get_price_earnings_growth_ratio()
-            self.open = company.get_open()
-            self.market_cap = company.get_market_cap()
-            self.fiftytwo_week_high = company.get_year_high()
-            self.fiftytwo_week_low = company.get_year_low()
-            self.fifty_day_moving_avg = company.get_50day_moving_avg()
-            self.two_hundred_day_moving_avg = company.get_200day_moving_avg()
-            self.ebitda = company.get_ebitda()
-            self.dividend_share = company.get_dividend_share()
-            self.avg_volume = company.get_avg_daily_volume()
-            self.price_per_sale = company.get_price_sales()
-            self.price_per_book = company.get_price_book()
-            self.short_ratio = company.get_short_ratio()
-            self.days_low = company.get_days_low()
-            self.days_high = company.get_days_high()
-            self.currency = company.get_currency()
-
-        self.title = company.get_name()
-        self.price = company.get_price()
-
-def company_detail(request, ticker):
-
-    company = Company(ticker, detail=True)
-    if company.title:
-
-        if request.method == 'GET':
-            serializer = CompanySerializer(company)
-            return JsonResponse(serializer.data)
-
-    else:
-        return HttpResponse(status=404)
-
 class StockView(CreateModelMixin, GenericAPIView):
 
     serializer_class = StockSerializer
@@ -221,15 +157,3 @@ class InvestorView(GenericAPIView):
             return Response(serializer.data)
         else:
             return HttpResponse("Invalid info", status=404)
-
-def stock_price(request, ticker):
-
-    stock = Company(ticker)
-    if stock.title:
-
-        if request.method == 'GET':
-            serializer = StockPriceSerializer(stock)
-            return JsonResponse(serializer.data)
-
-    else:
-        return HttpResponse(status=404)
