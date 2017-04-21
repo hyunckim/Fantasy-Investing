@@ -110,6 +110,7 @@
 .rickshaw_graph  .x_axis_d3 {
 	fill: none;
 }
+
 .rickshaw_graph .y_ticks .tick line,
 .rickshaw_graph .x_ticks_d3 .tick {
 	stroke: rgba(0, 0, 0, 0.16);
@@ -382,6 +383,13 @@
 	width: 40px;
 }
 
+#canvas-svg2 .y_axis {
+	position: absolute;
+	top: 50px;
+	bottom: 0;
+	width: 40px;
+}
+
 .x_axis {
 	position: relative;
 	left: 40px;
@@ -393,11 +401,13 @@
 	left: 40px;
 }
 
-#canvas svg {
+#canvas svg,
+#canvas2 svg {
   border: none;
 }
 
-#canvas-svg {
+#canvas-svg,
+#canvas-svg2 {
   position: relative;
 	width: 50vw;
 	height: 300px;
