@@ -217,7 +217,6 @@ class Portfolio extends React.Component {
                 );
             });
         }
-        debugger;
 
         if (mainPortfolio && mainPortfolio.main) {
           let percentChange;

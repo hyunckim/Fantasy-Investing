@@ -120,7 +120,6 @@ class Company extends React.Component {
         }
       },
       error: (res) => {
-        debugger;
         this.receiveNews(ticker, index + 1);
       }
     });
