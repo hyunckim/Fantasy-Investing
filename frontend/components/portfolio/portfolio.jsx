@@ -41,8 +41,6 @@ class Portfolio extends React.Component {
           }
         }
       }
-
-
     }
 
     handleData(portfolios, index = 0) {
@@ -62,8 +60,12 @@ class Portfolio extends React.Component {
       watchlistTickers = watchlistTickers.slice(0,-1);
       let priceData = [];
 
-      this.fetchData(mainTickers, 'name,last_price,change');
-      this.fetchData(watchlistTickers, 'name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group');
+      if (mainTickers.length > 0) {
+        this.fetchData(mainTickers, 'name,last_price,change');
+      }
+      if (watchlistTickers.length > 0) {
+        this.fetchData(watchlistTickers, 'name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group');
+      }
     }
 
     fetchData(tickers, items, index = 0) {
