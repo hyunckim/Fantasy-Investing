@@ -12,6 +12,7 @@ class TradeForm extends React.Component {
   }
 
   handleSubmit(e) {
+    debugger;
     e.preventDefault();
     this.props.removeStockErrors();
     let price = undefined;
@@ -67,7 +68,7 @@ class TradeForm extends React.Component {
     if (parseInt(this.props.balance) >= (price * parseInt(this.state.number_of_shares))) {
 
       let purchaseInfo = {
-        ticker: this.state.ticker,
+        ticker: this.state.ticker.toUpperCase(),
       };
 
       let action = "";
@@ -105,10 +106,10 @@ class TradeForm extends React.Component {
   }
 
   sellStock(existingPosition, price) {
-    let newBalance = Math.round((parseInt(this.props.balance) +
-      (price * parseInt(this.state.number_of_shares))));
 
     if (existingPosition) {
+      let newBalance = Math.round((parseInt(this.props.balance) +
+        (price * parseInt(this.state.number_of_shares))));
       if (parseInt(this.state.number_of_shares) < parseInt(existingPosition.number_of_shares)) {
         let saleInfo = {
           id: existingPosition.id,
@@ -140,7 +141,6 @@ class TradeForm extends React.Component {
 
   render() {
 
-
     return (
       <div className="trade-form-container">
         <div>
@@ -163,8 +163,7 @@ class TradeForm extends React.Component {
             <input className="form-shares" onChange={this.update('number_of_shares')} placeholder='# Of Shares' />
           </label>
 
-          <input type="submit" id="submit-button" className="form-submit-button" value="Submit"
-            onSubmit={this.handleSubmit} />
+          <input type="submit" id="submit-button" className="form-submit-button" value="Submit"/>
         </form>
         <div className="trade-form-popup">
 

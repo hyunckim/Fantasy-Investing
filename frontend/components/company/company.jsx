@@ -101,20 +101,27 @@ class Company extends React.Component {
     };
   }
 
-  receiveNews(ticker) {
-    let username = "d6166222f6cd23d2214f20c0de1d4cc3";
-    let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
-    let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
+  receiveNews(ticker, index = 0) {
+    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
+    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
 
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}`,
       dataType: 'json',
       headers: {
-        "Authorization": "Basic " + btoa(username + ":" + password)
+        "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
       },
       success: (res) => {
-        this.setState({ news: res.data.slice(0,4) });
+        if (res.missing_access_codes) {
+          this.receiveNews(ticker, index + 1);
+        } else {
+          this.setState({ news: res.data.slice(0,4) });
+        }
+      },
+      error: (res) => {
+        debugger;
+        this.receiveNews(ticker, index + 1);
       }
     });
   }
