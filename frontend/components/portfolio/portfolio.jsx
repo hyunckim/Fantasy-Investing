@@ -26,18 +26,23 @@ class Portfolio extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      for (let i = 0; i < nextProps.portfolio.length; i++) {
-        if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
-          var newStock = nextProps.portfolio[i].stocks[nextProps.portfolio[i].stocks.length - 1].ticker;
-          var portfolioType = nextProps.portfolio[i].main;
-          let items = 'last_price,change,name';
-          if (!portfolioType) {
-            items += ',adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group';
+
+      if (nextProps.portfolio.length === this.props.portfolio.length) {
+        for (let i = 0; i < nextProps.portfolio.length; i++) {
+          if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
+            var newStock = nextProps.portfolio[i].stocks[nextProps.portfolio[i].stocks.length - 1].ticker;
+            var portfolioType = nextProps.portfolio[i].main;
+            let items = 'last_price,change,name';
+            if (!portfolioType) {
+              items += ',adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group';
+            }
+            this.fetchData(newStock, items);
+            break;
           }
-          this.fetchData(newStock, items);
-          break;
         }
       }
+
+
     }
 
     handleData(portfolios, index = 0) {
@@ -210,9 +215,9 @@ class Portfolio extends React.Component {
                 );
             });
         }
+        debugger;
 
-
-        if (mainPortfolio && mainPortfolio.main && Object.keys(this.data).length > 0) {
+        if (mainPortfolio && mainPortfolio.main) {
           let percentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             if (this.data[stock.ticker]) {

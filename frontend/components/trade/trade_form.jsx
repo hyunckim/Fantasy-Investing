@@ -23,7 +23,6 @@ class TradeForm extends React.Component {
     } else {
       this.props.receiveStockErrors("The U.S. equity market is currently closed");
     }
-
   }
 
   fetchData(ticker, index = 0) {
@@ -158,7 +157,6 @@ class TradeForm extends React.Component {
           <label> Symbol
             <input className="form-symbol" onChange={this.update("ticker")} placeholder='Ex:MSFT'/>
           </label>
-
           <label> Quantity
             <input className="form-shares" onChange={this.update('number_of_shares')} placeholder='# Of Shares' />
           </label>
