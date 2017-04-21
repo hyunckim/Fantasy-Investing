@@ -24,8 +24,8 @@ class Company extends React.Component {
   }
 
   fetchData(ticker, index = 0) {
-    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
-    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
+    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
+    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
     let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,forward_dividend_rate,forward_dividend_yield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
     let today = new Date();
     let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -102,8 +102,8 @@ class Company extends React.Component {
   }
 
   receiveNews(ticker, index = 0) {
-    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
-    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
+    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
+    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
 
     $.ajax({
       type: "GET",
@@ -389,7 +389,7 @@ class Company extends React.Component {
 
     let change;
     if (percentChange) {
-      if (percentChange[0] == "-") {
+      if (percentChange < 0) {
         change = "portfolio-red";
       } else { change = "portfolio-green";}
     }

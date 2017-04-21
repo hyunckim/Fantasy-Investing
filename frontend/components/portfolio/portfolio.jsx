@@ -69,8 +69,8 @@ class Portfolio extends React.Component {
     }
 
     fetchData(tickers, items, index = 0) {
-      let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4"];
-      let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d"];
+      let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
+      let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
 
       $.ajax({
           type: "GET",

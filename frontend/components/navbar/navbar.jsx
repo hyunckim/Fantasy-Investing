@@ -51,30 +51,8 @@ class NavBar extends React.Component {
   }
 
   handleFilterChange() {
-    let username = "d6166222f6cd23d2214f20c0de1d4cc3";
-    let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
-    let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
-
     return e => {
       this.setState({ ticker: e.target.value });
-      // $.ajax({
-      //   url: `https://api.intrinio.com/companies?query=${e.target.value}`,
-      //   method: 'GET',
-      //   dataType: 'json',
-      //   headers: {
-      //     "Authorization": "Basic " + btoa(username + ":" + password)
-      //   },
-      //   success: (res) => {
-      //     let array =[];
-      //     res.data.forEach(company => {
-      //       array.push(company.ticker);
-      //     });
-      //     this.setState({ populate: array });
-      //     $( "#search" ).autocomplete({
-      //       source: array
-      //     });
-      //   }
-      // });
     };
   }
 
