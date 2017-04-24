@@ -134,10 +134,8 @@
 
 .watchlist-dropdown span{
     border:1px solid #943323;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
     border-radius: 5px;
-    font-size:16px;
+    font-size: 12px;
     text-transform: uppercase;
     padding: 10px 10px 10px 10px;
     text-decoration:none;
