@@ -29,14 +29,6 @@ class NavBar extends React.Component {
   handleLogOutClick(e) {
     e.preventDefault();
     this.props.logout().then(() => hashHistory.push("/"));
-    // let timesRun = 0;
-    // let interval = setInterval(function(){
-    //   timesRun += 1;
-    //   if(timesRun === 1){
-    //     clearInterval(interval);
-    //   }
-    //   hashHistory.push("/");
-    // }, 2000);
   }
 
   handleGuestClick(e) {
