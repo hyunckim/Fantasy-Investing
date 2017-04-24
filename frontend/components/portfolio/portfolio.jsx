@@ -9,15 +9,116 @@ class Portfolio extends React.Component {
     constructor(props) {
       super(props);
         this.state = {
-            currentPortfolio: undefined
+            currentPortfolio: undefined,
+            data: false
         };
+        this.data = {};
         this.handleClick = this.handleClick.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleData = this.handleData.bind(this);
+        this.handleCompanyData = this.handleCompanyData.bind(this);
+        this.positionsPieChart = this.positionsPieChart.bind(this);
     }
 
     componentDidMount() {
+      let stockTicker = [];
+      this.props.fetchPortfolios().then(portfolios => this.handleData(portfolios));
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+      if (nextProps.portfolio.length === this.props.portfolio.length) {
+        for (let i = 0; i < nextProps.portfolio.length; i++) {
+          if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
+            var newStock = nextProps.portfolio[i].stocks[nextProps.portfolio[i].stocks.length - 1].ticker;
+            var portfolioType = nextProps.portfolio[i].main;
+            let items = 'last_price,change,name';
+            if (!portfolioType) {
+              items += ',adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group';
+            }
+            this.fetchData(newStock, items);
+            break;
+          }
+        }
+      }
+    }
+
+    handleData(portfolios, index = 0) {
+
+      let mainTickers = ``;
+      let watchlistTickers = ``;
+      for (let i = 0; i < portfolios.portfolios.length; i++) {
+        for (let j = 0; j < portfolios.portfolios[i].stocks.length; j++) {
+          if (portfolios.portfolios[i].main === true) {
+            mainTickers += `${portfolios.portfolios[i].stocks[j].ticker},`;
+          } else {
+            watchlistTickers += `${portfolios.portfolios[i].stocks[j].ticker},`;
+          }
+        }
+      }
+      mainTickers = mainTickers.slice(0,-1);
+      watchlistTickers = watchlistTickers.slice(0,-1);
+      let priceData = [];
+
+      if (mainTickers.length > 0) {
+        this.fetchData(mainTickers, 'name,last_price,change');
+      }
+      if (watchlistTickers.length > 0) {
+        this.fetchData(watchlistTickers, 'name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group');
+      }
+    }
+
+    fetchData(tickers, items, index = 0) {
+      let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3",
+      "0f51c94416c5a029ced069c9c445bcf4",
+      "77a9accfe589ee1bde92b347cd7243bf",
+      "00c96699cb9905e2e93939af22fd255d",
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130"
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b",
+      "dfb23653432156bdbf868393255d9f3d",
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67"
+      ];
+      $.ajax({
+          type: "GET",
+          url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
+          dataType: 'json',
+          headers: {
+            "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+          },
+          success: (res) => {
+            if (res.missing_access_codes) {
+              this.fetchData(tickers, items, index + 1);
+            } else {
+              this.handleCompanyData(res);
+            }
+          }
+      });
+    }
+
+    handleCompanyData(data) {
+      for (let i = 0; i < data.data.length; i++) {
+        let ticker = data.data[i].identifier;
+        if (!this.data[ticker]) {
+          this.data[ticker] = {};
+        }
+        this.data[ticker][data.data[i].item] = data.data[i].value;
+      }
+      this.setState({data:true});
+    }
+
+    componentWillMount() {
       this.props.fetchPortfolios();
     }
+
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
@@ -54,7 +155,7 @@ class Portfolio extends React.Component {
             backgroundColor: '#2c2c2c',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 36,
+                fontSize: 30,
                 color: '#F5F1F2'
             },
             legend: {
@@ -84,7 +185,7 @@ class Portfolio extends React.Component {
         data.addColumn('number', "Value");
         let positionsArray = [];
         for (let i = 0; i < stocks.length; i++) {
-          data.addRow([stocks[i].ticker, stocks[i].number_of_shares * stocks[i].current_price]);
+          data.addRow([stocks[i][0], stocks[i][1]]);
         }
 
         let options = {
@@ -96,7 +197,7 @@ class Portfolio extends React.Component {
             backgroundColor: '#2c2c2c',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 36,
+                fontSize: 30,
                 color: '#F5F1F2'
             },
             legend: {
@@ -137,25 +238,30 @@ class Portfolio extends React.Component {
             });
         }
 
-
-        if (mainPortfolio) {
+        if (mainPortfolio && mainPortfolio.main) {
+          let percentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
+            if (this.data[stock.ticker]) {
+              percentChange = (this.data[stock.ticker]['change'] /
+                (this.data[stock.ticker]['last_price'] -
+                this.data[stock.ticker]['change']) * 100).toFixed(1);
+              return (
 
-            return (
+              <tr key={idx} className='lalign'>
 
-            <tr key={idx} className='lalign'>
-
-              <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
-              <td>{ stock.title }</td>
-              <td>{ stock.number_of_shares }</td>
-              <td>${ stock.current_price.toFixed(2) } </td>
-              <td>${ this.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))}</td>
-              <td>${ stock.purchase_price.toFixed(2) }</td>
-              <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
-              <td>${ this.numberWithCommas(Math.round((stock.current_price - stock.purchase_price)  * stock.number_of_shares))}</td>
-              <td>{ (((stock.current_price - stock.purchase_price) /
-                  stock.purchase_price) * 100).toFixed(1) }% </td>
-            </tr>);
+                <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
+                <td>{ this.data[stock.ticker]['name'] }</td>
+                <td>{ stock.number_of_shares }</td>
+                <td>${ Math.round(this.data[stock.ticker]['last_price'] * 100) / 100 } </td>
+                <td>{ percentChange }% </td>
+                <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
+                <td>${ stock.purchase_price.toFixed(2) }</td>
+                <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+                <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
+                <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
+                    stock.purchase_price) * 100).toFixed(1) }% </td>
+                </tr>);
+            }
           });
 
           if (this.props.currentUser) {
@@ -163,16 +269,27 @@ class Portfolio extends React.Component {
 
             let unrealizedGain = 0;
             let initialValue = 0;
+            let costBasis = 0;
+            let prevDayValue = 0;
 
             for (let i = 0; i < mainPortfolio.stocks.length; i++) {
               let stock = mainPortfolio.stocks[i];
-              totalValue += (stock.current_price * stock.number_of_shares);
-              initialValue += (stock.purchase_price * stock.number_of_shares);
-
+              if (this.data[stock.ticker]) {
+                totalValue += (this.data[stock.ticker]['last_price'] * stock.number_of_shares);
+                initialValue += (stock.purchase_price * stock.number_of_shares);
+                prevDayValue += ((this.data[stock.ticker]['last_price'] - this.data[stock.ticker]['change'])
+                * stock.number_of_shares);
+              }
             }
+            prevDayValue += this.props.currentUser.investor.balance;
             unrealizedGain = totalValue - initialValue - this.props.currentUser.investor.balance;
-            var percentageChange = ((unrealizedGain) / (initialValue - this.props.currentUser.investor.balance)) * 100;
-
+            var percentageChange;
+            if (initialValue === 0) {
+              percentageChange = 0;
+            } else {
+              percentageChange = (unrealizedGain / initialValue) * 100;
+            }
+            let totalDailyChange = ((totalValue  - prevDayValue) / prevDayValue * 100).toFixed(1);
             portfolioTable =
                 <table id='portfolioTable'>
                     <thead>
@@ -181,6 +298,7 @@ class Portfolio extends React.Component {
                             <th><span>Title</span></th>
                             <th><span>Quantity</span></th>
                             <th><span>Price</span></th>
+                            <th><span>Daily Change</span></th>
                             <th><span>Value</span></th>
                             <th><span>Purchase Price</span></th>
                             <th><span>Cost Basis</span></th>
@@ -195,6 +313,7 @@ class Portfolio extends React.Component {
                           <td></td>
                           <td></td>
                           <td></td>
+                          <td></td>
                           <td>${this.numberWithCommas(Math.round(this.props.currentUser.investor.balance))}</td>
                           <td></td>
                           <td></td>
@@ -203,9 +322,10 @@ class Portfolio extends React.Component {
                         </tr>
                         <tr id="total-row">
                           <td>Total</td>
+                          <td ></td>
                           <td></td>
                           <td></td>
-                          <td></td>
+                          <td>{totalDailyChange}%</td>
                           <td>${this.numberWithCommas(Math.round(totalValue))}</td>
                           <td></td>
                           <td></td>
@@ -219,7 +339,7 @@ class Portfolio extends React.Component {
         }
         let value = (<p></p>);
         let className = 'portfolio-green';
-        if (mainPortfolio.main) {
+        if (mainPortfolio && mainPortfolio.main) {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
@@ -232,14 +352,98 @@ class Portfolio extends React.Component {
               );
           }
 
+        } else if (mainPortfolio && mainPortfolio.main === false && Object.keys(this.data).length > 0) {
+          let stocks = mainPortfolio.stocks.map((stock, idx) => {
+            let percentChange = (this.data[stock.ticker]['change'] /
+              (this.data[stock.ticker]['last_price'] -
+              this.data[stock.ticker]['change']) * 100).toFixed(1);
+
+            return (
+
+            <tr key={idx} className='lalign'>
+
+              <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
+              <td>{ this.data[stock.ticker]['name'] }</td>
+              <td>${ Math.round(this.data[stock.ticker]['last_price'] * 100) / 100} </td>
+              <td>{ this.data[stock.ticker]['change'] }</td>
+              <td>{percentChange}%</td>
+              <td>{ this.data[stock.ticker]['industry_group'] }</td>
+              <td>{this.numberWithCommas(Math.round(this.data[stock.ticker]['adj_volume']))}</td>
+              <td>{ this.numberWithCommas(Math.round(this.data[stock.ticker]['average_daily_volume'])) }</td>
+              <td>${this.data[stock.ticker]['adj_low_price']} - {this.data[stock.ticker]['adj_high_price']}</td>
+              <td>${this.data[stock.ticker]['52_week_low']} - {this.data[stock.ticker]['52_week_high']}</td>
+              <td>${ (this.data[stock.ticker]['marketcap'] / 1000000000).toFixed(1)}B</td>
+            </tr>);
+          });
+
+          portfolioTable = (<table id='portfolioTable'>
+              <thead>
+                  <tr>
+                      <th><span>Symbol</span></th>
+                      <th><span>Title</span></th>
+                      <th><span>Price</span></th>
+                      <th><span>Change</span></th>
+                      <th><span>Daily Change</span></th>
+                      <th><span>Sector</span></th>
+                      <th><span>Volume</span></th>
+                      <th><span>Avg Volume</span></th>
+                      <th><span>Day Range</span></th>
+                      <th><span>52-week Range</span></th>
+                      <th><span>Market Cap</span></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {stocks}
+              </tbody>
+          </table>);
+        } else {
+          portfolioTable = (<table id='portfolioTable'>
+              <thead>
+                  <tr>
+                      <th><span>Symbol</span></th>
+                      <th><span>Title</span></th>
+                      <th><span>Price</span></th>
+                      <th><span>Change</span></th>
+                      <th><span>Daily Change</span></th>
+                      <th><span>Sector</span></th>
+                      <th><span>Volume</span></th>
+                      <th><span>Avg Volume</span></th>
+                      <th><span>Day Range</span></th>
+                      <th><span>52-week Range</span></th>
+                      <th><span>Market Cap</span></th>
+                  </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>);
         }
 
+        let deleteButton = (<div></div>);
+        if (mainPortfolio && !mainPortfolio.main) {
+          deleteButton = (<button className = 'delete-button'
+            onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>);
+        }
         if (this.props.currentUser && mainPortfolio) {
-            let posChart = "";
-            if (mainPortfolio.stocks.length > 0) {
-              posChart = (<div id="positions-piechart">
-                {this.positionsPieChart(mainPortfolio.stocks)}
-              </div>);
+
+          if ($('#positions-piechart')) {
+            $('#piechart').remove();
+            $('#positions-piechart').remove();
+          }
+
+            if (mainPortfolio.stocks.length > 0 && mainPortfolio.main) {
+              let stocks = [];
+              for (let i = 0; i < mainPortfolio.stocks.length; i++) {
+                let ticker = mainPortfolio.stocks[i].ticker;
+                if (this.data[ticker]) {
+                  stocks.push([ticker, this.data[ticker]['last_price'] * mainPortfolio.stocks[i].number_of_shares]);
+                }
+              }
+              $('.piechart-container').append('<div id="positions-piechart"></div>');
+               $('#positions-piechart').append(this.positionsPieChart(stocks));
+            }
+            if (mainPortfolio.main) {
+                $('.piechart-container').append('<div id="piechart"></div>');
+                $('#piechart').append(this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,this.props.currentUser.investor.balance));
             }
             return (
                 <div className='main-portfolio-index'>
@@ -258,7 +462,7 @@ class Portfolio extends React.Component {
                           <PortfolioModal />
                         </div>
                       </div>
-                      <button className = 'delete-button' onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>
+                      {deleteButton}
                   </div>
                 </div>
 
@@ -266,13 +470,7 @@ class Portfolio extends React.Component {
                         {portfolioTable}
                     </div>
 
-                    <div className='piechart-container'>
-                      <div id="piechart">
-                          {this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,
-                              this.props.currentUser.investor.balance)}
-                      </div>
-                      {posChart}
-                    </div>
+
                 </div>
             );
         } else {
