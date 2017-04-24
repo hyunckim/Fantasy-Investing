@@ -28,6 +28,7 @@ class NavBar extends React.Component {
 
   handleLogOutClick(e) {
     e.preventDefault();
+    this.props.clearPortfolio();
     this.props.logout().then(() => hashHistory.push("/"));
   }
 
