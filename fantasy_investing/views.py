@@ -16,6 +16,12 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from fantasy_investing.serializers import PortfolioSerializer, PortfolioFormSerializer
 from fantasy_investing.models import Portfolio
+<<<<<<< HEAD
+from fantasy_investing.serializers import StockPriceSerializer
+from urllib.request import urlopen
+import requests
+=======
+>>>>>>> 1b5c3389d954f8e9b7b2ac160f335b5f0620a32a
 import datetime
 from fantasy_investing.models import Investor, Stock
 import pdb

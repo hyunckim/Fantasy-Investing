@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from fantasy_investing.models import Stock, Portfolio, Investor, User
 from yahoo_finance import Share
+import requests
 
 
 class StockSerializer(serializers.ModelSerializer):
