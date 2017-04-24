@@ -265,7 +265,7 @@ class Company extends React.Component {
       let count = 0;
       if (data) {
         for (let i = 0; i < data.length; i++) {
-          seriesDataMap.data.push({x: count, y: data[data.length-1-i].value });
+          seriesDataMap.data.push({x: count, y: (Math.round(data[data.length-1-i].value * 100) / 100) });
           seriesDataMap.date.push(data[data.length-1-i].date);
           count++;
         }
