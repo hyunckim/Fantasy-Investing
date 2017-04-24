@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { createStock, updateStock, deleteStock, receiveStockErrors,
   removeStockErrors}
   from '../../actions/stock_actions';
-import { fetchCompany } from "../../actions/company_actions";
 import { updateInvestor } from "../../actions/investor_actions";
 import TradeForm from './trade_form';
 
@@ -34,8 +33,7 @@ const mapDispatchToProps = (dispatch, { location }) => {
     deleteStock: stockId => dispatch(deleteStock(stockId)),
     removeStockErrors: () => dispatch(removeStockErrors()),
     receiveStockErrors: errors => dispatch(receiveStockErrors(errors)),
-    updateInvestor: investor => dispatch(updateInvestor(investor)),
-    fetchCompany: ticker => dispatch(fetchCompany(ticker))
+    updateInvestor: investor => dispatch(updateInvestor(investor))
   };
 };
 

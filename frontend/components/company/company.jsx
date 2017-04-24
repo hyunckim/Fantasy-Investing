@@ -6,23 +6,96 @@ class Company extends React.Component {
   constructor(props) {
     super(props);
     this.state = {news : ""};
+    this.data = {};
   }
 
   componentDidMount() {
-    this.props.fetchCompany();
+    // this.props.fetchCompany();
     this.props.fetchPortfolios();
+    this.fetchData(this.props.ticker);
     this.receiveNews(this.props.ticker);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.company && nextProps.company) {
-      this.props.fetchCompany();
-      this.receiveNews(nextProps.ticker);
-    } else if ( this.props.params.ticker !== nextProps.params.ticker ) {
-      nextProps.fetchCompany();
+    if ( this.props.params.ticker !== nextProps.params.ticker ) {
+      this.fetchData(nextProps.ticker);
       this.receiveNews(nextProps.ticker);
     }
   }
+
+  fetchData(ticker, index = 0) {
+    let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3", 
+      "0f51c94416c5a029ced069c9c445bcf4", 
+      "77a9accfe589ee1bde92b347cd7243bf", 
+      "00c96699cb9905e2e93939af22fd255d", 
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130"
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b", 
+      "dfb23653432156bdbf868393255d9f3d", 
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44", 
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67"
+      ];
+    let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,forward_dividend_rate,forward_dividend_yield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
+    let today = new Date();
+    let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    let yearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+    let startDate = `${yearAgo.getFullYear()}-${yearAgo.getMonth() + 1}-${yearAgo.getDate()}`;
+
+    $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/data_point?identifier=${ticker}&item=${items}`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.fetchData(ticker, index + 1);
+          } else {
+            this.handleCompanyData(res);
+          }
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/historical_data?identifier=${ticker}&item=adj_close_price&start_date=${startDate}&end_date=${endDate}&page_size=350`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.fetchData(ticker, index + 1);
+          } else {
+            this.handlePriceData(res);
+          }
+        }
+    });
+  }
+
+  handleCompanyData(data) {
+    for (let i = 0; i < data.data.length; i++) {
+      let ticker = data.data[i].identifier;
+      if (!this.data[ticker]) {
+        this.data[ticker] = {};
+      }
+      this.data[ticker][data.data[i].item] = data.data[i].value;
+    }
+    this.setState({data:true});
+  }
+
+  handlePriceData(data) {
+    this.data['historical'] = data.data;
+  }
+
 
   numberWithCommas (num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
@@ -44,20 +117,41 @@ class Company extends React.Component {
     };
   }
 
-  receiveNews(ticker) {
-    let username = "d6166222f6cd23d2214f20c0de1d4cc3";
-    let password = "6fbb48d898d18930d6fc1e2d4e1bd54b";
-    let auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
-
+  receiveNews(ticker, index = 0) {
+    let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3", 
+      "0f51c94416c5a029ced069c9c445bcf4", 
+      "77a9accfe589ee1bde92b347cd7243bf", 
+      "00c96699cb9905e2e93939af22fd255d", 
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130"
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b", 
+      "dfb23653432156bdbf868393255d9f3d", 
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44", 
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67"
+      ];
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}`,
       dataType: 'json',
       headers: {
-        "Authorization": "Basic " + btoa(username + ":" + password)
+        "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
       },
       success: (res) => {
-        this.setState({ news: res.data.slice(0, 7) });
+        if (res.missing_access_codes) {
+          this.receiveNews(ticker, index + 1);
+        } else {
+          this.setState({ news: res.data.slice(0, 7) });
+        }
+      },
+      error: (res) => {
+        this.receiveNews(ticker, index + 1);
       }
     });
   }
@@ -92,14 +186,12 @@ class Company extends React.Component {
   render() {
     let title;
     let price;
-    let earningShare;
+    let priceChange;
     let percentChange;
     let ticker;
     let volume;
     let prevClose;
-    let dividend;
-    let yearHigh;
-    let yearLow;
+    let dividendYield;
     let pastYearInfo;
     let sample;
     let open;
@@ -107,64 +199,47 @@ class Company extends React.Component {
     let fiftytwoWeekLow;
     let marketCap;
     let dividendShare;
-    let fiftyDayMovingAvg;
-    let twoHundredDayMovingAvg;
     let ebitda;
     let eps;
     let avgVolume;
     let forwardPE;
-    let peg;
     let pricePerSale;
     let pricePerBook;
-    let shortRatio;
     let newsContent;
     let watchlists;
     let daysLow;
     let daysHigh;
+    let evToEbitda;
+    let revenue;
 
-    if (this.props.company.title !== undefined ) {
-      title = this.props.company.title;
-      price = this.props.company.price.toFixed(2);
-      earningShare = this.props.company.earning_share;
-      percentChange = this.props.company.percent_change;
-      ticker = this.props.company.ticker;
-      volume = this.numberWithCommas(this.props.company.volume);
-      prevClose = this.props.company.prev_close.toFixed(2 );
-      if (this.props.company.dividend === null) {
-        dividend = "N/A";
-      } else {
-        dividend = this.props.company.dividend.toFixed(2);
-      }
-      yearHigh = this.props.company.year_high;
-      yearLow = this.props.company.year_low;
-      pastYearInfo = jQuery.extend(true, [], this.props.company.past_year_info);
-      if (this.props.company.open !== null) {
-        open = this.props.company.open.toFixed(2);
-      } else { this.props.fetchCompany(); }
-      fiftytwoWeekHigh = this.props.company.fiftytwo_week_high.toFixed(2);
-      fiftytwoWeekLow = this.props.company.fiftytwo_week_low.toFixed(2);
-      marketCap = this.props.company.market_cap;
-      if (this.props.company.dividend_share === null) {
-        dividendShare = "N/A";
-      } else {
-        dividendShare = this.props.company.dividend_share.toFixed(2);
-      }
-      fiftyDayMovingAvg = this.props.company.fifty_day_moving_avg;
-      twoHundredDayMovingAvg = this.props.company.two_hundred_day_moving_avg;
-      ebitda = this.props.company.ebitda;
-      eps = this.props.company.EPS_next_year;
-      avgVolume = this.numberWithCommas(this.props.company.avg_volume);
-      forwardPE = Math.round( this.props.company.EPS_estimate_next_year * 10 ) / 10;
-      peg = Math.round( this.props.company.earnings_growth_ratio * 10 ) / 10;
-      pricePerSale = Math.round( this.props.company.price_per_sale * 10 ) / 10;
-      pricePerBook = Math.round( this.props.company.price_per_book * 10 ) / 10;
-      shortRatio = Math.round( this.props.company.short_ratio * 10 ) / 10;
-      if (this.props.company.days_low) {
-        daysLow = this.props.company.days_low.toFixed(2);
-      }
-      if (this.props.company.days_high) {
-        daysHigh = this.props.company.days_high.toFixed(2);
-      }
+    if (this.data[this.props.ticker] ) {
+      title = this.data[this.props.ticker]['name'];
+      price = (Math.round(this.data[this.props.ticker]['last_price'] * 100) / 100).toFixed(2);
+      priceChange = (this.data[this.props.ticker]['change']).toFixed(2);
+      percentChange = Math.round(this.data[this.props.ticker]['change'] /
+        (this.data[this.props.ticker]['last_price'] -
+        this.data[this.props.ticker]['change']) * 10000) / 100;
+      ticker = this.props.ticker;
+      volume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['adj_volume']));
+      prevClose = (Math.round((this.data[this.props.ticker]['last_price'] - this.data[this.props.ticker]['change']) * 100) / 100).toFixed(2);
+      dividendYield = (Math.round(this.data[this.props.ticker]['forward_dividend_yield']* 1000) / 10).toFixed(2);
+      open = (Math.round(this.data[this.props.ticker]['adj_open_price'] * 100) / 100).toFixed(2);
+      fiftytwoWeekHigh = (Math.round(this.data[this.props.ticker]['52_week_high'] * 100) / 100).toFixed(2);
+      fiftytwoWeekLow = (Math.round(this.data[this.props.ticker]['52_week_low'] * 100) / 100).toFixed(2);
+      marketCap = (this.data[this.props.ticker]['marketcap'] / 1000000000).toFixed(1);
+      dividendShare = (this.data[this.props.ticker]['forward_dividend_rate']).toFixed(2);
+      revenue = (this.data[this.props.ticker]['totalrevenue'] / 1000000000).toFixed(1);
+      ebitda = (this.data[this.props.ticker]['ebitda'] / 1000000000).toFixed(1);
+      eps = (this.data[this.props.ticker]['dilutedeps']).toFixed(2);
+      avgVolume = this.numberWithCommas(Math.round(this.data[this.props.ticker]['average_daily_volume']));
+      forwardPE = (Math.round(this.data[this.props.ticker]['pricetonextyearearnings'] * 10) / 10).toFixed(1);
+      pricePerSale = (Math.round(this.data[this.props.ticker]['pricetonextyearrevenue'] * 10) / 10).toFixed(1);
+      pricePerBook = (Math.round(this.data[this.props.ticker]['pricetobook'] * 10) / 10).toFixed(1);
+      evToEbitda = (Math.round(this.data[this.props.ticker]['evtoebitda'] * 10) / 10).toFixed(1);
+      daysLow = (Math.round(this.data[this.props.ticker]['adj_low_price'] * 100) / 100).toFixed(2);
+      daysHigh = (Math.round(this.data[this.props.ticker]['adj_high_price'] * 100) / 100).toFixed(2);
+    }
+
       let seriesDataMap = {};
       let config = {};
       config.xAxis = "date";
@@ -176,8 +251,9 @@ class Company extends React.Component {
       config.title = "1-year Price History";
       config.title2 = "1-week Price History";
 
-      let data = pastYearInfo;
+      let data = this.data['historical'];
       let color = "orange";
+
           seriesDataMap = {
             color: color,
             name: ticker,
@@ -188,11 +264,12 @@ class Company extends React.Component {
       let yAxisType = "";
 
       let count = 0;
-      for (let i = 0; i < data.length; i++) {
-        seriesDataMap.data.push({x: count, y: data[data.length-1-i].close });
-        seriesDataMap.date.push(data[data.length-1-i].date);
-        count++;
-      }
+      if (data) {
+        for (let i = 0; i < data.length; i++) {
+          seriesDataMap.data.push({x: count, y: data[data.length-1-i].value });
+          seriesDataMap.date.push(data[data.length-1-i].date);
+          count++;
+        }
 
       let seriesData = [];
       let darray = seriesDataMap.data;
@@ -222,59 +299,74 @@ class Company extends React.Component {
         $('#canvas-svg2').find('.chart').remove();
       }
 
-      $('<div class="chart"></div>').appendTo($(".chart_container"));
-      $('<div class="y_axis"></div>').appendTo($(".chart_container"));
-      $('<div class="x_axis"></div>').appendTo($(".chart_container"));
-
-      if ($('#canvas-svg').find('.chart')[0]) {
-        let graph = new Rickshaw.Graph( {
-          element: $('#canvas-svg').find('.chart')[0],
-          width: width - margin.left - margin.right,
-          height: height - margin.top - margin.bottom,
-          min: "auto",
-          renderer: 'line',
-          series: seriesData
-        } );
-
-        graph.render();
-
-        let commaFormat = d3.format("0,000");
-
-        let hoverDetail = new Rickshaw.Graph.HoverDetail( {
-          graph: graph,
-          formatter: function(series, x, y) {
-            let content = ": $" + commaFormat(y);
-            let date = series.date[x];
-            return date + content;
-          }
-        } );
-
-        let shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
-          graph: graph
-        } );
-
-        let axes = new Rickshaw.Graph.Axis.Time( {
-          graph: graph
-        } );
+        // adjust height
+        if (config.title !== '') {
+          $("#canvas-svg .title").show();
+          $("#canvas-svg .title").html(config.title);
+          height -= $("#canvas-svg .title").height();
+        }
 
         function yFormat(n) {
           return Rickshaw.Fixtures.Number.formatKMBT(n);
         }
 
-        let yAxis = new Rickshaw.Graph.Axis.Y({
-          graph: graph,
-          orientation: 'left',
-          tickFormat: yFormat,
-          element: $('#canvas-svg').find('.y_axis')[0]
-        });
+        $('<div class="chart"></div>').appendTo($(".chart_container"));
+        $('<div class="y_axis"></div>').appendTo($(".chart_container"));
+        $('<div class="x_axis"></div>').appendTo($(".chart_container"));
 
-        let format = function(n) {
-          if (data[data.length-1-n]) {
-            return data[data.length-1-n][config.xAxis];
-          } else {
-            return "";
+        if ($('#canvas-svg').find('.chart')[0]) {
+          let graph = new Rickshaw.Graph( {
+            element: $('#canvas-svg').find('.chart')[0],
+            width: width - margin.left - margin.right,
+            height: height - margin.top - margin.bottom,
+            min: "auto",
+            renderer: 'line',
+            series: seriesData
+          } );
+
+          graph.render();
+
+          let commaFormat = d3.format("0,000");
+
+          let hoverDetail = new Rickshaw.Graph.HoverDetail( {
+            graph: graph,
+            formatter: function(series, x, y) {
+              let content = ": $" + commaFormat(y);
+              let date = series.date[x];
+              return date + content;
+            }
+          } );
+
+          let shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+            graph: graph
+          } );
+
+          let axes = new Rickshaw.Graph.Axis.Time( {
+            graph: graph
+          } );
+
+          function yFormat(n) {
+            if (yAxisType === "$") {
+              return Rickshaw.Fixtures.Number.formatKMBT(n);
+            } else {
+              return Rickshaw.Fixtures.Number.formatKMBT(n);
+            }
           }
-        }
+
+          let yAxis = new Rickshaw.Graph.Axis.Y({
+            graph: graph,
+            orientation: 'left',
+            tickFormat: yFormat,
+            element: $('#canvas-svg').find('.y_axis')[0]
+          });
+
+          let format = function(n) {
+            if (data[data.length-1-n]) {
+              return data[data.length-1-n][config.xAxis];
+            } else {
+              return "";
+            }
+          }
 
         let xAxis = new Rickshaw.Graph.Axis.X( {
           graph: graph,
@@ -428,11 +520,12 @@ class Company extends React.Component {
         });
       }
     }
+
     let change;
     if (percentChange) {
-      if (percentChange[0] === "-") {
+      if (percentChange < 0) {
         change = "portfolio-red";
-      } else { change = "portfolio-green"; }
+      } else { change = "portfolio-green";}
     }
 
     return (
@@ -441,7 +534,7 @@ class Company extends React.Component {
           <div className="company-header">
             <div className="company-name-price">
               <span className="company-title">{ title } { ticker }</span>
-              <span className="company-price">${ price } <span className={change}>({ percentChange })</span></span>
+              <span className="company-price">${ price } <span className={change}>{priceChange}  ({ percentChange })%</span></span>
             </div>
             <div className="watchlist-button">
               <div className='watchlist-dropdown'>
@@ -481,7 +574,7 @@ class Company extends React.Component {
             </div>
             <div className="company-nums">
               <p >Market Cap</p>
-              <p className='value'>${ marketCap }</p>
+              <p className='value'>${ marketCap }Bn</p>
             </div>
             <div className="company-nums">
               <p>Volume</p>
@@ -497,19 +590,15 @@ class Company extends React.Component {
             </div>
             <div className="company-nums">
               <p>Dividend Yield</p>
-              <p className='value'>{ dividend }%</p>
+              <p className='value'>{ dividendYield }%</p>
             </div>
             <div className="company-nums">
               <p>Trailing EBITDA</p>
-              <p className='value'>${ ebitda }</p>
+              <p className='value'>${ ebitda }Bn</p>
             </div>
             <div className="company-nums">
-              <p>50-day Moving Avg</p>
-              <p className='value'>${ fiftyDayMovingAvg }</p>
-            </div>
-            <div className="company-nums">
-              <p>200-day Moving Avg</p>
-              <p className='value'>${ twoHundredDayMovingAvg }</p>
+              <p>Revenue</p>
+              <p className='value'>${ revenue }Bn</p>
             </div>
             <br></br>
             <div className="company-nums">
@@ -517,8 +606,8 @@ class Company extends React.Component {
               <p className='value'>{ forwardPE }x</p>
             </div>
             <div className="company-nums">
-              <p>PEG</p>
-              <p className='value'>{ peg }x</p>
+              <p>EV/EBITDA</p>
+              <p className='value'>{ evToEbitda }x</p>
             </div>
             <div className="company-nums">
               <p>Price / Sales</p>
@@ -528,11 +617,6 @@ class Company extends React.Component {
               <p>Price / Book</p>
               <p className='value'>{ pricePerBook }x</p>
             </div>
-            <div className="company-nums">
-              <p>Short Ratio</p>
-              <p className='value'>{ shortRatio }%</p>
-            </div>
-            <br/>
           </div>
           <div className = "company-graphs">
             <div id="canvas-svg2">

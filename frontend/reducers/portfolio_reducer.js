@@ -1,4 +1,4 @@
-import { RECEIVE_PORTFOLIOS, RECEIVE_PORTFOLIO, REMOVE_PORTFOLIO} from '../actions/portfolio_actions';
+import { RECEIVE_PORTFOLIOS, RECEIVE_PORTFOLIO, REMOVE_PORTFOLIO, CLEAR_PORTFOLIO} from '../actions/portfolio_actions';
 import { CREATE_STOCK, UPDATE_STOCK, REMOVE_STOCK } from '../actions/stock_actions';
 import { merge } from 'lodash';
 
@@ -58,6 +58,8 @@ const PortfolioReducer = (state = [], action) => {
             }
           }
           return nextState;
+          case CLEAR_PORTFOLIO:
+            return [];
         default:
           return state;
     }

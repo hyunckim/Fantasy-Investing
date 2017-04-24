@@ -36,19 +36,11 @@ tbody tr:nth-child(2n) {
 tbody tr:last-child td {
   border-bottom:none;
   background-color: inherit;
+  color: inherit;
 }
 
-/*tbody:hover > tr td {
-  opacity: 0.5;
-}*/
-
-/*tbody:hover > tr:hover td {
-  text-shadow: none;
-  opacity: 1.0;
-  color: inherit;
-}*/
-
-.total-row {
+#total-row {
   font-weight: bold;
   background-color: #ce9e62;
+  color: black;
 }

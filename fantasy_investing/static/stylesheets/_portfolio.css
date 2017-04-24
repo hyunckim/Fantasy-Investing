@@ -118,8 +118,66 @@
 
 .portfolio-red {
   color: rgb(222, 15, 0);
+
 }
+
+.company-content .portfolio-green {
+  color: green;
+  background: #F6F2F3;
+  border-radius: 1px;
+  opacity: .5;
+}
+
+.company-content .portfolio-red {
+  color: rgb(222, 15, 0);
+  background: #F6F2F3;
+  border-radius: 1px;
+  opacity: .5;
+}
+
 
 #portfolio-change {
   margin-left: 50px;
 }
+
+.loading{
+  width: 80%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-right:10%;
+  margin-left: 10%;
+  /*background-image: url(https://s3-us-west-1.amazonaws.com/fantasyinvesting-dev/loading+wallpaper.jpg);
+  background-size: cover;  
+  opacity: 0.5;*/
+  /*border: 1px solid white;*/
+
+
+}
+
+.loading h1{
+   position: absolute;
+    font-size: 7vh;
+    top: 0;
+    color: white;
+    margin-top: 7%;
+    line-height: 46px;
+    opacity: 1;
+
+}
+
+.fa-spinner {
+  align-self: center;
+  font-size: 150px;
+  color: white;
+  animation-name: spin;
+  animation-duration: .9s;
+  animation-iteration-count: infinite;
+  margin: 25px;
+      opacity: 1;
+
+}
+
