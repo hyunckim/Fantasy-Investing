@@ -11,11 +11,62 @@ class TradeForm extends React.Component {
     this.updateBalance = this.updateBalance.bind(this);
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.removeStockErrors();
+    let price = undefined;
+    let today = new Date();
+    if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
+        today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
+        this.fetchData(this.state.ticker.toUpperCase());
+    } else {
+      this.props.receiveStockErrors("The U.S. equity market is currently closed");
+    }
+  }
+
+  fetchData(ticker, index = 0) {
+    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
+    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
+
+    $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/data_point?identifier=${ticker}&item=last_price`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.fetchData(ticker, index + 1);
+          } else {
+            this.handlePromise(res);
+          }
+        }
+    });
+  }
+
+  handlePromise(res) {
+    let price = res.value;
+    let existingPosition = undefined;
+    for (let i = 0; i < this.props.currentStocks.length; i++) {
+      if (this.props.currentStocks[i].ticker === this.state.ticker.toUpperCase()) {
+        existingPosition = this.props.currentStocks[i];
+        break;
+      }
+    }
+
+    if (this.state.action === "Buy") {
+      this.buyStock(existingPosition, price);
+    } else if (this.state.action === "Sell") {
+      this.sellStock(existingPosition, price);
+    }
+  }
+
   buyStock(existingPosition, price) {
     if (parseInt(this.props.balance) >= (price * parseInt(this.state.number_of_shares))) {
 
       let purchaseInfo = {
-        ticker: this.state.ticker,
+        ticker: this.state.ticker.toUpperCase(),
       };
 
       let action = "";
@@ -53,10 +104,10 @@ class TradeForm extends React.Component {
   }
 
   sellStock(existingPosition, price) {
-    let newBalance = Math.round((parseInt(this.props.balance) +
-      (price * parseInt(this.state.number_of_shares))));
 
     if (existingPosition) {
+      let newBalance = Math.round((parseInt(this.props.balance) +
+        (price * parseInt(this.state.number_of_shares))));
       if (parseInt(this.state.number_of_shares) < parseInt(existingPosition.number_of_shares)) {
         let saleInfo = {
           id: existingPosition.id,
@@ -80,38 +131,6 @@ class TradeForm extends React.Component {
     this.props.updateInvestor( {id: this.props.investor.id, balance: newBalance});
   }
 
-  handlePromise(res) {
-    let price = res.price;
-    let existingPosition = undefined;
-    for (let i = 0; i < this.props.currentStocks.length; i++) {
-      if (this.props.currentStocks[i].ticker === this.state.ticker.toUpperCase()) {
-        existingPosition = this.props.currentStocks[i];
-        break;
-      }
-    }
-
-    if (this.state.action === "Buy") {
-
-      this.buyStock(existingPosition, price);
-    } else if (this.state.action === "Sell") {
-      this.sellStock(existingPosition, price);
-    }
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.removeStockErrors();
-    let price = undefined;
-    let today = new Date();
-    if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
-        today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
-        fetchStockPrice(this.state.ticker.toUpperCase()).then(res => this.handlePromise(res));
-    } else {
-      this.props.receiveStockErrors("The U.S. equity market is currently closed");
-    }
-
-  }
-
   update(field) {
     return e => {
       this.setState({[field]: e.target.value});
@@ -119,7 +138,6 @@ class TradeForm extends React.Component {
   }
 
   render() {
-
 
     return (
       <div className="trade-form-container">
@@ -138,13 +156,11 @@ class TradeForm extends React.Component {
           <label> Symbol
             <input className="form-symbol" onChange={this.update("ticker")} placeholder='Ex:MSFT'/>
           </label>
-
           <label> Quantity
             <input className="form-shares" onChange={this.update('number_of_shares')} placeholder='# Of Shares' />
           </label>
 
-          <input type="submit" id="submit-button" className="form-submit-button" value="Submit"
-            onSubmit={this.handleSubmit} />
+          <input type="submit" id="submit-button" className="form-submit-button" value="Submit"/>
         </form>
         <div className="trade-form-popup">
 
