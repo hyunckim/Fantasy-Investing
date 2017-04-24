@@ -54,10 +54,6 @@
   min-width: 200px;
 }
 
-#canvas-svg {
-  background: #4F6E7C;
-}
-
 .line {
   fill: none;
   stroke: #ce9e62;
@@ -94,6 +90,9 @@
   text-align: left;
   width: 23vw;
   align-self: center;
+  max-height: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .news-content {
