@@ -118,7 +118,23 @@
 
 .portfolio-red {
   color: rgb(222, 15, 0);
+
 }
+
+.company-content .portfolio-green {
+  color: green;
+  background: #F6F2F3;
+  border-radius: 1px;
+  opacity: .5;
+}
+
+.company-content .portfolio-red {
+  color: rgb(222, 15, 0);
+  background: #F6F2F3;
+  border-radius: 1px;
+  opacity: .5;
+}
+
 
 #portfolio-change {
   margin-left: 50px;

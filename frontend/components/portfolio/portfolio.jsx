@@ -69,9 +69,24 @@ class Portfolio extends React.Component {
     }
 
     fetchData(tickers, items, index = 0) {
-      let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
-      let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
-
+      let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3", 
+      "0f51c94416c5a029ced069c9c445bcf4", 
+      "77a9accfe589ee1bde92b347cd7243bf", 
+      "00c96699cb9905e2e93939af22fd255d", 
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130"
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b", 
+      "dfb23653432156bdbf868393255d9f3d", 
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44", 
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67"
+      ];
       $.ajax({
           type: "GET",
           url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,

@@ -151,3 +151,8 @@
 .watchlist-dropdown:hover .dropdown-content {
     display: block;
 }
+
+.company-graph{
+  text-align: center;
+  width: 50%vh;
+}
