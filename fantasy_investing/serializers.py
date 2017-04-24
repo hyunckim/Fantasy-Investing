@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from fantasy_investing.models import Stock, Portfolio, Investor, User
 from yahoo_finance import Share
+import requests
 
 
 # class PortfolioIndexSerializer(serializers.Serializer):
@@ -8,33 +9,50 @@ from yahoo_finance import Share
 
 class StockSerializer(serializers.ModelSerializer):
 
-    current_price = serializers.SerializerMethodField()
-    title = serializers.SerializerMethodField()
-    prev_close = serializers.SerializerMethodField()
-    change = serializers.SerializerMethodField()
-    percent_change = serializers.SerializerMethodField()
-    currency = serializers.SerializerMethodField()
-    volume = serializers.SerializerMethodField()
-    avg_daily_volume = serializers.SerializerMethodField()
-    days_range = serializers.SerializerMethodField()
-    year_range = serializers.SerializerMethodField()
-    market_cap = serializers.SerializerMethodField()
+    # current_price = serializers.SerializerMethodField()
+    # title = serializers.SerializerMethodField()
+    # prev_close = serializers.SerializerMethodField()
+    # change = serializers.SerializerMethodField()
+    # percent_change = serializers.SerializerMethodField()
+    # currency = serializers.SerializerMethodField()
+    # volume = serializers.SerializerMethodField()
+    # avg_daily_volume = serializers.SerializerMethodField()
+    # days_range = serializers.SerializerMethodField()
+    # year_range = serializers.SerializerMethodField()
+    # market_cap = serializers.SerializerMethodField()
 
     class Meta:
         model = Stock
         fields = "__all__"
 
     def get_current_price(self, obj):
-        stock = Share(obj.ticker)
-        return float(stock.get_price())
+        username = "d6166222f6cd23d2214f20c0de1d4cc3"
+        password = "6fbb48d898d18930d6fc1e2d4e1bd54b"
+
+        url = 'https://api.intrinio.com/prices'
+
+        p = { 'identifier': obj.ticker }
+        r = requests.get(url, params=p, auth=(username, password))
+
+        data_list = r.json()['data']
+
+        return data_list[0]['close']
 
     def get_title(self, obj):
         stock = Share(obj.ticker)
         return stock.get_name()
 
     def get_prev_close(self, obj):
-        stock = Share(obj.ticker)
-        return float(stock.get_prev_close())
+        username = "d6166222f6cd23d2214f20c0de1d4cc3"
+        password = "6fbb48d898d18930d6fc1e2d4e1bd54b"
+
+        url = 'https://api.intrinio.com/prices'
+
+        p = { 'identifier': obj.ticker }
+        r = requests.get(url, params=p, auth=(username, password))
+
+        data_list = r.json()['data']
+        return data_list[1]['close']
 
     def get_change(self, obj):
         stock = Share(obj.ticker)

@@ -19,6 +19,8 @@ from yahoo_finance import Share
 from fantasy_investing.serializers import PortfolioSerializer, PortfolioFormSerializer
 from fantasy_investing.models import Portfolio
 from fantasy_investing.serializers import StockPriceSerializer
+from urllib.request import urlopen
+import requests
 import datetime
 from fantasy_investing.models import Investor, Stock
 import pdb
@@ -108,6 +110,15 @@ def portfolio_detail(request, pk):
 class Company(object):
     def __init__(self, ticker, detail=False):
         company = Share(ticker)
+        username = "d6166222f6cd23d2214f20c0de1d4cc3"
+        password = "6fbb48d898d18930d6fc1e2d4e1bd54b"
+
+        url = 'https://api.intrinio.com/prices'
+
+        p = { 'identifier': ticker }
+        r = requests.get(url, params=p, auth=(username, password))
+
+        data_list = r.json()['data']
 
         if detail==True:
             end_date = datetime.date.today().strftime("%Y-%m-%d")
@@ -121,7 +132,7 @@ class Company(object):
                 past_year_info.append({ 'date': date, 'close': float('%.2f' % float(element['Close'])) })
 
             self.ticker = ticker
-            self.prev_close = company.get_prev_close()
+            self.prev_close = data_list[1]['close']
             self.year_high = company.get_year_high()
             self.year_low = company.get_year_low()
             self.change = company.get_change()
@@ -151,7 +162,7 @@ class Company(object):
             self.days_high = company.get_days_high()
 
         self.title = company.get_name()
-        self.price = company.get_price()
+        self.price = data_list[0]['close']
 
 def company_detail(request, ticker):
 

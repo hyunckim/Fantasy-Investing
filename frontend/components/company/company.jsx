@@ -63,32 +63,31 @@ class Company extends React.Component {
   }
 
   timeSince(date) {
+    let seconds = Math.floor((new Date() - new Date(date)) / 1000);
 
-  let seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    let interval = Math.floor(seconds / 31536000);
 
-  let interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) {
-    return interval + " years";
+    if (interval > 1) {
+      return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
   }
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return interval + " months";
-  }
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) {
-    return interval + " days";
-  }
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) {
-    return interval + " hours";
-  }
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) {
-    return interval + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
-}
 
   render() {
     let title;
@@ -393,7 +392,7 @@ class Company extends React.Component {
         d3.select("#canvas-svg2").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
         .style("left", (-10) + "px")
-        .style("top", (-15) + "px")
+        .style("top", (-30) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width

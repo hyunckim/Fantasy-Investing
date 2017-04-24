@@ -137,7 +137,6 @@ class Portfolio extends React.Component {
             });
         }
 
-
         if (mainPortfolio) {
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             let percentChange;
@@ -156,7 +155,7 @@ class Portfolio extends React.Component {
               <td><Link to={`company/${stock.ticker}`}>{ stock.ticker }</Link></td>
               <td>{ stock.title }</td>
               <td>{ stock.number_of_shares }</td>
-              <td>${ stock.current_price.toFixed(2) } </td>
+              <td>${ stock.current_price } </td>
               <td>{ percentChange } </td>
 
               <td>${ this.numberWithCommas(Math.round(stock.current_price * stock.number_of_shares))}</td>
@@ -339,8 +338,7 @@ class Portfolio extends React.Component {
                         {portfolioTable}
                     </div>
 
-                    <div className='piechart-container'>
-                    </div>
+
                 </div>
             );
         } else {
@@ -352,3 +350,5 @@ class Portfolio extends React.Component {
 }
 
 export default Portfolio;
+// <div className='piechart-container'>
+// </div>
