@@ -469,7 +469,8 @@ class Portfolio extends React.Component {
                     <div>
                         {portfolioTable}
                     </div>
-
+                    <div className="piechart-container">
+                    </div>
 
                 </div>
             );
