@@ -77,7 +77,8 @@ class Portfolio extends React.Component {
       "9543da974ae42ceb2724f4fc215bb83b",
       "1b4f66213e0ee9c96e1298adaf093d99",
       "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-      "cd25157222f897581b38dfa05a0dc94b"
+      "cd25157222f897581b38dfa05a0dc94b",
+      "ef2c9c791fd32dcb138fc9ca511a651c",
       ];
     let password = [
       "6fbb48d898d18930d6fc1e2d4e1bd54b",
@@ -87,7 +88,8 @@ class Portfolio extends React.Component {
       "1f91849f806fe320b31c550ebe39bae9",
       "2e11b74611f8e7a5f52f68a8e04c88b7",
       "286ce4fbedd72511eac4dd3e58831c67",
-      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e"
+      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
+      "4a9214f9a7031f8870897deb8cbdd488",
       ];
       $.ajax({
           type: "GET",
@@ -345,7 +347,7 @@ class Portfolio extends React.Component {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
-          if (percentageChange) {
+          if (percentageChange || percentageChange === 0) {
             value = (
               <div className='portfolio-performance'>
                 <p>Total Value: ${this.numberWithCommas(Math.round(totalValue))}</p>
