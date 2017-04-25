@@ -1,15 +1,17 @@
 # Fantasy Investing
 
-[Roomsurfing live][heroku]
+[Fantasy Investing live][heroku]
 
-Fantasy investing is a full-stack web application that simulates stock investing and trading. The goal of the app is allow the user to buy and sell virtual shares of companies and see their performance over time.
+[heroku]: https://fantasy-investing-app.herokuapp.com
+
+Fantasy investing is a full-stack web application that simulates stock investing and trading. The goal of the app is to allow users to buy and sell virtual shares of companies and see their performance over time.
 
 Fantasy Investing utilizes Python/Django on the backend, a PostgreSQL database, and React.js with a Redux architectural framework on the frontend.  
 
 ## Features & Implementation
 
 The main features of the app include buying and selling virtual public company shares,
-creating and updating watchlists, and reviewing information for a specific company.
+creating and updating watchlists, and reviewing information about a specific company.
 
 ### Buying and Selling Shares
 
