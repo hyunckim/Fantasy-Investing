@@ -531,6 +531,19 @@ class Company extends React.Component {
         change = "portfolio-red";
       } else { change = "portfolio-green";}
     }
+    let watchlistDropdown = (<div></div>);
+    if (watchlists && watchlists.length > 0) {
+      watchlistDropdown = (
+        <div className="watchlist-button">
+          <div className='watchlist-dropdown'>
+            <span>Add to Watchlist</span>
+            <div className="dropdown-content">
+              { watchlists }
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="company-content">
@@ -540,14 +553,7 @@ class Company extends React.Component {
               <span className="company-title">{ title } { ticker }</span>
               <span className="company-price">${ price } <span className={change}>{priceChange}  ({ percentChange })%</span></span>
             </div>
-            <div className="watchlist-button">
-              <div className='watchlist-dropdown'>
-                <span>Add to Watchlist</span>
-                <div className="dropdown-content">
-                  { watchlists }
-                </div>
-              </div>
-            </div>
+            {watchlistDropdown}
           </div>
         </div>
         <div className="company-summary">
