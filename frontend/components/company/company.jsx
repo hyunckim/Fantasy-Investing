@@ -124,7 +124,8 @@ class Company extends React.Component {
       "00c96699cb9905e2e93939af22fd255d",
       "9543da974ae42ceb2724f4fc215bb83b",
       "1b4f66213e0ee9c96e1298adaf093d99",
-      "4d28e4bb9ba48a3e05e0f7d5e03fe130"
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
+      "cd25157222f897581b38dfa05a0dc94b"
       ];
     let password = [
       "6fbb48d898d18930d6fc1e2d4e1bd54b",
@@ -133,7 +134,8 @@ class Company extends React.Component {
       "2ce4b7bb869b8c78e176ee210c20269d",
       "1f91849f806fe320b31c550ebe39bae9",
       "2e11b74611f8e7a5f52f68a8e04c88b7",
-      "286ce4fbedd72511eac4dd3e58831c67"
+      "286ce4fbedd72511eac4dd3e58831c67",
+      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e"
       ];
     $.ajax({
       type: "GET",
@@ -407,7 +409,7 @@ class Company extends React.Component {
 
         $("#canvas-svg2 .title").show();
         $("#canvas-svg2 .title").html(config.title2);
-        height -= $("#canvas-svg2 .title").height();
+
         let seriesData2 = [];
         let darray2 = seriesDataMap.data.slice(seriesDataMap.data.length-7);
           seriesData2.push({
