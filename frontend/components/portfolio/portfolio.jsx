@@ -345,7 +345,7 @@ class Portfolio extends React.Component {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
-          if (percentageChange) {
+          if (percentageChange || percentageChange === 0) {
             value = (
               <div className='portfolio-performance'>
                 <p>Total Value: ${this.numberWithCommas(Math.round(totalValue))}</p>
