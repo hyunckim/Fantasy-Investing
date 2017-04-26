@@ -29,6 +29,7 @@
 .login-button,
 .logout-button,
 .demo-button {
+  font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #F6F2F3;
   font-size: 3vh;
   margin-right: 24px;
