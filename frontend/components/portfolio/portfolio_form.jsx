@@ -43,11 +43,11 @@ class PortfolioForm extends React.Component {
             onChange={ this.updatePortfolio }
             type="text"
             placeholder="Portfolio Title"
-            value={ this.state.title } />
+            value={ this.state.title }
+            className="portfolio-form-input"/>
           <input
               type="submit"
-              id="submit-button"
-              className="form-submit-button"
+              id="portfolio-submit-button"
               value="Submit"/>
         </form>
       </div>
@@ -55,7 +55,7 @@ class PortfolioForm extends React.Component {
     if (this.state.formState) {
       formHtml = (
         <div>
-          Watchlist created!
+          {this.state.title} created!
         </div>
       );
     }
