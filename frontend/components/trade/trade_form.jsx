@@ -10,6 +10,7 @@ class TradeForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleForm = this.handleForm.bind(this);
     this.handlePromise = this.handlePromise.bind(this);
+    this.handleNewForm = this.handleNewForm.bind(this);
     this.updateBalance = this.updateBalance.bind(this);
     this.formState = "new form";
   }
@@ -191,6 +192,12 @@ class TradeForm extends React.Component {
     }
   }
 
+  handleNewForm(e) {
+    e.preventDefault();
+    this.setState({formState: "new form"});
+    this.setState({stock: this.props.stock});
+  }
+
   render() {
 
     let formHtml = (
@@ -237,7 +244,7 @@ class TradeForm extends React.Component {
       }
       formHtml = (
         <div>Your {actionWord} of {this.state.stock.number_of_shares} {this.state.stock.name} shares is complete
-          <button>Make another trade</button>
+          <button onClick={this.handleNewForm}>Make another trade</button>
         </div>);
 
     }
