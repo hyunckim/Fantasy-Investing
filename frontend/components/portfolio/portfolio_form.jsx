@@ -60,7 +60,6 @@ class PortfolioForm extends React.Component {
       );
     }
 
-
     return (
       <div>
         {formHtml}
