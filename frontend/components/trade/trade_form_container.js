@@ -18,7 +18,7 @@ const mapStateToProps = (state) => {
     balance: state.currentUser.investor.balance,
     currentStocks: currentStocks,
     stock: { ticker: "", purchase_price: "", purchase_date: "", number_of_shares: "",
-      action: ""},
+      action: "", current_price: "", name: ""},
     investor: state.currentUser.investor,
     portfolio: state.portfolio,
     error: state.errors.stock

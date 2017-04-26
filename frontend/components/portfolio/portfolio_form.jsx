@@ -37,8 +37,13 @@ class PortfolioForm extends React.Component {
             type="text"
             placeholder="Portfolio Title"
             value={ this.state.title } />
+         <input 
+            type="submit" 
+            id="submit-button" 
+            className="form-submit-button" 
+            value="Submit"
+            />
         </form>
-
       </div>
     );
   }

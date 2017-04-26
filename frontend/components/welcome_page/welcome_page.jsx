@@ -10,8 +10,8 @@ const WelcomePage = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="intro-message">
-                <h1>Welcome to Fantasy Investing</h1>
-                <h3>Stock Trade Simulator</h3>
+                <h1 className="splash-welcome">Welcome to Fantasy Investing</h1>
+                <h3 className="splash-welcome2">Stock Trade Simulator</h3>
                 </div>
               </div>
             </div>
@@ -48,7 +48,7 @@ const WelcomePage = () => {
                     <hr className="section-heading-spacer" />
                       <div className="clearfix"></div>
                       <h2 className="section-heading">Trade Shares</h2>
-                      <p className="lead">Fantasy Investing offers seamless realistic stock trading experience with up-to-date stock prices and regulated market trading time.</p>
+                      <p className="lead">Fantasy Investing offers seamless realistic stock trading experience with up-to-date stock prices during market trading time.</p>
                     </div>
                     <div className="col-lg-5 col-sm-pull-6  col-sm-6">
                       <img className="img-responsive" src="images/" alt="" />
