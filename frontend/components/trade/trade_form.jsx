@@ -235,8 +235,8 @@ class TradeForm extends React.Component {
           <div>
             <h3 className='trade-form-title'>Confirm your order</h3>
           </div>
-          <div className='confirmation-message'>You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.name} at ${this.state.stock.current_price} / share
-
+          <div className='confirmation-message'>
+            You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.name} at ${this.state.stock.current_price} / share
             <div className='trade-confirmation-buttons'>
               <button onClick={this.handleSubmit}>Confirm trade</button>
               <button onClick={() => this.setState({formState: "new form"})}>Go Back</button>
@@ -250,9 +250,16 @@ class TradeForm extends React.Component {
         actionWord = "purchase";
       }
       formHtml = (
-        <div>Your {actionWord} of {this.state.stock.number_of_shares} {this.state.stock.name} shares is complete
-          <button onClick={this.handleNewForm}>Make another trade</button>
+        <div>
+          <div>
+            <h3 className='trade-form-title'>Order confirmation</h3>
+          </div>
+          <div className='confirmation-message'>Your {actionWord} of {this.state.stock.number_of_shares} {this.state.stock.name} shares is complete
+            <button id="another-trade-button"
+              onClick={this.handleNewForm}>Make another trade</button>
+          </div>
         </div>);
+
     }
     return (
       <div className="trade-form-container">
