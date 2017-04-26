@@ -207,18 +207,18 @@ class TradeForm extends React.Component {
           </div>
           <p className="trade-form-errors">{this.props.error}</p>
           <form className="trade-form" onSubmit={this.handleForm}>
-            <label> Action
+            <label id="action-label"> Action
               <select className="trade-action" onChange={this.update('action')} value={this.state.stock.action}>
                 <option value=""></option>
                 <option value="Buy">Buy</option>
                 <option value="Sell">Sell</option>
               </select>
             </label>
-            <label> Symbol
+            <label id="symbol-label"> Symbol
               <input className="form-symbol" onChange={this.update("ticker")}
                 placeholder='Ex:MSFT' value={this.state.stock.ticker}/>
             </label>
-            <label> Quantity
+            <label id='quantity-label'> Quantity
               <input className="form-shares" onChange={this.update('number_of_shares')}
                 placeholder='# Of Shares' value={this.state.stock.number_of_shares}/>
             </label>
@@ -231,12 +231,19 @@ class TradeForm extends React.Component {
     if (this.state.formState === "confirm trade") {
 
       formHtml = (
-        <div>You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.name} at ${this.state.stock.current_price} / share
-          <div className='trade-confirmation-buttons'>
-            <button onClick={this.handleSubmit}>Confirm trade</button>
-            <button onClick={() => this.setState({formState: "new form"})}>Go Back</button>
+        <div>
+          <div>
+            <h3 className='trade-form-title'>Confirm your order</h3>
           </div>
-        </div>);
+          <div className='confirmation-message'>You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.name} at ${this.state.stock.current_price} / share
+
+            <div className='trade-confirmation-buttons'>
+              <button onClick={this.handleSubmit}>Confirm trade</button>
+              <button onClick={() => this.setState({formState: "new form"})}>Go Back</button>
+            </div>
+          </div>
+        </div>
+        );
     } else if (this.state.formState === "trade complete") {
       let actionWord = "sale";
       if (this.state.stock.action === "Buy") {
