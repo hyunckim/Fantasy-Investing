@@ -246,7 +246,6 @@ class TradeForm extends React.Component {
         <div>Your {actionWord} of {this.state.stock.number_of_shares} {this.state.stock.name} shares is complete
           <button onClick={this.handleNewForm}>Make another trade</button>
         </div>);
-
     }
     return (
       <div className="trade-form-container">

@@ -300,7 +300,6 @@ class Portfolio extends React.Component {
             if (totalDailyChange === "-0.0") {
               totalDailyChange = "0.0";
             }
-            debugger;
             if (percentageChange < 0 && percentageChange > -0.1) {
               percentageChange = 0;
             }
