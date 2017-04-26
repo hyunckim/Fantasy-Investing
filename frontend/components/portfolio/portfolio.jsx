@@ -9,8 +9,9 @@ class Portfolio extends React.Component {
     constructor(props) {
       super(props);
         this.state = {
-            currentPortfolio: undefined,
-            data: false
+            currentPortfolio: this.props.portfolio[0],
+            data: false,
+            news: ""
         };
         this.data = {};
         this.handleClick = this.handleClick.bind(this);
@@ -18,15 +19,26 @@ class Portfolio extends React.Component {
         this.handleData = this.handleData.bind(this);
         this.handleCompanyData = this.handleCompanyData.bind(this);
         this.positionsPieChart = this.positionsPieChart.bind(this);
+        this.receiveNews = this.receiveNews.bind(this);
+        this.timeSince = this.timeSince.bind(this);
     }
 
     componentDidMount() {
       let stockTicker = [];
-      this.props.fetchPortfolios().then(portfolios => this.handleData(portfolios));
+      this.props.fetchPortfolios().then(portfolios => {
+        this.handleData(portfolios);
+        let newsStock = [];
+        for (let i = 0; i < portfolios.portfolios[0].stocks.length; i++) {
+          newsStock.push(portfolios.portfolios[0].stocks[i].ticker);
+        }
+        if (newsStock.length > 0) {
+          this.receiveNews(newsStock.join(','));
+        }
+      });
     }
 
     componentWillReceiveProps(nextProps) {
-
+      debugger;
       if (nextProps.portfolio.length === this.props.portfolio.length) {
         for (let i = 0; i < nextProps.portfolio.length; i++) {
           if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
@@ -70,27 +82,31 @@ class Portfolio extends React.Component {
 
     fetchData(tickers, items, index = 0) {
       let username = [
-      "d6166222f6cd23d2214f20c0de1d4cc3",
-      "0f51c94416c5a029ced069c9c445bcf4",
-      "77a9accfe589ee1bde92b347cd7243bf",
-      "00c96699cb9905e2e93939af22fd255d",
-      "9543da974ae42ceb2724f4fc215bb83b",
-      "1b4f66213e0ee9c96e1298adaf093d99",
-      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-      "cd25157222f897581b38dfa05a0dc94b",
-      "ef2c9c791fd32dcb138fc9ca511a651c",
-      ];
-    let password = [
-      "6fbb48d898d18930d6fc1e2d4e1bd54b",
-      "dfb23653432156bdbf868393255d9f3d",
-      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-      "2ce4b7bb869b8c78e176ee210c20269d",
-      "1f91849f806fe320b31c550ebe39bae9",
-      "2e11b74611f8e7a5f52f68a8e04c88b7",
-      "286ce4fbedd72511eac4dd3e58831c67",
-      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
-      "4a9214f9a7031f8870897deb8cbdd488",
-      ];
+        "d6166222f6cd23d2214f20c0de1d4cc3",
+        "0f51c94416c5a029ced069c9c445bcf4",
+        "77a9accfe589ee1bde92b347cd7243bf",
+        "00c96699cb9905e2e93939af22fd255d",
+        "9543da974ae42ceb2724f4fc215bb83b",
+        "1b4f66213e0ee9c96e1298adaf093d99",
+        "4d28e4bb9ba48a3e05e0f7d5e03fe130",
+        "db165ed10432182a47f5439432be10b6",
+        "9bbbdbda7c369c21969cdc108fef9a87",
+        "ef2c9c791fd32dcb138fc9ca511a651c",
+        "cd25157222f897581b38dfa05a0dc94b",
+        ];
+      let password = [
+        "6fbb48d898d18930d6fc1e2d4e1bd54b",
+        "dfb23653432156bdbf868393255d9f3d",
+        "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
+        "2ce4b7bb869b8c78e176ee210c20269d",
+        "1f91849f806fe320b31c550ebe39bae9",
+        "2e11b74611f8e7a5f52f68a8e04c88b7",
+        "286ce4fbedd72511eac4dd3e58831c67",
+        "5a59201505bf41ef2e52f5c15e123fd7",
+        "2fa44779f963571608242cfc9d216cd2",
+        "4a9214f9a7031f8870897deb8cbdd488",
+        "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
+        ];
       $.ajax({
           type: "GET",
           url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
@@ -107,6 +123,54 @@ class Portfolio extends React.Component {
           }
       });
     }
+
+    receiveNews(ticker, index = 0) {
+    let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3",
+      "0f51c94416c5a029ced069c9c445bcf4",
+      "77a9accfe589ee1bde92b347cd7243bf",
+      "00c96699cb9905e2e93939af22fd255d",
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
+      "db165ed10432182a47f5439432be10b6",
+      "9bbbdbda7c369c21969cdc108fef9a87",
+      "ef2c9c791fd32dcb138fc9ca511a651c",
+      "cd25157222f897581b38dfa05a0dc94b",
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b",
+      "dfb23653432156bdbf868393255d9f3d",
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67",
+      "5a59201505bf41ef2e52f5c15e123fd7",
+      "2fa44779f963571608242cfc9d216cd2",
+      "4a9214f9a7031f8870897deb8cbdd488",
+      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
+      ];
+
+    $.ajax({
+      type: "GET",
+      url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
+      dataType: 'json',
+      headers: {
+        "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+      },
+      success: (res) => {
+        if (res.missing_access_codes) {
+          this.receiveNews(ticker, index + 1);
+        } else {
+          this.setState({ news: res.data});
+        }
+      },
+      error: (res) => {
+        this.receiveNews(ticker, index + 1);
+      }
+    });
+  }
 
     handleCompanyData(data) {
       for (let i = 0; i < data.data.length; i++) {
@@ -140,6 +204,44 @@ class Portfolio extends React.Component {
         this.setState({ currentPortfolio: main});
     }
 
+    weekLineChart(){
+      google.charts.load('current', {packages: ['corechart', 'line']});
+      google.charts.setOnLoadCallback(drawLineColors);
+
+      function drawLineColors() {
+        let data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'Cats');
+
+        data.addRows([
+          [0, 0, 0],    [1, 10, 5],   [2, 23, 15],  [3, 17, 9],   [4, 18, 10],  [5, 9, 5],
+          [6, 11, 3],   [7, 27, 19],  [8, 33, 25],  [9, 40, 32],  [10, 32, 24], [11, 35, 27],
+          [12, 30, 22], [13, 40, 32], [14, 42, 34], [15, 47, 39], [16, 44, 36], [17, 48, 40],
+          [18, 52, 44], [19, 54, 46], [20, 42, 34], [21, 55, 47], [22, 56, 48], [23, 57, 49],
+          [24, 60, 52], [25, 50, 42], [26, 52, 44], [27, 51, 43], [28, 49, 41], [29, 53, 45],
+          [30, 55, 47], [31, 60, 52], [32, 61, 53], [33, 59, 51], [34, 62, 54], [35, 65, 57],
+          [36, 62, 54], [37, 58, 50], [38, 55, 47], [39, 61, 53], [40, 64, 56], [41, 65, 57],
+          [42, 63, 55], [43, 66, 58], [44, 67, 59], [45, 69, 61], [46, 69, 61], [47, 70, 62],
+          [48, 72, 64], [49, 68, 60], [50, 66, 58], [51, 65, 57], [52, 67, 59], [53, 70, 62],
+          [54, 71, 63], [55, 72, 64], [56, 73, 65], [57, 75, 67], [58, 70, 62], [59, 68, 60],
+          [60, 64, 56], [61, 60, 52], [62, 65, 57], [63, 67, 59], [64, 68, 60], [65, 69, 61],
+          [66, 70, 62], [67, 72, 64], [68, 75, 67], [69, 80, 72]
+        ]);
+
+        var options = {
+          hAxis: {
+            title: 'Time'
+          },
+          vAxis: {
+            title: 'Popularity'
+          },
+          colors: ['#a52714', '#097138']
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+    }
     portfolioPieChart(equity, cash) {
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
@@ -155,18 +257,22 @@ class Portfolio extends React.Component {
         let options = {
             title: 'Portfolio Breakdown',
             colors: ['#c1432e', '#ce9e62', '#4b6777' ],
-            is3D: true,
-            backgroundColor: '#2c2c2c',
+            pieHole: 0.5,
+            width: 200,
+            height: 200,
+            backgroundColor: '#FFF',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 30,
-                color: '#F5F1F2'
+                fontSize: 16,
+                color: '#676a6c'
             },
+            chartArea: {'width': '80%', 'height': '80%'},
             legend: {
+                position: 'bottom',
                 textStyle: {
-                    color: '#F5F1F2',
-                    fontSize: 16
-                }
+                    color: '#676a6c',
+                    fontSize: 12
+                },
             }
         };
         if (document.getElementById('piechart')) {
@@ -197,18 +303,22 @@ class Portfolio extends React.Component {
             colors: ['#c1432e', '#ce9e62', '#4b6777', "#AD1457", "#AB47BC",
               "#90CAF9", "#6D4C41", "#9E9E9E", "#00838F", "#9CCC65", "#A1887F",
               "#616161", "#EF9A9A", "#004D40", "#CDDC39", "#FB8C00", "#263238"],
-            is3D: true,
-            backgroundColor: '#2c2c2c',
+            pieHole: 0.5,
+            width: 200,
+            height: 200,
+            backgroundColor: '#FFF',
             titleTextStyle: {
                 fontName: "Helvetica",
-                fontSize: 30,
-                color: '#F5F1F2'
+                fontSize: 16,
+                color: '#676a6c'
             },
+            chartArea: {'width': '100%', 'height': '80%'},
             legend: {
+                position: 'bottom',
                 textStyle: {
-                    color: '#F5F1F2',
-                    fontSize: 16
-                }
+                    color: '#676a6c',
+                    fontSize: 12
+                },
             }
         };
         if (document.getElementById('positions-piechart')) {
@@ -217,6 +327,49 @@ class Portfolio extends React.Component {
         }
       }
     }
+     timeSince(date) {
+
+      let seconds = Math.floor((new Date() - new Date(date)) / 1000);
+
+      let interval = Math.floor(seconds / 31536000);
+
+      if (interval > 1) {
+        return interval + " years";
+      }
+      if (interval === 1) {
+        return interval + " year";
+      }
+      interval = Math.floor(seconds / 2592000);
+      if (interval > 1) {
+        return interval + " months";
+      }
+      if (interval === 1) {
+        return interval + " month";
+      }
+      interval = Math.floor(seconds / 86400);
+      if (interval > 1) {
+        return interval + " days";
+      }
+      interval = Math.floor(seconds / 86400);
+      if (interval === 1) {
+        return interval + " day";
+      }
+      interval = Math.floor(seconds / 3600);
+      if (interval > 1) {
+        return interval + " hours";
+      }
+      if (interval === 1) {
+        return interval + " hour";
+      }
+      interval = Math.floor(seconds / 60);
+      if (interval > 1) {
+        return interval + " minutes";
+      }
+      if (interval === 1) {
+        return interval + " minute";
+      }
+      return Math.floor(seconds) + " seconds";
+    }
 
 
     numberWithCommas (num) {
@@ -224,6 +377,29 @@ class Portfolio extends React.Component {
     }
 
     render() {
+        // Loading Screen
+        // let pie = document.getElementById('piechart');
+        // let p = document.getElementById('positions-piechart');
+
+        // if (this.props.portfolio.length === 0 && !pie) {
+        //   if (this.props.currentUser){
+        //     return (
+        //     <div className="loading">
+        //           <h1>Loading...</h1>
+        //           <i className="fa fa-spinner" aria-hidden="true"/>
+        //     </div>
+
+        //     );
+        //   }else{
+        //     return (
+        //     <div className="loading">
+        //       <h1>Thank you for using Fantasy <Investing></Investing></h1>
+        //       <i className="fa fa-spinner" aria-hidden="true"/>
+        //     </div>
+        //     );
+        //   }
+
+        //   }
         let portfolioTable;
         let portfolioIndex = [];
         let mainPortfolio = this.state.currentPortfolio;
@@ -244,11 +420,17 @@ class Portfolio extends React.Component {
 
         if (mainPortfolio && mainPortfolio.main) {
           let percentChange;
+          let totalPercentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             if (this.data[stock.ticker]) {
               percentChange = (this.data[stock.ticker]['change'] /
                 (this.data[stock.ticker]['last_price'] -
                 this.data[stock.ticker]['change']) * 100).toFixed(1);
+              totalPercentChange = (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
+                  stock.purchase_price) * 100).toFixed(1);
+              if (totalPercentChange === "-0.0") {
+                totalPercentChange = "0.0";
+              }
               return (
 
               <tr key={idx} className='lalign'>
@@ -260,10 +442,9 @@ class Portfolio extends React.Component {
                 <td>{ percentChange }% </td>
                 <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
                 <td>${ stock.purchase_price.toFixed(2) }</td>
-                <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+                <td>${ this.numberWithCommas(stock.purchase_price * stock.number_of_shares.toFixed(2)) }</td>
                 <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
-                <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
-                    stock.purchase_price) * 100).toFixed(1) }% </td>
+                <td>{ totalPercentChange }% </td>
                 </tr>);
             }
           });
@@ -271,7 +452,7 @@ class Portfolio extends React.Component {
           if (this.props.currentUser) {
             var totalValue = this.props.currentUser.investor.balance;
 
-            let unrealizedGain = 0;
+            var unrealizedGain = 0;
             let initialValue = 0;
             let costBasis = 0;
             let prevDayValue = 0;
@@ -294,6 +475,12 @@ class Portfolio extends React.Component {
               percentageChange = (unrealizedGain / initialValue) * 100;
             }
             let totalDailyChange = ((totalValue  - prevDayValue) / prevDayValue * 100).toFixed(1);
+            if (totalDailyChange === "-0.0") {
+              totalDailyChange = "0.0";
+            }
+            if (percentageChange < 0 && percentageChange > -0.1) {
+              percentageChange = 0;
+            }
             portfolioTable =
                 <table id='portfolioTable'>
                     <thead>
@@ -347,11 +534,18 @@ class Portfolio extends React.Component {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
-          if (percentageChange || percentageChange === 0) {
+          if (percentageChange && className === 'portfolio-red') {
             value = (
               <div className='portfolio-performance'>
-                <p>Total Value: ${this.numberWithCommas(Math.round(totalValue))}</p>
-                <p className={className} id="portfolio-change"> {percentageChange.toFixed(1)}%</p>
+                <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
+                <p className={className} id="portfolio-change"  >  <span>${this.numberWithCommas(Math.round(unrealizedGain))}</span>   ({percentageChange.toFixed(1)}%)</p>
+              </div>
+              );
+          }else if(percentageChange && className === 'portfolio-green') {
+            value = (
+              <div className='portfolio-performance'>
+                <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
+                <p className={className} id="portfolio-change">  <span>+${this.numberWithCommas(Math.round(unrealizedGain))}</span>   ({percentageChange.toFixed(1)}%)</p>
               </div>
               );
           }
@@ -422,11 +616,41 @@ class Portfolio extends React.Component {
           </table>);
         }
 
+
         let deleteButton = (<div></div>);
         if (mainPortfolio && !mainPortfolio.main) {
           deleteButton = (<button className = 'delete-button'
             onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>);
         }
+          let newsContent;
+          let newsHeader;
+          if (this.state.news.length) {
+            if ($('#news-scroll-header').find('.news')) {
+              $('#news-scroll-header').empty();
+            }
+            newsContent = this.state.news.map((news, idx) => {
+              return (
+                <div key={ idx } className="news-content-item">
+                  <div className="news-title">
+                    <a href={ news.url }>{ news.title }</a>
+                  </div>
+                  <div className="news-summary">
+                    <a href={ news.url }>{ news.summary}...</a>
+                  </div>
+                  <div className="news-date">
+                    { this.timeSince(news.publication_date) } ago
+                  </div>
+                </div>
+                );
+            }).slice(0, 10);
+            let elements = $();
+            this.state.news.forEach((news , idx) => {
+                elements = elements.add(`<a href=${ news.url } class='news' key=${idx}>${news.title} <div>${this.timeSince(news.publication_date)} ago</div></a>`);
+            });
+            $('#news-scroll-header').append(elements);
+            $('#news-scroll-header').marquee({duration: 15000, duplicate: true});
+          }
+
         if (this.props.currentUser && mainPortfolio) {
 
           if ($('#positions-piechart')) {
@@ -450,33 +674,45 @@ class Portfolio extends React.Component {
                 $('#piechart').append(this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,this.props.currentUser.investor.balance));
             }
             return (
-                <div className='main-portfolio-index'>
-
-                  <div className="portfolio-header">
-                    <div className='portfolio-title'>
-                      {mainPortfolio.title}
-                      {value}
+              <div className='main-portfolio-index'>
+                <ul id='news-scroll-header'></ul>
+                <div className="portfolio-header">
+                  <div className='portfolio-title'>
+                    <div className='greeting'>Welcome {this.props.currentUser.username}</div>
+                    <div className='current-portfolio-title'>
+                      <span>{mainPortfolio.title}</span>
                     </div>
-
-                    <div className = 'portfolio-buttons'>
-                      <div className='dropdown'>
-                        <span>Portfolios</span>
-                        <div className="dropdown-content">
-                          {portfolioIndex}
-                          <PortfolioModal />
-                        </div>
-                      </div>
-                      {deleteButton}
                   </div>
-                </div>
-
-                    <div>
+                  <div className='portfolio-mid'>
+                    <div className='mid-header'>
+                      { value }
+                      <div className='portfolio-buttons'>
+                        <div className='dropdown'>
+                          <span>Portfolio List</span>
+                          <div className="dropdown-content">
+                            {portfolioIndex}
+                            <PortfolioModal/>
+                          </div>
+                        </div>
+                        {deleteButton}
+                      </div>
+                    </div>
+                     <div className='portfolio-table'>
                         {portfolioTable}
-                    </div>
-                    <div className="piechart-container">
-                    </div>
+                      </div>
+                  </div>
+                  <div className='piechart-container'></div>
+
 
                 </div>
+
+                <div className='news-content'>
+                  <div className='news-content-title'>
+                    <span> Recent Fantasy Investing New </span>
+                  </div>
+                  {newsContent}
+                </div>
+              </div>
             );
         } else {
             return (
