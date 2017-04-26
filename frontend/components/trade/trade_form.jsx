@@ -16,13 +16,12 @@ class TradeForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.removeStockErrors();
-    let price = undefined;
 
-
-    this.fetchData(this.state.stock.ticker.toUpperCase());
-    // } else {
-    //   this.props.receiveStockErrors("The U.S. equity market is currently closed");
-    // }
+    if (this.state.stock.action === "Buy") {
+      this.buyStock(this.state.existingPosition, this.state.stock.current_price);
+    } else if (this.state.stock.action === "Sell") {
+      this.sellStock(this.state.existingPosition, this.state.stock.current_price);
+    }
   }
 
   fetchData(ticker, index = 0) {
@@ -68,89 +67,9 @@ class TradeForm extends React.Component {
     stock['current_price'] = res.data[0].value;
     stock['name'] = res.data[1].value;
     this.setState({stock: stock});
-  }
 
-  buyStock(existingPosition, price) {
-    if (parseInt(this.props.balance) >= (price * parseInt(this.state.stock.number_of_shares))) {
-
-      let purchaseInfo = {
-        ticker: this.state.stock.ticker.toUpperCase(),
-      };
-
-      let action = "";
-      if (existingPosition) {
-        purchaseInfo["id"] = existingPosition.id;
-        purchaseInfo["purchase_price"] = ((parseFloat(existingPosition.purchase_price) * parseInt(existingPosition.number_of_shares))
-          + (price * parseInt(this.state.stock.number_of_shares))) /
-          (parseInt(existingPosition.number_of_shares) + parseFloat(this.state.stock.number_of_shares));
-        purchaseInfo["number_of_shares"] = parseInt(existingPosition.number_of_shares)
-          + parseInt(this.state.stock.number_of_shares);
-        action = this.props.updateStock;
-      } else {
-        purchaseInfo["purchase_price"] = price;
-        let today = new Date();
-        purchaseInfo["purchase_date"] =
-          `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate()}`;
-        purchaseInfo["number_of_shares"] = this.state.stock.number_of_shares;
-        let portfolio;
-        for (let i = 0; i < this.props.portfolio.length; i++) {
-          if (this.props.portfolio[i].main === true) {
-            portfolio = this.props.portfolio[i];
-            break;
-          }
-        }
-        purchaseInfo["portfolio"] = portfolio;
-        action = this.props.createStock;
-      }
-      let newBalance = Math.round((parseInt(this.props.balance) -
-        (price * parseInt(this.state.stock.number_of_shares))));
-      this.updateBalance(newBalance);
-      action(purchaseInfo).then(hashHistory.push("/portfolio"));
-    } else {
-      this.props.receiveStockErrors("You have insufficient balance for this trade");
-    }
-  }
-
-  sellStock(existingPosition, price) {
-
-    if (existingPosition) {
-      let newBalance = Math.round((parseInt(this.props.balance) +
-        (price * parseInt(this.state.stock.number_of_shares))));
-      if (parseInt(this.state.stock.number_of_shares) < parseInt(existingPosition.number_of_shares)) {
-        let saleInfo = {
-          id: existingPosition.id,
-          number_of_shares: parseInt(existingPosition.number_of_shares)
-            - parseInt(this.state.stock.number_of_shares)
-        };
-        this.props.updateStock(saleInfo).then(hashHistory.push("/portfolio"));
-        this.updateBalance(newBalance);
-      } else if (parseInt(this.state.stock.number_of_shares) === parseInt(existingPosition.number_of_shares)) {
-        this.props.deleteStock({id: existingPosition.id});
-        this.updateBalance(newBalance);
-      } else {
-        this.props.receiveStockErrors("You are trying to sell more shares than you have");
-      }
-    } else {
-      this.props.receiveStockErrors(`You don't have any ${this.state.stock.ticker} shares to sell`);
-    }
-  }
-
-  updateBalance(newBalance) {
-    this.props.updateInvestor( {id: this.props.investor.id, balance: newBalance});
-  }
-
-  update(field) {
-    return e => {
-      let stock = this.state.stock;
-      stock[field] = e.target.value;
-      this.setState({stock: stock});
-    };
-  }
-
-  handleForm(e) {
-    e.preventDefault();
     let today = new Date();
-    this.fetchData(this.state.stock.ticker);
+
     let existingPosition = undefined;
     if (this.state.stock.action == "Sell") {
       for (let i = 0; i < this.props.currentStocks.length; i++) {
@@ -161,14 +80,11 @@ class TradeForm extends React.Component {
       }
     }
 
-    if (this.state.stock.action.length < 1) {
-      this.props.receiveStockErrors("Please select Buy or Sell");
-    } else if (today.getDay() > 5 ||
+    if (today.getDay() > 5 ||
       today.getHours() + (today.getTimezoneOffset() / 60) < 13 ||
-      today.getHours() + (today.getTimezoneOffset() / 60) > 24) {
+      today.getHours() + (today.getTimezoneOffset() / 60) > 30) {
       this.props.receiveStockErrors("The stock market is currently closed. You can trade shares between 6am and 5pm PT");
-    } else if (this.state.stock.name === 'na' ||
-      this.state.stock.name.length < 1) {
+    } else if (this.state.stock.name === 'na') {
       this.props.receiveStockErrors("You have entered an incorrect ticker. Please look up the ticker again.");
     } else if (this.state.stock.action === "Buy" &&
       this.state.stock.current_price *
@@ -179,19 +95,100 @@ class TradeForm extends React.Component {
     } else if (this.state.stock.action === "Sell" &&
       this.state.stock.number_of_shares > existingPosition.number_of_shares) {
       this.props.receiveStockErrors(`You are trying to sell more ${this.state.stock.ticker} shares than you have`);
-    }
-
-
-    else {
+    } else if (this.state.stock.name.length > 0) {
       this.setState({formState: "confirm trade"});
+      this.setState({existingPosition: existingPosition});
     }
+  }
 
-    if (this.state.stock.action === "Buy") {
-      this.buyStock(existingPosition, price);
-    } else if (this.state.stock.action === "Sell") {
-      this.sellStock(existingPosition, price);
+  buyStock(existingPosition, price) {
+
+    let purchaseInfo = {
+      ticker: this.state.stock.ticker.toUpperCase(),
+    };
+
+    let action = "";
+    debugger;
+    if (existingPosition) {
+      purchaseInfo["id"] = existingPosition.id;
+      purchaseInfo["purchase_price"] = ((parseFloat(existingPosition.purchase_price) * parseInt(existingPosition.number_of_shares))
+        + (price * parseInt(this.state.stock.number_of_shares))) /
+        (parseInt(existingPosition.number_of_shares) + parseFloat(this.state.stock.number_of_shares));
+      purchaseInfo["number_of_shares"] = parseInt(existingPosition.number_of_shares)
+        + parseInt(this.state.stock.number_of_shares);
+      action = this.props.updateStock;
+    } else {
+      purchaseInfo["purchase_price"] = price;
+      let today = new Date();
+      purchaseInfo["purchase_date"] =
+        `${today.getFullYear}-${today.getMonth() + 1}-${today.getDate()}`;
+      purchaseInfo["number_of_shares"] = this.state.stock.number_of_shares;
+      let portfolio;
+      for (let i = 0; i < this.props.portfolio.length; i++) {
+        if (this.props.portfolio[i].main === true) {
+          portfolio = this.props.portfolio[i];
+          break;
+        }
+      }
+      purchaseInfo["portfolio"] = portfolio;
+      action = this.props.createStock;
     }
+    let newBalance = Math.round((parseInt(this.props.balance) -
+      (price * parseInt(this.state.stock.number_of_shares))));
+    this.updateBalance(newBalance);
+    action(purchaseInfo).then(hashHistory.push("/portfolio"));
+  }
 
+  sellStock(existingPosition, price) {
+
+    let newBalance = Math.round((parseInt(this.props.balance) +
+      (price * parseInt(this.state.stock.number_of_shares))));
+    if (parseInt(this.state.stock.number_of_shares) < parseInt(existingPosition.number_of_shares)) {
+      let saleInfo = {
+        id: existingPosition.id,
+        number_of_shares: parseInt(existingPosition.number_of_shares)
+          - parseInt(this.state.stock.number_of_shares)
+      };
+      this.props.updateStock(saleInfo).then(hashHistory.push("/portfolio"));
+      this.updateBalance(newBalance);
+    } else if (parseInt(this.state.stock.number_of_shares) === parseInt(existingPosition.number_of_shares)) {
+      this.props.deleteStock({id: existingPosition.id});
+      this.updateBalance(newBalance);
+    }
+  }
+
+  updateBalance(newBalance) {
+    this.props.updateInvestor( {id: this.props.investor.id, balance: newBalance});
+  }
+
+  update(field) {
+    return e => {
+      let stock = this.state.stock;
+      if (field === "ticker") {
+        stock[field] = e.target.value.toUpperCase();
+      } else {
+        stock[field] = e.target.value;
+      }
+      this.setState({stock: stock});
+    };
+  }
+
+  handleForm(e) {
+    e.preventDefault();
+
+    if (this.state.stock.action.length < 1) {
+      this.props.receiveStockErrors("Please select Buy or Sell");
+    } else if (this.state.stock.ticker.length < 1) {
+      this.props.receiveStockErrors("Please enter a ticker");
+    } else if (this.state.stock.number_of_shares === "") {
+      this.props.receiveStockErrors("Please enter a the amount of shares you want to trade");
+    } else if (this.state.stock.number_of_shares < 1) {
+      this.props.receiveStockErrors("Please enter a positive integer for the number of shares you want to trade")
+    } else if (this.state.stock.number_of_shares.includes(".")) {
+      this.props.receiveStockErrors("You cannot trade partial shares")
+    } else {
+      this.fetchData(this.state.stock.ticker);
+    }
   }
 
   render() {
