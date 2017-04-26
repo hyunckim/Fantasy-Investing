@@ -17,13 +17,14 @@
   flex-direction: row;
   width: 100%;
   background: white;
-  border-bottom: 1px solid #e7eaec;
   border-top: 1px solid #e7eaec;
-  height: 430px;
+  height: 425px;
   border-color: #e7eaec;
   border-style: solid solid none;
   text-overflow: ellipsis;  
-  border-width: 2px 0 2px 0;
+  border-width: 2px 0 0;
+  border-bottom: 1px solid #e7eaec;
+
 
 }
 
@@ -126,6 +127,7 @@
 
 .dropdown-content {
   display: none;
+  margin-top: 10px;
   position: absolute;
   background-color: #F5F1F2;
   border: 1px solid #C74837;

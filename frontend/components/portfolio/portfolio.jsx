@@ -38,6 +38,7 @@ class Portfolio extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+      debugger;
       if (nextProps.portfolio.length === this.props.portfolio.length) {
         for (let i = 0; i < nextProps.portfolio.length; i++) {
           if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
@@ -518,10 +519,10 @@ class Portfolio extends React.Component {
             value = (
               <div className='portfolio-performance'>
                 <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
-                <p className={className} id="portfolio-change">  <span>${this.numberWithCommas(Math.round(unrealizedGain))}</span>   ({percentageChange.toFixed(1)}%)</p>
+                <p className={className} id="portfolio-change"  >  <span>${this.numberWithCommas(Math.round(unrealizedGain))}</span>   ({percentageChange.toFixed(1)}%)</p>
               </div>
               );
-          }else{
+          }else if(percentageChange && className === 'portfolio-green') {
             value = (
               <div className='portfolio-performance'>
                 <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
