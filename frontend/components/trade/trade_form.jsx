@@ -23,6 +23,7 @@ class TradeForm extends React.Component {
     } else if (this.state.stock.action === "Sell") {
       this.sellStock(this.state.existingPosition, this.state.stock.current_price);
     }
+    this.setState({formState: "trade complete"});
   }
 
   fetchData(ticker, index = 0) {
@@ -174,7 +175,6 @@ class TradeForm extends React.Component {
 
   handleForm(e) {
     e.preventDefault();
-    this.props.removeStockErrors();
 
     if (this.state.stock.action.length < 1) {
       this.props.receiveStockErrors("Please select Buy or Sell");
@@ -231,7 +231,15 @@ class TradeForm extends React.Component {
           </div>
         </div>);
     } else if (this.state.formState === "trade complete") {
-      formHtml = (<div>Trade complete</div>);
+      let actionWord = "sale";
+      if (this.state.stock.action === "Buy") {
+        actionWord = "purchase";
+      }
+      formHtml = (
+        <div>Your {actionWord} of {this.state.stock.number_of_shares} {this.state.stock.name} shares is complete
+          <button>Make another trade</button>
+        </div>);
+
     }
     return (
       <div className="trade-form-container">
