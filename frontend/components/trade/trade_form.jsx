@@ -48,7 +48,7 @@ class TradeForm extends React.Component {
       ];
     $.ajax({
         type: "GET",
-        url: `https://api.intrinio.com/data_point?identifier=${ticker}&item=last_price`,
+        url: `https://api.intrinio.com/data_point?identifier=${ticker}&item=last_price,name`,
         dataType: 'json',
         headers: {
           "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
@@ -64,20 +64,10 @@ class TradeForm extends React.Component {
   }
 
   handlePromise(res) {
-    let price = res.value;
-    let existingPosition = undefined;
-    for (let i = 0; i < this.props.currentStocks.length; i++) {
-      if (this.props.currentStocks[i].ticker === this.state.stock.ticker.toUpperCase()) {
-        existingPosition = this.props.currentStocks[i];
-        break;
-      }
-    }
-
-    if (this.state.stock.action === "Buy") {
-      this.buyStock(existingPosition, price);
-    } else if (this.state.stock.action === "Sell") {
-      this.sellStock(existingPosition, price);
-    }
+    let stock = this.state.stock;
+    stock['current_price'] = res.data[0].value;
+    stock['name'] = res.data[1].value;
+    this.setState({stock: stock});
   }
 
   buyStock(existingPosition, price) {
@@ -160,14 +150,46 @@ class TradeForm extends React.Component {
   handleForm(e) {
     e.preventDefault();
     let today = new Date();
+    this.fetchData(this.state.stock.ticker);
+    let existingPosition = undefined;
+    if (this.state.stock.action == "Sell") {
+      for (let i = 0; i < this.props.currentStocks.length; i++) {
+        if (this.props.currentStocks[i].ticker === this.state.stock.ticker.toUpperCase()) {
+          existingPosition = this.props.currentStocks[i];
+          break;
+        }
+      }
+    }
 
     if (this.state.stock.action.length < 1) {
       this.props.receiveStockErrors("Please select Buy or Sell");
-    } else if (today.getDay() > 5 || today.getHours() + (today.getTimezoneOffset() / 60) < 13 ||
+    } else if (today.getDay() > 5 ||
+      today.getHours() + (today.getTimezoneOffset() / 60) < 13 ||
       today.getHours() + (today.getTimezoneOffset() / 60) > 24) {
       this.props.receiveStockErrors("The stock market is currently closed. You can trade shares between 6am and 5pm PT");
-    } else {
+    } else if (this.state.stock.name === 'na' ||
+      this.state.stock.name.length < 1) {
+      this.props.receiveStockErrors("You have entered an incorrect ticker. Please look up the ticker again.");
+    } else if (this.state.stock.action === "Buy" &&
+      this.state.stock.current_price *
+      this.state.stock.number_of_shares > this.props.balance) {
+        this.props.receiveStockErrors("You have insufficient balance for this trade");
+    } else if (this.state.stock.action === "Sell" && !existingPosition) {
+      this.props.receiveStockErrors(`You don't have any ${this.state.stock.ticker} shares to sell`);
+    } else if (this.state.stock.action === "Sell" &&
+      this.state.stock.number_of_shares > existingPosition.number_of_shares) {
+      this.props.receiveStockErrors(`You are trying to sell more ${this.state.stock.ticker} shares than you have`);
+    }
+
+
+    else {
       this.setState({formState: "confirm trade"});
+    }
+
+    if (this.state.stock.action === "Buy") {
+      this.buyStock(existingPosition, price);
+    } else if (this.state.stock.action === "Sell") {
+      this.sellStock(existingPosition, price);
     }
 
   }
