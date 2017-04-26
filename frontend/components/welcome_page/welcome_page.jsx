@@ -11,7 +11,7 @@ const WelcomePage = () => {
             <div className="col-lg-12">
               <div className="intro-message">
                 <h1 className="splash-welcome">Welcome to Fantasy Investing</h1>
-                <h3 className="splash-welcome2">Stock Trade Simulator</h3>
+                <h3 className="splash-welcome2">Stock Trading Simulator</h3>
                 </div>
               </div>
             </div>
