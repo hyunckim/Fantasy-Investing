@@ -154,7 +154,7 @@ class Company extends React.Component {
         if (res.missing_access_codes) {
           this.receiveNews(ticker, index + 1);
         } else {
-          this.setState({ news: res.data.slice(0, 7) });
+          this.setState({ news: res.data.slice(0, 10) });
         }
       },
       error: (res) => {
@@ -512,7 +512,7 @@ class Company extends React.Component {
           return (
             <div key={ idx } className="news-content">
               <div className="news-summary">
-                <a href={ news.url }>{ news.summary }</a>
+                <a href={ news.url }>{ news.title }</a>
               </div>
               <div className="news-date">
                 { this.timeSince(news.publication_date) } ago
