@@ -176,7 +176,6 @@ class TradeForm extends React.Component {
 
   handleForm(e) {
     e.preventDefault();
-    debugger;
 
     if (this.state.stock.action.length < 1) {
       this.props.receiveStockErrors("Please select Buy or Sell");

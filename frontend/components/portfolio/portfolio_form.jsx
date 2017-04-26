@@ -54,8 +54,8 @@ class PortfolioForm extends React.Component {
     );
     if (this.state.formState) {
       formHtml = (
-        <div>
-          {this.state.title} created!
+        <div className='portfolio-confirmation-container'>
+          <p>{this.state.title} created!</p>
         </div>
       );
     }

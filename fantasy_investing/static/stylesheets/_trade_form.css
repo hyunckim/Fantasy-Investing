@@ -48,6 +48,7 @@
   background-size: 200px 100%;
   background-repeat: no-repeat;
   color: #4b6777;
+  padding-bottom: 5px;
 }
 
 #symbol-label {
@@ -145,8 +146,21 @@
 
 #portfolio-submit-button {
   margin-top: 60px;
+  text-align: center;
 }
 
 .portfolio-form-input {
   margin-top: 40px;
+}
+
+#portfolio-submit-button:hover {
+  cursor: pointer;
+}
+
+.portfolio-confirmation-container {
+  height: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
 }

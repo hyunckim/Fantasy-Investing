@@ -121,7 +121,6 @@ class Portfolio extends React.Component {
       this.props.fetchPortfolios();
     }
 
-
     handleClick(event){
         this.setState({ currentPortfolio: event });
     }
