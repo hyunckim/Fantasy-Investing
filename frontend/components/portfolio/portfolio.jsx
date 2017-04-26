@@ -242,11 +242,17 @@ class Portfolio extends React.Component {
 
         if (mainPortfolio && mainPortfolio.main) {
           let percentChange;
+          let totalPercentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             if (this.data[stock.ticker]) {
               percentChange = (this.data[stock.ticker]['change'] /
                 (this.data[stock.ticker]['last_price'] -
                 this.data[stock.ticker]['change']) * 100).toFixed(1);
+              totalPercentChange = (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
+                  stock.purchase_price) * 100).toFixed(1);
+              if (totalPercentChange === "-0.0") {
+                totalPercentChange = "0.0";
+              }
               return (
 
               <tr key={idx} className='lalign'>
@@ -258,10 +264,9 @@ class Portfolio extends React.Component {
                 <td>{ percentChange }% </td>
                 <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
                 <td>${ stock.purchase_price.toFixed(2) }</td>
-                <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+                <td>${ this.numberWithCommas(stock.purchase_price * stock.number_of_shares.toFixed(2)) }</td>
                 <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
-                <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
-                    stock.purchase_price) * 100).toFixed(1) }% </td>
+                <td>{ totalPercentChange }% </td>
                 </tr>);
             }
           });
@@ -292,6 +297,13 @@ class Portfolio extends React.Component {
               percentageChange = (unrealizedGain / initialValue) * 100;
             }
             let totalDailyChange = ((totalValue  - prevDayValue) / prevDayValue * 100).toFixed(1);
+            if (totalDailyChange === "-0.0") {
+              totalDailyChange = "0.0";
+            }
+            debugger;
+            if (percentageChange < 0 && percentageChange > -0.1) {
+              percentageChange = 0;
+            }
             portfolioTable =
                 <table id='portfolioTable'>
                     <thead>
