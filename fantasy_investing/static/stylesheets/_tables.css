@@ -44,16 +44,6 @@ tbody tr:last-child td {
   color: inherit;
 }
 
-/*tbody:hover > tr td {
-  opacity: 0.5;
-}*/
-
-/*tbody:hover > tr:hover td {
-  text-shadow: none;
-  opacity: 1.0;
-  color: inherit;
-}*/
-
 #total-row {
   font-weight: bold;
   background-color: #ce9e62;

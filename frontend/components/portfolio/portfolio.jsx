@@ -90,18 +90,20 @@ class Portfolio extends React.Component {
         "1b4f66213e0ee9c96e1298adaf093d99",
         "4d28e4bb9ba48a3e05e0f7d5e03fe130",
         "db165ed10432182a47f5439432be10b6",
-        "9bbbdbda7c369c21969cdc108fef9a87"
+        "9bbbdbda7c369c21969cdc108fef9a87",
+        "ef2c9c791fd32dcb138fc9ca511a651c",
         ];
       let password = [
-        "6fbb48d898d18930d6fc1e2d4e1bd54b", 
-        "dfb23653432156bdbf868393255d9f3d", 
-        "6fabe9c15bd1e7ead66b7cc3cd6b3e44", 
+        "6fbb48d898d18930d6fc1e2d4e1bd54b",
+        "dfb23653432156bdbf868393255d9f3d",
+        "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
         "2ce4b7bb869b8c78e176ee210c20269d",
         "1f91849f806fe320b31c550ebe39bae9",
         "2e11b74611f8e7a5f52f68a8e04c88b7",
         "286ce4fbedd72511eac4dd3e58831c67",
         "5a59201505bf41ef2e52f5c15e123fd7",
-        "2fa44779f963571608242cfc9d216cd2"
+        "2fa44779f963571608242cfc9d216cd2",
+        "4a9214f9a7031f8870897deb8cbdd488"
         ];
       $.ajax({
           type: "GET",
@@ -121,7 +123,6 @@ class Portfolio extends React.Component {
     }
 
     receiveNews(ticker, index = 0) {
-    
     let username = [
       "d6166222f6cd23d2214f20c0de1d4cc3", 
       "0f51c94416c5a029ced069c9c445bcf4", 
@@ -131,18 +132,20 @@ class Portfolio extends React.Component {
       "1b4f66213e0ee9c96e1298adaf093d99",
       "4d28e4bb9ba48a3e05e0f7d5e03fe130",
       "db165ed10432182a47f5439432be10b6",
-      "9bbbdbda7c369c21969cdc108fef9a87"
+      "9bbbdbda7c369c21969cdc108fef9a87",
+      "ef2c9c791fd32dcb138fc9ca511a651c",
       ];
     let password = [
-      "6fbb48d898d18930d6fc1e2d4e1bd54b", 
-      "dfb23653432156bdbf868393255d9f3d", 
-      "6fabe9c15bd1e7ead66b7cc3cd6b3e44", 
+      "6fbb48d898d18930d6fc1e2d4e1bd54b",
+      "dfb23653432156bdbf868393255d9f3d",
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
       "2ce4b7bb869b8c78e176ee210c20269d",
       "1f91849f806fe320b31c550ebe39bae9",
       "2e11b74611f8e7a5f52f68a8e04c88b7",
       "286ce4fbedd72511eac4dd3e58831c67",
       "5a59201505bf41ef2e52f5c15e123fd7",
-      "2fa44779f963571608242cfc9d216cd2"
+      "2fa44779f963571608242cfc9d216cd2",
+      "4a9214f9a7031f8870897deb8cbdd488"
       ];
 
     $.ajax({
@@ -175,8 +178,11 @@ class Portfolio extends React.Component {
       }
       this.setState({data:true});
     }
-    
-    
+
+    componentWillMount() {
+      this.props.fetchPortfolios();
+    }
+
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
@@ -390,8 +396,6 @@ class Portfolio extends React.Component {
         //   }
           
         //   }
-          
-
         let portfolioTable;
         let portfolioIndex = [];
         let mainPortfolio = this.state.currentPortfolio;
@@ -412,11 +416,17 @@ class Portfolio extends React.Component {
 
         if (mainPortfolio && mainPortfolio.main) {
           let percentChange;
+          let totalPercentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             if (this.data[stock.ticker]) {
               percentChange = (this.data[stock.ticker]['change'] /
                 (this.data[stock.ticker]['last_price'] -
                 this.data[stock.ticker]['change']) * 100).toFixed(1);
+              totalPercentChange = (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
+                  stock.purchase_price) * 100).toFixed(1);
+              if (totalPercentChange === "-0.0") {
+                totalPercentChange = "0.0";
+              }
               return (
 
               <tr key={idx} className='lalign'>
@@ -428,10 +438,9 @@ class Portfolio extends React.Component {
                 <td>{ percentChange }% </td>
                 <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
                 <td>${ stock.purchase_price.toFixed(2) }</td>
-                <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+                <td>${ this.numberWithCommas(stock.purchase_price * stock.number_of_shares.toFixed(2)) }</td>
                 <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
-                <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
-                    stock.purchase_price) * 100).toFixed(1) }% </td>
+                <td>{ totalPercentChange }% </td>
                 </tr>);
             }
           });
@@ -462,6 +471,12 @@ class Portfolio extends React.Component {
               percentageChange = (unrealizedGain / initialValue) * 100;
             }
             let totalDailyChange = ((totalValue  - prevDayValue) / prevDayValue * 100).toFixed(1);
+            if (totalDailyChange === "-0.0") {
+              totalDailyChange = "0.0";
+            }
+            if (percentageChange < 0 && percentageChange > -0.1) {
+              percentageChange = 0;
+            }
             portfolioTable =
                 <table id='portfolioTable'>
                     <thead>
@@ -682,8 +697,8 @@ class Portfolio extends React.Component {
                         {portfolioTable}
                       </div>
                   </div>
-
                   <div className='piechart-container'></div>
+
 
                 </div>
 
