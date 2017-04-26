@@ -17,10 +17,8 @@ class TradeForm extends React.Component {
     e.preventDefault();
     this.props.removeStockErrors();
     let price = undefined;
-    let today = new Date();
-    // if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
-    //     today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
-    debugger;
+
+
     this.fetchData(this.state.stock.ticker.toUpperCase());
     // } else {
     //   this.props.receiveStockErrors("The U.S. equity market is currently closed");
@@ -161,7 +159,17 @@ class TradeForm extends React.Component {
 
   handleForm(e) {
     e.preventDefault();
-    this.setState({formState: "confirm trade"});
+    let today = new Date();
+
+    if (this.state.stock.action.length < 1) {
+      this.props.receiveStockErrors("Please select Buy or Sell");
+    } else if (today.getDay() > 5 || today.getHours() + (today.getTimezoneOffset() / 60) < 13 ||
+      today.getHours() + (today.getTimezoneOffset() / 60) > 24) {
+      this.props.receiveStockErrors("The stock market is currently closed. You can trade shares between 6am and 5pm PT");
+    } else {
+      this.setState({formState: "confirm trade"});
+    }
+
   }
 
   render() {
@@ -174,8 +182,8 @@ class TradeForm extends React.Component {
           <p className="trade-form-errors">{this.props.error}</p>
           <form className="trade-form" onSubmit={this.handleForm}>
             <label> Action
-              <select className="trade-action" onChange={this.update('action')}>
-                <option value="" disabled selected></option>
+              <select className="trade-action" onChange={this.update('action')} value={this.state.stock.action}>
+                <option value=""></option>
                 <option value="Buy">Buy</option>
                 <option value="Sell">Sell</option>
               </select>
@@ -209,7 +217,6 @@ class TradeForm extends React.Component {
     } else if (this.state.formState === "trade complete") {
       formHtml = (<div>Trade complete</div>);
     }
-    debugger;
     return (
       <div className="trade-form-container">
         {formHtml}
