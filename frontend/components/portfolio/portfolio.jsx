@@ -123,6 +123,7 @@ class Portfolio extends React.Component {
     }
 
     receiveNews(ticker, index = 0) {
+<<<<<<< HEAD
     let username = [
       "d6166222f6cd23d2214f20c0de1d4cc3",
       "0f51c94416c5a029ced069c9c445bcf4",
@@ -147,7 +148,6 @@ class Portfolio extends React.Component {
       "2fa44779f963571608242cfc9d216cd2",
       "4a9214f9a7031f8870897deb8cbdd488"
       ];
-
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
@@ -530,14 +530,14 @@ class Portfolio extends React.Component {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
-          if (percentageChange && className === 'portfolio-red') {
+          if ((percentageChange || percentageChange === 0) && className === 'portfolio-red') {
             value = (
               <div className='portfolio-performance'>
                 <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
                 <p className={className} id="portfolio-change"  >  <span>${this.numberWithCommas(Math.round(unrealizedGain))}</span>   ({percentageChange.toFixed(1)}%)</p>
               </div>
               );
-          }else if(percentageChange && className === 'portfolio-green') {
+          }else if((percentageChange || percentageChange === 0) && className === 'portfolio-green') {
             value = (
               <div className='portfolio-performance'>
                 <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
