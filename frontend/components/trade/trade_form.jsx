@@ -17,12 +17,13 @@ class TradeForm extends React.Component {
     this.props.removeStockErrors();
     let price = undefined;
     let today = new Date();
-    if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
-        today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
-        this.fetchData(this.state.stock.ticker.toUpperCase());
-    } else {
-      this.props.receiveStockErrors("The U.S. equity market is currently closed");
-    }
+    // if (today.getDay() < 6 && today.getHours() + (today.getTimezoneOffset() / 60) > 12 &&
+    //     today.getHours() + (today.getTimezoneOffset() / 60) < 24) {
+    debugger;
+    this.fetchData(this.state.stock.ticker.toUpperCase());
+    // } else {
+    //   this.props.receiveStockErrors("The U.S. equity market is currently closed");
+    // }
   }
 
   fetchData(ticker, index = 0) {
@@ -150,10 +151,9 @@ class TradeForm extends React.Component {
   }
 
   update(field) {
-    debugger;
     return e => {
       let stock = this.state.stock;
-      stock.field = e.target.value;
+      stock[field] = e.target.value;
       this.setState({stock: stock});
     };
   }
