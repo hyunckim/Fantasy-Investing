@@ -20,6 +20,10 @@
   border-bottom: 1px solid #e7eaec;
   border-top: 1px solid #e7eaec;
   height: 430px;
+  border-color: #e7eaec;
+  border-style: solid solid none;
+  text-overflow: ellipsis;  
+  border-width: 2px 0 2px 0;
 
 }
 
