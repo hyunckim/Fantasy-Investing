@@ -5,7 +5,8 @@ import { fetchStockPrice } from "../../util/stock_api_util";
 class TradeForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {stock: this.props.stock, formState: "new form"};
+    this.state = {stock: this.props.stock, formState: "new form",
+      existingPosition: undefined};
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleForm = this.handleForm.bind(this);
     this.handlePromise = this.handlePromise.bind(this);
@@ -64,19 +65,18 @@ class TradeForm extends React.Component {
 
   handlePromise(res) {
     let stock = this.state.stock;
-    stock['current_price'] = res.data[0].value;
+    stock['current_price'] = Math.round(res.data[0].value * 100) / 100;
     stock['name'] = res.data[1].value;
     this.setState({stock: stock});
 
     let today = new Date();
 
     let existingPosition = undefined;
-    if (this.state.stock.action == "Sell") {
-      for (let i = 0; i < this.props.currentStocks.length; i++) {
-        if (this.props.currentStocks[i].ticker === this.state.stock.ticker.toUpperCase()) {
-          existingPosition = this.props.currentStocks[i];
-          break;
-        }
+
+    for (let i = 0; i < this.props.currentStocks.length; i++) {
+      if (this.props.currentStocks[i].ticker === this.state.stock.ticker.toUpperCase()) {
+        existingPosition = this.props.currentStocks[i];
+        break;
       }
     }
 
@@ -108,7 +108,6 @@ class TradeForm extends React.Component {
     };
 
     let action = "";
-    debugger;
     if (existingPosition) {
       purchaseInfo["id"] = existingPosition.id;
       purchaseInfo["purchase_price"] = ((parseFloat(existingPosition.purchase_price) * parseInt(existingPosition.number_of_shares))
@@ -175,6 +174,7 @@ class TradeForm extends React.Component {
 
   handleForm(e) {
     e.preventDefault();
+    this.props.removeStockErrors();
 
     if (this.state.stock.action.length < 1) {
       this.props.receiveStockErrors("Please select Buy or Sell");
@@ -183,9 +183,9 @@ class TradeForm extends React.Component {
     } else if (this.state.stock.number_of_shares === "") {
       this.props.receiveStockErrors("Please enter a the amount of shares you want to trade");
     } else if (this.state.stock.number_of_shares < 1) {
-      this.props.receiveStockErrors("Please enter a positive integer for the number of shares you want to trade")
+      this.props.receiveStockErrors("Please enter a positive integer for the number of shares you want to trade");
     } else if (this.state.stock.number_of_shares.includes(".")) {
-      this.props.receiveStockErrors("You cannot trade partial shares")
+      this.props.receiveStockErrors("You cannot trade partial shares");
     } else {
       this.fetchData(this.state.stock.ticker);
     }
@@ -218,16 +218,13 @@ class TradeForm extends React.Component {
 
             <input type="submit" id="submit-button" className="form-submit-button" value="Submit"/>
           </form>
-          <div className="trade-form-popup">
-
-          </div>
         </div>
     );
 
     if (this.state.formState === "confirm trade") {
 
       formHtml = (
-        <div>You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.ticker.toUpperCase()}
+        <div>You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.name} at ${this.state.stock.current_price} / share
           <div className='trade-confirmation-buttons'>
             <button onClick={this.handleSubmit}>Confirm trade</button>
             <button onClick={() => this.setState({formState: "new form"})}>Go Back</button>
