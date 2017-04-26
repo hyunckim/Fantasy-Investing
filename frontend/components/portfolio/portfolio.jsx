@@ -82,10 +82,10 @@ class Portfolio extends React.Component {
 
     fetchData(tickers, items, index = 0) {
       let username = [
-        "d6166222f6cd23d2214f20c0de1d4cc3", 
-        "0f51c94416c5a029ced069c9c445bcf4", 
-        "77a9accfe589ee1bde92b347cd7243bf", 
-        "00c96699cb9905e2e93939af22fd255d", 
+        "d6166222f6cd23d2214f20c0de1d4cc3",
+        "0f51c94416c5a029ced069c9c445bcf4",
+        "77a9accfe589ee1bde92b347cd7243bf",
+        "00c96699cb9905e2e93939af22fd255d",
         "9543da974ae42ceb2724f4fc215bb83b",
         "1b4f66213e0ee9c96e1298adaf093d99",
         "4d28e4bb9ba48a3e05e0f7d5e03fe130",
@@ -124,10 +124,10 @@ class Portfolio extends React.Component {
 
     receiveNews(ticker, index = 0) {
     let username = [
-      "d6166222f6cd23d2214f20c0de1d4cc3", 
-      "0f51c94416c5a029ced069c9c445bcf4", 
-      "77a9accfe589ee1bde92b347cd7243bf", 
-      "00c96699cb9905e2e93939af22fd255d", 
+      "d6166222f6cd23d2214f20c0de1d4cc3",
+      "0f51c94416c5a029ced069c9c445bcf4",
+      "77a9accfe589ee1bde92b347cd7243bf",
+      "00c96699cb9905e2e93939af22fd255d",
       "9543da974ae42ceb2724f4fc215bb83b",
       "1b4f66213e0ee9c96e1298adaf093d99",
       "4d28e4bb9ba48a3e05e0f7d5e03fe130",
@@ -157,7 +157,7 @@ class Portfolio extends React.Component {
       },
       success: (res) => {
         if (res.missing_access_codes) {
-          this.receiveNews(ticker, index + 1);  
+          this.receiveNews(ticker, index + 1);
         } else {
           this.setState({ news: res.data});
         }
@@ -375,7 +375,7 @@ class Portfolio extends React.Component {
         // Loading Screen
         // let pie = document.getElementById('piechart');
         // let p = document.getElementById('positions-piechart');
-        
+
         // if (this.props.portfolio.length === 0 && !pie) {
         //   if (this.props.currentUser){
         //     return (
@@ -383,7 +383,7 @@ class Portfolio extends React.Component {
         //           <h1>Loading...</h1>
         //           <i className="fa fa-spinner" aria-hidden="true"/>
         //     </div>
-  
+
         //     );
         //   }else{
         //     return (
@@ -393,7 +393,7 @@ class Portfolio extends React.Component {
         //     </div>
         //     );
         //   }
-          
+
         //   }
         let portfolioTable;
         let portfolioIndex = [];
@@ -443,7 +443,7 @@ class Portfolio extends React.Component {
                 </tr>);
             }
           });
-      
+
           if (this.props.currentUser) {
             var totalValue = this.props.currentUser.investor.balance;
 
@@ -526,6 +526,7 @@ class Portfolio extends React.Component {
         let value = (<p></p>);
         let className = 'portfolio-green';
         if (mainPortfolio && mainPortfolio.main) {
+          debugger;
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
@@ -610,7 +611,7 @@ class Portfolio extends React.Component {
               </tbody>
           </table>);
         }
-        
+
 
         let deleteButton = (<div></div>);
         if (mainPortfolio && !mainPortfolio.main) {
@@ -640,7 +641,7 @@ class Portfolio extends React.Component {
             }).slice(0, 10);
             let elements = $();
             this.state.news.forEach((news , idx) => {
-                elements = elements.add(`<a href=${ news.url } class='news' key=${idx}>${news.title} <div>${this.timeSince(news.publication_date)} ago</div></a>`); 
+                elements = elements.add(`<a href=${ news.url } class='news' key=${idx}>${news.title} <div>${this.timeSince(news.publication_date)} ago</div></a>`);
             });
             $('#news-scroll-header').append(elements);
             $('#news-scroll-header').marquee({duration: 15000, duplicate: true});
