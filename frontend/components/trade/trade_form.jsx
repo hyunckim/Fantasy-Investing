@@ -176,6 +176,7 @@ class TradeForm extends React.Component {
 
   handleForm(e) {
     e.preventDefault();
+    debugger;
 
     if (this.state.stock.action.length < 1) {
       this.props.receiveStockErrors("Please select Buy or Sell");
@@ -183,10 +184,10 @@ class TradeForm extends React.Component {
       this.props.receiveStockErrors("Please enter a ticker");
     } else if (this.state.stock.number_of_shares === "") {
       this.props.receiveStockErrors("Please enter a the amount of shares you want to trade");
-    } else if (this.state.stock.number_of_shares < 1) {
-      this.props.receiveStockErrors("Please enter a positive integer for the number of shares you want to trade");
     } else if (this.state.stock.number_of_shares.includes(".")) {
       this.props.receiveStockErrors("You cannot trade partial shares");
+    } else if (!parseInt(this.state.stock.number_of_shares) || parseInt(this.state.stock.number_of_shares) < 1) {
+      this.props.receiveStockErrors("Please enter a positive integer for the number of shares you want to trade");
     } else {
       this.fetchData(this.state.stock.ticker);
     }
