@@ -323,29 +323,6 @@ class Portfolio extends React.Component {
     }
 
     render() {
-        // Loading Screen
-        // let pie = document.getElementById('piechart');
-        // let p = document.getElementById('positions-piechart');
-
-        // if (this.props.portfolio.length === 0 && !pie) {
-        //   if (this.props.currentUser){
-        //     return (
-        //     <div className="loading">
-        //           <h1>Loading...</h1>
-        //           <i className="fa fa-spinner" aria-hidden="true"/>
-        //     </div>
-
-        //     );
-        //   }else{
-        //     return (
-        //     <div className="loading">
-        //       <h1>Thank you for using Fantasy <Investing></Investing></h1>
-        //       <i className="fa fa-spinner" aria-hidden="true"/>
-        //     </div>
-        //     );
-        //   }
-
-        //   }
         let portfolioTable;
         let portfolioIndex = [];
         let mainPortfolio = this.state.currentPortfolio;
@@ -480,14 +457,14 @@ class Portfolio extends React.Component {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
-          if (percentageChange && className === 'portfolio-red') {
+          if ((percentageChange || percentageChange === 0) && className === 'portfolio-red') {
             value = (
               <div className='portfolio-performance'>
                 <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
                 <p className={className} id="portfolio-change"  >  <span>${this.numberWithCommas(Math.round(unrealizedGain))}</span>   ({percentageChange.toFixed(1)}%)</p>
               </div>
               );
-          }else if(percentageChange && className === 'portfolio-green') {
+          }else if((percentageChange || percentageChange === 0) && className === 'portfolio-green') {
             value = (
               <div className='portfolio-performance'>
                 <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
