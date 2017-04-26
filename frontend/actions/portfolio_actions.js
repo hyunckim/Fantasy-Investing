@@ -2,6 +2,9 @@ import * as PortfolioAPIUtil from '../util/portfolio_api_util';
 export const RECEIVE_PORTFOLIO = "RECEIVE_PORTFOLIO";
 export const RECEIVE_PORTFOLIOS = "RECEIVE_PORTFOLIOS";
 export const REMOVE_PORTFOLIO = "REMOVE_PORTFOLIO";
+export const CLEAR_PORTFOLIO = "CLEAR_PORTFOLIO";
+export const START_LOADING_PORTFOLIO = "START_LOADING_PORTFOLIO";
+export const START_LOADING_PORTFOLIOS = "START_LOADING_PORTFOLIOS";
 
 export const receivePortfolios = (portfolios) => ({
   type: RECEIVE_PORTFOLIOS,
@@ -18,6 +21,18 @@ export const removePortfolio = (portfolio) => ({
     portfolio
 });
 
+export const startLoadingPortfolio = () => ({
+  type: START_LOADING_PORTFOLIO
+});
+export const startLoadingPortfolios = () => ({
+  type: START_LOADING_PORTFOLIOS
+});
+
+export const clearPortfolio = () => ({
+  type: CLEAR_PORTFOLIO,
+});
+
+
 export const createPortfolio = (portfolio) => (dispatch) => (
     PortfolioAPIUtil.createPortfolio(portfolio).then(newPortfolio => dispatch(receivePortfolio(newPortfolio)))
 );
@@ -27,12 +42,20 @@ export const deletePortfolio = (portfolio) => (dispatch) => (
     .then( () => dispatch(removePortfolio(portfolio)))
 );
 
-export const fetchPortfolios = () => (dispatch) => (
-  PortfolioAPIUtil.fetchPortfolios()
-  .then((portfolios) => dispatch(receivePortfolios(portfolios)))
-);
+export const fetchPortfolios = () => (dispatch) => {
+  dispatch(startLoadingPortfolios());
+  return (
+    PortfolioAPIUtil.fetchPortfolios()
+      .then(portfolios => dispatch(receivePortfolios(portfolios)))
+  );
+};
 
-export const fetchPortfolio = portfolioId => dispatch => (
-  PortfolioAPIUtil.fetchPortfolio(portfolioId)
-  .then(portfolio => dispatch(receivePortfolio(portfolio)))
-);
+export const fetchPortfolio = portfolioId => dispatch => {
+  dispatch(startLoadingPortfolio());
+  return(
+    PortfolioAPIUtil.fetchPortfolio(portfolioId)
+      .then(portfolio => dispatch(receivePortfolio(portfolio)))
+  );
+};
+
+

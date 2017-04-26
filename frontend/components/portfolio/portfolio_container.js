@@ -5,7 +5,8 @@ import Portfolio from './portfolio';
 const mapStateToProps = state => {
     return {
         currentUser: state.currentUser,
-        portfolio: state.portfolio
+        portfolio: state.portfolio,
+        loading: state.loading
     };
 };
 

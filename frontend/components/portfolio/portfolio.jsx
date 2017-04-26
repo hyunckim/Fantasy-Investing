@@ -69,9 +69,26 @@ class Portfolio extends React.Component {
     }
 
     fetchData(tickers, items, index = 0) {
-      let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
-      let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
-
+      let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3",
+      "0f51c94416c5a029ced069c9c445bcf4",
+      "77a9accfe589ee1bde92b347cd7243bf",
+      "00c96699cb9905e2e93939af22fd255d",
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
+      "ef2c9c791fd32dcb138fc9ca511a651c"
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b",
+      "dfb23653432156bdbf868393255d9f3d",
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67",
+      "4a9214f9a7031f8870897deb8cbdd488"
+      ];
       $.ajax({
           type: "GET",
           url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
@@ -99,6 +116,11 @@ class Portfolio extends React.Component {
       }
       this.setState({data:true});
     }
+
+    componentWillMount() {
+      this.props.fetchPortfolios();
+    }
+
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
@@ -220,11 +242,17 @@ class Portfolio extends React.Component {
 
         if (mainPortfolio && mainPortfolio.main) {
           let percentChange;
+          let totalPercentChange;
           let stocks = mainPortfolio.stocks.map((stock, idx) => {
             if (this.data[stock.ticker]) {
               percentChange = (this.data[stock.ticker]['change'] /
                 (this.data[stock.ticker]['last_price'] -
                 this.data[stock.ticker]['change']) * 100).toFixed(1);
+              totalPercentChange = (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
+                  stock.purchase_price) * 100).toFixed(1);
+              if (totalPercentChange === "-0.0") {
+                totalPercentChange = "0.0";
+              }
               return (
 
               <tr key={idx} className='lalign'>
@@ -236,10 +264,9 @@ class Portfolio extends React.Component {
                 <td>{ percentChange }% </td>
                 <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
                 <td>${ stock.purchase_price.toFixed(2) }</td>
-                <td>${ this.numberWithCommas(Math.round(stock.purchase_price * stock.number_of_shares)) }</td>
+                <td>${ this.numberWithCommas(stock.purchase_price * stock.number_of_shares.toFixed(2)) }</td>
                 <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
-                <td>{ (((this.data[stock.ticker]['last_price'] - stock.purchase_price) /
-                    stock.purchase_price) * 100).toFixed(1) }% </td>
+                <td>{ totalPercentChange }% </td>
                 </tr>);
             }
           });
@@ -270,6 +297,12 @@ class Portfolio extends React.Component {
               percentageChange = (unrealizedGain / initialValue) * 100;
             }
             let totalDailyChange = ((totalValue  - prevDayValue) / prevDayValue * 100).toFixed(1);
+            if (totalDailyChange === "-0.0") {
+              totalDailyChange = "0.0";
+            }
+            if (percentageChange < 0 && percentageChange > -0.1) {
+              percentageChange = 0;
+            }
             portfolioTable =
                 <table id='portfolioTable'>
                     <thead>
@@ -323,7 +356,7 @@ class Portfolio extends React.Component {
           if (percentageChange < 0) {
             className = 'portfolio-red';
           }
-          if (percentageChange) {
+          if (percentageChange || percentageChange === 0) {
             value = (
               <div className='portfolio-performance'>
                 <p>Total Value: ${this.numberWithCommas(Math.round(totalValue))}</p>
@@ -403,7 +436,6 @@ class Portfolio extends React.Component {
           deleteButton = (<button className = 'delete-button'
             onClick={() => this.handleDelete(mainPortfolio)}>Delete Portfolio</button>);
         }
-
         if (this.props.currentUser && mainPortfolio) {
 
           if ($('#positions-piechart')) {
@@ -450,9 +482,9 @@ class Portfolio extends React.Component {
                     <div>
                         {portfolioTable}
                     </div>
-
-                    <div className='piechart-container'>
+                    <div className="piechart-container">
                     </div>
+
                 </div>
             );
         } else {

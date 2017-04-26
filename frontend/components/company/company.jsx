@@ -24,8 +24,26 @@ class Company extends React.Component {
   }
 
   fetchData(ticker, index = 0) {
-    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
-    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
+    let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3",
+      "0f51c94416c5a029ced069c9c445bcf4",
+      "77a9accfe589ee1bde92b347cd7243bf",
+      "00c96699cb9905e2e93939af22fd255d",
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
+      "ef2c9c791fd32dcb138fc9ca511a651c"
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b",
+      "dfb23653432156bdbf868393255d9f3d",
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67",
+      "4a9214f9a7031f8870897deb8cbdd488"
+      ];
     let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,forward_dividend_rate,forward_dividend_yield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
     let today = new Date();
     let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -102,9 +120,26 @@ class Company extends React.Component {
   }
 
   receiveNews(ticker, index = 0) {
-    let username = ["d6166222f6cd23d2214f20c0de1d4cc3", "0f51c94416c5a029ced069c9c445bcf4", "77a9accfe589ee1bde92b347cd7243bf"];
-    let password = ["6fbb48d898d18930d6fc1e2d4e1bd54b", "dfb23653432156bdbf868393255d9f3d", "6fabe9c15bd1e7ead66b7cc3cd6b3e44"];
-
+    let username = [
+      "d6166222f6cd23d2214f20c0de1d4cc3",
+      "0f51c94416c5a029ced069c9c445bcf4",
+      "77a9accfe589ee1bde92b347cd7243bf",
+      "00c96699cb9905e2e93939af22fd255d",
+      "9543da974ae42ceb2724f4fc215bb83b",
+      "1b4f66213e0ee9c96e1298adaf093d99",
+      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
+      "ef2c9c791fd32dcb138fc9ca511a651c"
+      ];
+    let password = [
+      "6fbb48d898d18930d6fc1e2d4e1bd54b",
+      "dfb23653432156bdbf868393255d9f3d",
+      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
+      "2ce4b7bb869b8c78e176ee210c20269d",
+      "1f91849f806fe320b31c550ebe39bae9",
+      "2e11b74611f8e7a5f52f68a8e04c88b7",
+      "286ce4fbedd72511eac4dd3e58831c67",
+      "4a9214f9a7031f8870897deb8cbdd488"
+      ];
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}`,
@@ -126,32 +161,31 @@ class Company extends React.Component {
   }
 
   timeSince(date) {
+    let seconds = Math.floor((new Date() - new Date(date)) / 1000);
 
-  let seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    let interval = Math.floor(seconds / 31536000);
 
-  let interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) {
-    return interval + " years";
+    if (interval > 1) {
+      return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
   }
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return interval + " months";
-  }
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) {
-    return interval + " days";
-  }
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) {
-    return interval + " hours";
-  }
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) {
-    return interval + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
-}
 
   render() {
     let title;
@@ -454,7 +488,7 @@ class Company extends React.Component {
         d3.select("#canvas-svg2").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
         .style("left", (-10) + "px")
-        .style("top", (-15) + "px")
+        .style("top", (-30) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -497,6 +531,19 @@ class Company extends React.Component {
         change = "portfolio-red";
       } else { change = "portfolio-green";}
     }
+    let watchlistDropdown = (<div></div>);
+    if (watchlists && watchlists.length > 0) {
+      watchlistDropdown = (
+        <div className="watchlist-button">
+          <div className='watchlist-dropdown'>
+            <span>Add to Watchlist</span>
+            <div className="dropdown-content">
+              { watchlists }
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="company-content">
@@ -506,14 +553,7 @@ class Company extends React.Component {
               <span className="company-title">{ title } { ticker }</span>
               <span className="company-price">${ price } <span className={change}>{priceChange}  ({ percentChange })%</span></span>
             </div>
-            <div className="watchlist-button">
-              <div className='watchlist-dropdown'>
-                <span>Add to Watchlist</span>
-                <div className="dropdown-content">
-                  { watchlists }
-                </div>
-              </div>
-            </div>
+            {watchlistDropdown}
           </div>
         </div>
         <div className="company-summary">

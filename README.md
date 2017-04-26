@@ -1,15 +1,17 @@
 # Fantasy Investing
 
-[Roomsurfing live][heroku]
+[Fantasy Investing live][heroku]
 
-Fantasy investing is a full-stack web application that simulates stock investing and trading. The goal of the app is allow the user to buy and sell virtual shares of companies and see their performance over time.
+[heroku]: https://fantasy-investing-app.herokuapp.com
 
-Fantasy Investing utilizes Python/Django on the backend, a PostgreSQL database, and React.js with a Redux architectural framework on the frontend.  
+Fantasy investing is a full-stack web application that simulates stock investing and trading. The goal of the app is to allow users to buy and sell virtual shares of companies and see their performance over time.
+
+Fantasy Investing utilizes Python/Django on the backend, a PostgreSQL database, and React.js with a Redux architectural framework on the frontend. Intrinio API is used for real-time financial data.
 
 ## Features & Implementation
 
 The main features of the app include buying and selling virtual public company shares,
-creating and updating watchlists, and reviewing information for a specific company.
+creating and updating watchlists, and reviewing information about a specific company.
 
 ### Buying and Selling Shares
 
@@ -21,15 +23,19 @@ Fantasy Investing includes functionality to make partial sale of existing stock 
 
 ### Portfolios
 
-Each user has one main portfolio of holdings where he/she can add stocks to. The user can also add a watchlist where he/she can add certain stocks they want to keep track of.
+Each user has one main portfolio of holdings where he/she can add stocks to. The main portfolio shows the user performance and unrealized gains / losses for each security and portfolio as a whole.
 
-The main portfolio shows all the current positions of the user with total portfolio value as well as individual investments. There is also a dropdown where the user can select between different portfolios/watchlists.
+The user can also add a watchlist where he/she can add certain stocks they want to keep track of.
+
+The main portfolio shows all the current positions of the user with total portfolio value as well as individual investments. There is also a drop down where the user can select between different portfolios/watchlists.
 
 The charts in the portfolio page utilize Google Charts.
 
 ### Reviewing Company Information
 
-On top of every page, there is a search bar where a user can search a company by ticker. Upon doing a search, the user is taken to a page with company financial information and a chart with historical stock price performance.
+On top of every page, there is a search bar where a user can search a company by ticker. Upon doing a search, the user is taken to a page with company financial information, including all relevant market data as well as financial ratios. The page also includes a 1-year price history chart as well as a feed of recent company news.
+
+Once on the page, the user can choose to add the selected company to a watchlist.
 
 ## Future Directions for the Project
 
