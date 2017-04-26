@@ -181,10 +181,12 @@ class TradeForm extends React.Component {
               </select>
             </label>
             <label> Symbol
-              <input className="form-symbol" onChange={this.update("ticker")} placeholder='Ex:MSFT'/>
+              <input className="form-symbol" onChange={this.update("ticker")}
+                placeholder='Ex:MSFT' value={this.state.stock.ticker}/>
             </label>
             <label> Quantity
-              <input className="form-shares" onChange={this.update('number_of_shares')} placeholder='# Of Shares' />
+              <input className="form-shares" onChange={this.update('number_of_shares')}
+                placeholder='# Of Shares' value={this.state.stock.number_of_shares}/>
             </label>
 
             <input type="submit" id="submit-button" className="form-submit-button" value="Submit"/>
@@ -199,16 +201,15 @@ class TradeForm extends React.Component {
 
       formHtml = (
         <div>You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.ticker.toUpperCase()}
-          <br></br>
           <div className='trade-confirmation-buttons'>
             <button onClick={this.handleSubmit}>Confirm trade</button>
-            <button onClick={() => this.setState({formType: "new form"})}>Go Back</button>
+            <button onClick={() => this.setState({formState: "new form"})}>Go Back</button>
           </div>
         </div>);
     } else if (this.state.formState === "trade complete") {
       formHtml = (<div>Trade complete</div>);
     }
-
+    debugger;
     return (
       <div className="trade-form-container">
         {formHtml}
