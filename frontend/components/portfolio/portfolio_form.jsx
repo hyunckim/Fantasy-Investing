@@ -6,19 +6,26 @@ class PortfolioForm extends React.Component {
         this.state = {
             title: "",
             main: false,
-            user: this.props.currentUser
+            user: this.props.currentUser,
+            formState: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updatePortfolio = this.updatePortfolio.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-    }
-
     handleSubmit(e) {
         e.preventDefault();
-        this.props.createPortfolio(this.state)
-        .then(() => this.props.modal.closeModal());
+        this.props.createPortfolio(this.state);
+        this.setState({formState: true});
+
+        setTimeout(() =>
+          closeModal(),
+          3000);
+
+        const closeModal = () => {
+          this.setState({formState: false});
+          this.props.modal.closeModal();
+        };
     }
 
     updatePortfolio(event) {
@@ -26,7 +33,7 @@ class PortfolioForm extends React.Component {
     }
 
   render () {
-    return (
+    let formHtml = (
       <div className='portfolio-form'>
         <div className='portfolio-form-title'>
             Create A New Portfolio
@@ -43,7 +50,20 @@ class PortfolioForm extends React.Component {
               className="form-submit-button"
               value="Submit"/>
         </form>
+      </div>
+    );
+    if (this.state.formState) {
+      formHtml = (
+        <div>
+          Watchlist created!
+        </div>
+      );
+    }
 
+
+    return (
+      <div>
+        {formHtml}
       </div>
     );
   }
