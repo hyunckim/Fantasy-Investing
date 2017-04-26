@@ -23,6 +23,7 @@ class PortfolioModal extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.this = this;
   }
 
   componentWillMount() {
@@ -52,7 +53,7 @@ class PortfolioModal extends React.Component {
           contentLabel="Portfolio Modal"
         >
         <button className='portfolio-close-button' onClick={this.closeModal}>✖</button>
-        <PortfolioFormContainer closeModal={this.closeModal}/> 
+        <PortfolioFormContainer modal={this.this}/>
         </Modal>
       </div>
     );

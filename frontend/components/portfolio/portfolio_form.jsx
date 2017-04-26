@@ -14,11 +14,11 @@ class PortfolioForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
     }
-    
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.createPortfolio(this.state)
-        .then(() => this.props.closeModal());
+        .then(() => this.props.modal.closeModal());
     }
 
     updatePortfolio(event) {
@@ -37,13 +37,13 @@ class PortfolioForm extends React.Component {
             type="text"
             placeholder="Portfolio Title"
             value={ this.state.title } />
+          <input
+              type="submit"
+              id="submit-button"
+              className="form-submit-button"
+              value="Submit"/>
         </form>
-        <input 
-            type="submit" 
-            id="submit-button" 
-            className="form-submit-button" 
-            value="Submit"
-            onSubmit={this.handleSubmit}/>
+
       </div>
     );
   }
