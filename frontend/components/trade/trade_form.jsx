@@ -7,6 +7,7 @@ class TradeForm extends React.Component {
     super(props);
     this.state = {stock: this.props.stock, formState: "new form"};
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleForm = this.handleForm.bind(this);
     this.handlePromise = this.handlePromise.bind(this);
     this.updateBalance = this.updateBalance.bind(this);
     this.formState = "new form";
@@ -158,6 +159,10 @@ class TradeForm extends React.Component {
     };
   }
 
+  handleForm(e) {
+    e.preventDefault();
+    this.setState({formState: "confirm trade"});
+  }
 
   render() {
 
@@ -167,7 +172,7 @@ class TradeForm extends React.Component {
             <h3 className='trade-form-title'>Submit your order</h3>
           </div>
           <p className="trade-form-errors">{this.props.error}</p>
-          <form className="trade-form" onSubmit={this.handleSubmit}>
+          <form className="trade-form" onSubmit={this.handleForm}>
             <label> Action
               <select className="trade-action" onChange={this.update('action')}>
                 <option value="" disabled selected></option>
@@ -190,9 +195,17 @@ class TradeForm extends React.Component {
         </div>
     );
 
-    if (this.formState === "confirm trade") {
-      formHtml = (<div>Do you want to make this trade?</div>);
-    } else if (this.formState === "trade complete") {
+    if (this.state.formState === "confirm trade") {
+
+      formHtml = (
+        <div>You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.ticker.toUpperCase()}
+          <br></br>
+          <div className='trade-confirmation-buttons'>
+            <button onClick={this.handleSubmit}>Confirm trade</button>
+            <button onClick={() => this.setState({formType: "new form"})}>Go Back</button>
+          </div>
+        </div>);
+    } else if (this.state.formState === "trade complete") {
       formHtml = (<div>Trade complete</div>);
     }
 
