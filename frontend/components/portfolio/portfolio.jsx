@@ -38,7 +38,6 @@ class Portfolio extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      debugger;
       if (nextProps.portfolio.length === this.props.portfolio.length) {
         for (let i = 0; i < nextProps.portfolio.length; i++) {
           if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
