@@ -3,7 +3,7 @@ import { fetchStockPrice } from '../../util/stock_api_util';
 import {Link} from 'react-router';
 import PortfolioModal from './portfolio_modal.jsx';
 import PortfolioFormContainer from './portfolio_form_container';
-
+import { username, password } from '../../intrio_account';
 
 class Portfolio extends React.Component {
     constructor(props) {
@@ -84,36 +84,7 @@ class Portfolio extends React.Component {
     }
 
     fetchData(tickers, items, index = 0) {
-      let username = [
-       "d6166222f6cd23d2214f20c0de1d4cc3",
-       "0f51c94416c5a029ced069c9c445bcf4",
-       "77a9accfe589ee1bde92b347cd7243bf",
-       "00c96699cb9905e2e93939af22fd255d",
-       "9543da974ae42ceb2724f4fc215bb83b",
-       "1b4f66213e0ee9c96e1298adaf093d99",
-       "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-       "db165ed10432182a47f5439432be10b6",
-       "9bbbdbda7c369c21969cdc108fef9a87",
-       "ef2c9c791fd32dcb138fc9ca511a651c",
-       "6b3f930579a063f2593bee515e0ce231",
-       "3ee4fd6b79113d9a021f8edc344cde15",
-       "cd25157222f897581b38dfa05a0dc94b"
-     ];
-      let password = [
-        "6fbb48d898d18930d6fc1e2d4e1bd54b",
-        "dfb23653432156bdbf868393255d9f3d",
-        "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-        "2ce4b7bb869b8c78e176ee210c20269d",
-        "1f91849f806fe320b31c550ebe39bae9",
-        "2e11b74611f8e7a5f52f68a8e04c88b7",
-        "286ce4fbedd72511eac4dd3e58831c67",
-        "5a59201505bf41ef2e52f5c15e123fd7",
-        "2fa44779f963571608242cfc9d216cd2",
-        "4a9214f9a7031f8870897deb8cbdd488",
-        "4c14c89a57db9522f6c8f460e3142d88",
-        "a5792311c4b1288b385afdb57b8378a8",
-        "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e"
-        ];
+
       $.ajax({
           type: "GET",
           url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
@@ -132,36 +103,7 @@ class Portfolio extends React.Component {
     }
 
     receiveNews(ticker, index = 0) {
-      let username = [
-       "d6166222f6cd23d2214f20c0de1d4cc3",
-       "0f51c94416c5a029ced069c9c445bcf4",
-       "77a9accfe589ee1bde92b347cd7243bf",
-       "00c96699cb9905e2e93939af22fd255d",
-       "9543da974ae42ceb2724f4fc215bb83b",
-       "1b4f66213e0ee9c96e1298adaf093d99",
-       "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-       "db165ed10432182a47f5439432be10b6",
-       "9bbbdbda7c369c21969cdc108fef9a87",
-       "ef2c9c791fd32dcb138fc9ca511a651c",
-       "6b3f930579a063f2593bee515e0ce231",
-       "3ee4fd6b79113d9a021f8edc344cde15",
-       "cd25157222f897581b38dfa05a0dc94b"
-     ];
-      let password = [
-        "6fbb48d898d18930d6fc1e2d4e1bd54b",
-        "dfb23653432156bdbf868393255d9f3d",
-        "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-        "2ce4b7bb869b8c78e176ee210c20269d",
-        "1f91849f806fe320b31c550ebe39bae9",
-        "2e11b74611f8e7a5f52f68a8e04c88b7",
-        "286ce4fbedd72511eac4dd3e58831c67",
-        "5a59201505bf41ef2e52f5c15e123fd7",
-        "2fa44779f963571608242cfc9d216cd2",
-        "4a9214f9a7031f8870897deb8cbdd488",
-        "4c14c89a57db9522f6c8f460e3142d88",
-        "a5792311c4b1288b385afdb57b8378a8",
-        "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e"
-        ];
+
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
@@ -386,74 +328,53 @@ class Portfolio extends React.Component {
     }
 
     render() {
-        // Loading Screen
-        // let pie = document.getElementById('piechart');
-        // let p = document.getElementById('positions-piechart');
 
-        // if (this.props.portfolio.length === 0 && !pie) {
-        //   if (this.props.currentUser){
-        //     return (
-        //     <div className="loading">
-        //           <h1>Loading...</h1>
-        //           <i className="fa fa-spinner" aria-hidden="true"/>
-        //     </div>
+      let indexHtml = (<div></div>);
+      if (this.data['$SPX']) {
+        let spyPrev = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price'] * 100) / 100);
+        let djiPrev = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price'] * 100) / 100);
+        let rusPrev = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price'] * 100) / 100);
+        let spyPercent = this.data["SPY"]['percent_change'] * 100;
+        let djiPercent = this.data["DIA"]['percent_change'] * 100;
+        let rusPercent = this.data["IWM"]['percent_change'] * 100;
+        let spyLast = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price']
+          * (1 + this.data["SPY"]['percent_change']) * 100) / 100);
+        let djiLast = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price']
+          * (1 + this.data["DIA"]['percent_change']) * 100) / 100);
+        let rusLast = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price']
+          * (1 + this.data["IWM"]['percent_change']) * 100) / 100);
+        let spyChange = Math.round(this.data["$SPX"]['close_price'] *
+          this.data["SPY"]['percent_change'] * 100) / 100;
+        let djiChange = Math.round(this.data["$DJI"]['close_price'] *
+          this.data["DIA"]['percent_change'] * 100) / 100;
+        let rusChange = Math.round(this.data["$RUT"]['close_price'] *
+          this.data["IWM"]['percent_change'] * 100) / 100;
 
-        //     );
-        //   }else{
-        //     return (
-        //     <div className="loading">
-        //       <h1>Thank you for using Fantasy <Investing></Investing></h1>
-        //       <i className="fa fa-spinner" aria-hidden="true"/>
-        //     </div>
-        //     );
-        //   }
+        let spyClass = spyPercent < 0 ? "red" : "green";
+        let djiClass = djiPercent < 0 ? "red" : "green";
+        let rusClass = rusPercent < 0 ? "red" : "green";
 
-        //   }
-        let indexHtml = (<div></div>);
-        if (this.data['$SPX']) {
-          let spyPrev = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price'] * 100) / 100);
-          let djiPrev = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price'] * 100) / 100);
-          let rusPrev = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price'] * 100) / 100);
-          let spyPercent = this.data["SPY"]['percent_change'] * 100;
-          let djiPercent = this.data["DIA"]['percent_change'] * 100;
-          let rusPercent = this.data["IWM"]['percent_change'] * 100;
-          let spyLast = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price']
-            * (1 + this.data["SPY"]['percent_change']) * 100) / 100);
-          let djiLast = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price']
-            * (1 + this.data["DIA"]['percent_change']) * 100) / 100);
-          let rusLast = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price']
-            * (1 + this.data["IWM"]['percent_change']) * 100) / 100);
-          let spyChange = Math.round(this.data["$SPX"]['close_price'] *
-            this.data["SPY"]['percent_change'] * 100) / 100;
-          let djiChange = Math.round(this.data["$DJI"]['close_price'] *
-            this.data["DIA"]['percent_change'] * 100) / 100;
-          let rusChange = Math.round(this.data["$RUT"]['close_price'] *
-            this.data["IWM"]['percent_change'] * 100) / 100;
-
-          let spyClass = spyPercent < 0 ? "red" : "green";
-          let djiClass = djiPercent < 0 ? "red" : "green";
-          let rusClass = rusPercent < 0 ? "red" : "green";
-
-          indexHtml = (
-            <div className="indices-container">
-              <div className="market-index">
-                <p>S&P 500</p>
-                <p>{spyLast}</p>
-                <p className={spyClass}>{spyChange} {spyPercent}%</p>
-              </div>
-              <div className="market-index">
-                <p>Dow Jones</p>
-                  <p>{djiLast}</p>
-                  <p className={djiClass}> {djiChange} {djiPercent}%</p>
-              </div>
-              <div className="market-index">
-                <p>Russell 2000</p>
-                <p>{rusLast}</p>
-                <p className={rusClass}>{rusChange} {rusPercent}%</p>
-              </div>
+        indexHtml = (
+          <div className="indices-container">
+            <div className="market-index">
+              <p>S&P 500</p>
+              <p>{spyLast}</p>
+              <p className={spyClass}>{spyChange} {spyPercent}%</p>
             </div>
-          );
-        }
+            <div className="market-index">
+              <p>Dow Jones</p>
+                <p>{djiLast}</p>
+                <p className={djiClass}> {djiChange} {djiPercent}%</p>
+            </div>
+            <div className="market-index">
+              <p>Russell 2000</p>
+              <p>{rusLast}</p>
+              <p className={rusClass}>{rusChange} {rusPercent}%</p>
+            </div>
+          </div>
+        );
+      }
+
 
         let portfolioTable;
         let portfolioIndex = [];
