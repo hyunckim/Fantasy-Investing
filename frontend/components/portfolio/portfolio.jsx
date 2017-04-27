@@ -33,6 +33,8 @@ class Portfolio extends React.Component {
         }
         if (newsStock.length > 0) {
           this.receiveNews(newsStock.join(','));
+        } else {
+          this.receiveNews('AAPL,GOOGL,AMZN,NFLX');
         }
         let indexTickers = '$SPX,$DJI,$RUT';
         let etfTickers = "SPY,DIA,IWM";
@@ -53,12 +55,14 @@ class Portfolio extends React.Component {
               items += ',adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group';
             }
             this.fetchData(newStock, items);
-            // let newsStock = [];
-            // for (let j = 0; j < nextProps.portfolio[i].stocks.length; j++) {
-            //   newsStock.push(nextProps.portfolio[i].stocks[j].ticker);
-            // }
-            // setTimeout(() => this.receiveNews(newsStock.join(',')), 2000);
+          //   let newsStock = [];
+          //   for (let j = 0; j < nextProps.portfolio[i].stocks.length; j++) {
+          //     newsStock.push(nextProps.portfolio[i].stocks[j].ticker);
+          //   }
+          //   setTimeout(() => this.receiveNews(newsStock.join(',')), 2000);
             break;
+          // } else if (nextProps.portfolio[i].stocks.length < this.props.portfolio[i].stocks.length){
+          //
           }
         }
       }
