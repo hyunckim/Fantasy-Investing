@@ -68,7 +68,7 @@ const WelcomePage = () => {
                         <hr className="section-heading-spacer" />
                         <div className="clearfix"></div>
                         <h2 className="section-heading">Research Stock</h2>
-                        <p className="lead">Dive Deeper into the company before buying/selling shares! The acurate and variety data allows you to make sharp decisions to improve your portfolio.</p>
+                        <p className="lead">Dive deeper into the company before buying or selling shares. A wide variety of data allows you to make sharp decisions to improve your portfolio.</p>
                       </div>
                         <div className="col-lg-5 col-lg-offset-2 col-sm-6">
                           <img className="img-responsive" src="images/" alt="" />

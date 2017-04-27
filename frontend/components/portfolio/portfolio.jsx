@@ -666,7 +666,7 @@ class Portfolio extends React.Component {
                       <span>{mainPortfolio.title}</span>
                     </div>
                     <div>
-                      {indexHtml}
+                      { indexHtml }
                     </div>
 
                   </div>
