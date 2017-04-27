@@ -430,22 +430,26 @@ class Portfolio extends React.Component {
           let rusChange = Math.round(this.data["$RUT"]['close_price'] *
             this.data["IWM"]['percent_change'] * 100) / 100;
 
+          let spyClass = spyPercent < 0 ? "red" : "green";
+          let djiClass = djiPercent < 0 ? "red" : "green";
+          let rusClass = rusPercent < 0 ? "red" : "green";
+
           indexHtml = (
             <div className="indices-container">
-              <div>
-                S&P 500
+              <div className="market-index">
+                <p>S&P 500</p>
                 <p>{spyLast}</p>
-                <p>{spyChange} {spyPercent}%</p>
+                <p className={spyClass}>{spyChange} {spyPercent}%</p>
               </div>
-              <div>
-                Dow Jones
-                <p>{djiLast}</p>
-                <p>{djiChange} {djiPercent}%</p>
+              <div className="market-index">
+                <p>Dow Jones</p>
+                  <p>{djiLast}</p>
+                  <p className={djiClass}> {djiChange} {djiPercent}%</p>
               </div>
-              <div>
-                Russell 2000
+              <div className="market-index">
+                <p>Russell 2000</p>
                 <p>{rusLast}</p>
-                <p>{rusChange} {rusPercent}%</p>
+                <p className={rusClass}>{rusChange} {rusPercent}%</p>
               </div>
             </div>
           );

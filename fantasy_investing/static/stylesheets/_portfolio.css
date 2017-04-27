@@ -21,7 +21,7 @@
   height: 425px;
   border-color: #e7eaec;
   border-style: solid solid none;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
   border-width: 2px 0 0;
   border-bottom: 1px solid #e7eaec;
 
@@ -39,7 +39,7 @@
 .current-portfolio-title{
   width: 80%;
   margin-left: 10%;
-  border-bottom: 1px solid #676a6c; 
+  border-bottom: 1px solid #676a6c;
 
 
 }
@@ -91,7 +91,7 @@
 
 .dropdown {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   width: 100%;
 }
 
@@ -209,7 +209,7 @@
   margin-right: 10%;
   margin-left: 10%;
   /*background-image: url(https://s3-us-west-1.amazonaws.com/fantasyinvesting-dev/loading+wallpaper.jpg);
-  background-size: cover;  
+  background-size: cover;
   opacity: 0.5;*/
   /*border: 1px solid white;*/
 }
@@ -288,7 +288,7 @@ ul#news-scroll-header a:hover {
   border-image: none;
   width: 100%;
   border-style: solid solid none;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
   border-width: 2px 0 0;
   padding: 0;
 }
@@ -299,7 +299,7 @@ ul#news-scroll-header a:hover {
   font-weight: 600;
   font-size: 14px;
   padding: 2%;
-  
+
 }
 
 .news-content-item{
@@ -328,4 +328,34 @@ ul#news-scroll-header a:hover {
 
 .portfolio-table{
   margin-top: 10px;
+}
+
+.indices-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.indices-container div {
+  margin-top: 10%;
+}
+
+.market-index p {
+  margin-top: 5%;
+}
+
+.market-index p:first-child{
+  font-weight: bold;
+}
+
+.market-index:first-child {
+  margin-top: 5%;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
 }
