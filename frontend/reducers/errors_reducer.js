@@ -30,6 +30,9 @@ const ErrorsReducer = (state = _nullErrors, action) => {
         if (action.errors.responseText) {
           session.push(action.errors.responseText);
         }
+        if (action.errors.includes("6")) {
+          session.push(action.errors);
+        }
         nextState.session = session;
         return nextState;
       } else {
