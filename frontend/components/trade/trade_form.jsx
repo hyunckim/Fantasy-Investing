@@ -7,7 +7,6 @@ import { username, password } from '../../intrio_account';
 class TradeForm extends React.Component {
   constructor(props) {
     super(props);
-    debugger;
     this.state = {stock: this.props.stock, formState: "new form",
       existingPosition: undefined};
     this.handleSubmit = this.handleSubmit.bind(this);

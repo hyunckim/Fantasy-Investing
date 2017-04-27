@@ -34,11 +34,15 @@ class Portfolio extends React.Component {
         if (newsStock.length > 0) {
           this.receiveNews(newsStock.join(','));
         }
+        let indexTickers = '$SPX,$DJI,$RUT';
+        let etfTickers = "SPY,DIA,IWM";
+        this.fetchData(indexTickers, 'close_price');
+        setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 500);
       });
+
     }
 
     componentWillReceiveProps(nextProps) {
-      debugger;
       if (nextProps.portfolio.length === this.props.portfolio.length) {
         for (let i = 0; i < nextProps.portfolio.length; i++) {
           if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
@@ -70,8 +74,7 @@ class Portfolio extends React.Component {
       }
       mainTickers = mainTickers.slice(0,-1);
       watchlistTickers = watchlistTickers.slice(0,-1);
-      let indexTickers = '$SPX,$DJI,$RUT';
-      let etfTickers = "SPY,DIA,IWM";
+
       let priceData = [];
 
       if (mainTickers.length > 0) {
@@ -80,8 +83,6 @@ class Portfolio extends React.Component {
       if (watchlistTickers.length > 0) {
         this.fetchData(watchlistTickers, 'name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group');
       }
-      this.fetchData(indexTickers, 'close_price');
-      this.fetchData(etfTickers, 'percent_change');
     }
 
     fetchData(tickers, items, index = 0) {
@@ -133,7 +134,7 @@ class Portfolio extends React.Component {
         }
         this.data[ticker][data.data[i].item] = data.data[i].value;
       }
-      this.setState({data:true});
+      this.setState({data: !this.state.data});
     }
 
     componentWillMount() {
@@ -653,7 +654,6 @@ class Portfolio extends React.Component {
                 $('.piechart-container').append('<div id="piechart"></div>');
                 $('#piechart').append(this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,this.props.currentUser.investor.balance));
             }
-            debugger
             return (
               <div className='main-portfolio-index'>
                 <ul id='news-scroll-header'></ul>
@@ -664,7 +664,7 @@ class Portfolio extends React.Component {
                       <span>{mainPortfolio.title}</span>
                     </div>
                     <div>
-                      { indexHtml }
+                      {indexHtml}
                     </div>
 
                   </div>
