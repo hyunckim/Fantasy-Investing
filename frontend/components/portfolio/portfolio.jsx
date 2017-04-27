@@ -413,25 +413,39 @@ class Portfolio extends React.Component {
         if (this.data['$SPX']) {
           let spyPrev = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price'] * 100) / 100);
           let djiPrev = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price'] * 100) / 100);
-          let nyaPrev = this.numberWithCommas(Math.round(this.data["$NYA"]['close_price'] * 100) / 100);
+          let rusPrev = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price'] * 100) / 100);
           let spyPercent = this.data["SPY"]['percent_change'] * 100;
           let djiPercent = this.data["DIA"]['percent_change'] * 100;
-          let nyaPercent = this.data["IWM"]['percent_change'] * 100;
-          let spyPercent = (this.data["$SPX"]['change'] /
-            (this.data["$SPX"]['close_price'] + this.data["$SPX"]['change'])
-            * 100).toFixed(2);
+          let rusPercent = this.data["IWM"]['percent_change'] * 100;
+          let spyLast = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price']
+            * (1 + this.data["SPY"]['percent_change']) * 100) / 100);
+          let djiLast = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price']
+            * (1 + this.data["DIA"]['percent_change']) * 100) / 100);
+          let rusLast = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price']
+            * (1 + this.data["IWM"]['percent_change']) * 100) / 100);
+          let spyChange = Math.round(this.data["$SPX"]['close_price'] *
+            this.data["SPY"]['percent_change'] * 100) / 100;
+          let djiChange = Math.round(this.data["$DJI"]['close_price'] *
+            this.data["DIA"]['percent_change'] * 100) / 100;
+          let rusChange = Math.round(this.data["$RUT"]['close_price'] *
+            this.data["IWM"]['percent_change'] * 100) / 100;
 
           indexHtml = (
             <div className="indices-container">
               <div>
                 S&P 500
                 <p>{spyLast}</p>
-                <p>{spyChange} {spyPercent}</p>
+                <p>{spyChange} {spyPercent}%</p>
               </div>
               <div>
-                Dow 30
+                Dow Jones
                 <p>{djiLast}</p>
-                <p>{djiChange}</p>
+                <p>{djiChange} {djiPercent}%</p>
+              </div>
+              <div>
+                Russell 2000
+                <p>{rusLast}</p>
+                <p>{rusChange} {rusPercent}%</p>
               </div>
             </div>
           );
