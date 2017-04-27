@@ -334,9 +334,12 @@ class Portfolio extends React.Component {
         let spyPrev = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price'] * 100) / 100);
         let djiPrev = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price'] * 100) / 100);
         let rusPrev = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price'] * 100) / 100);
-        let spyPercent = this.data["SPY"]['percent_change'] * 100;
-        let djiPercent = this.data["DIA"]['percent_change'] * 100;
-        let rusPercent = this.data["IWM"]['percent_change'] * 100;
+        let spyPercent = (Math.round(this.data["SPY"]['percent_change']
+          * 10000) / 100).toFixed(2);
+        let djiPercent = (Math.round(this.data["DIA"]['percent_change']
+          * 10000) / 100).toFixed(2);
+        let rusPercent = (Math.round(this.data["IWM"]['percent_change']
+          * 10000) / 100).toFixed(2);
         let spyLast = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price']
           * (1 + this.data["SPY"]['percent_change']) * 100) / 100);
         let djiLast = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price']
@@ -358,17 +361,17 @@ class Portfolio extends React.Component {
           <div className="indices-container">
             <div className="market-index">
               <p>S&P 500</p>
-              <p>{spyLast}</p>
+              <p>${spyLast}</p>
               <p className={spyClass}>{spyChange} {spyPercent}%</p>
             </div>
             <div className="market-index">
               <p>Dow Jones</p>
-                <p>{djiLast}</p>
+                <p>${djiLast}</p>
                 <p className={djiClass}> {djiChange} {djiPercent}%</p>
             </div>
             <div className="market-index">
               <p>Russell 2000</p>
-              <p>{rusLast}</p>
+              <p>${rusLast}</p>
               <p className={rusClass}>{rusChange} {rusPercent}%</p>
             </div>
           </div>
