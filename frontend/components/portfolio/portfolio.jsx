@@ -8,19 +8,19 @@ import { username, password } from '../../intrio_account';
 class Portfolio extends React.Component {
     constructor(props) {
       super(props);
-        this.state = {
-            currentPortfolio: this.props.portfolio[0],
-            data: false,
-            news: ""
-        };
-        this.data = {};
-        this.handleClick = this.handleClick.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleData = this.handleData.bind(this);
-        this.handleCompanyData = this.handleCompanyData.bind(this);
-        this.positionsPieChart = this.positionsPieChart.bind(this);
-        this.receiveNews = this.receiveNews.bind(this);
-        this.timeSince = this.timeSince.bind(this);
+      this.state = {
+          currentPortfolio: this.props.portfolio[0],
+          data: false,
+          news: ""
+      };
+      this.data = {};
+      this.handleClick = this.handleClick.bind(this);
+      this.handleDelete = this.handleDelete.bind(this);
+      this.handleData = this.handleData.bind(this);
+      this.handleCompanyData = this.handleCompanyData.bind(this);
+      this.positionsPieChart = this.positionsPieChart.bind(this);
+      this.receiveNews = this.receiveNews.bind(this);
+      this.timeSince = this.timeSince.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +38,7 @@ class Portfolio extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+      debugger;
       if (nextProps.portfolio.length === this.props.portfolio.length) {
         for (let i = 0; i < nextProps.portfolio.length; i++) {
           if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
@@ -104,25 +105,25 @@ class Portfolio extends React.Component {
 
     receiveNews(ticker, index = 0) {
 
-    $.ajax({
-      type: "GET",
-      url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
-      dataType: 'json',
-      headers: {
-        "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
-      },
-      success: (res) => {
-        if (res.missing_access_codes) {
+      $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.receiveNews(ticker, index + 1);
+          } else {
+            this.setState({ news: res.data});
+          }
+        },
+        error: (res) => {
           this.receiveNews(ticker, index + 1);
-        } else {
-          this.setState({ news: res.data});
         }
-      },
-      error: (res) => {
-        this.receiveNews(ticker, index + 1);
-      }
-    });
-  }
+      });
+    }
 
     handleCompanyData(data) {
       for (let i = 0; i < data.data.length; i++) {
@@ -381,6 +382,7 @@ class Portfolio extends React.Component {
 
         let portfolioTable;
         let portfolioIndex = [];
+        debugger;
         let mainPortfolio = this.state.currentPortfolio;
         for (let i = 0; i < this.props.portfolio.length; i++) {
             if (this.props.portfolio[i].main === true && mainPortfolio === undefined) {
@@ -652,6 +654,7 @@ class Portfolio extends React.Component {
                 $('.piechart-container').append('<div id="piechart"></div>');
                 $('#piechart').append(this.portfolioPieChart(totalValue - this.props.currentUser.investor.balance,this.props.currentUser.investor.balance));
             }
+            debugger
             return (
               <div className='main-portfolio-index'>
                 <ul id='news-scroll-header'></ul>
