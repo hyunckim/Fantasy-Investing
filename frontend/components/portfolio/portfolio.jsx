@@ -331,7 +331,7 @@ class Portfolio extends React.Component {
     render() {
 
       let indexHtml = (<div></div>);
-      if (this.data['$SPX']) {
+      if (this.data['$SPX'] && this.data["SPY"]) {
         let spyPrev = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price'] * 100) / 100);
         let djiPrev = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price'] * 100) / 100);
         let rusPrev = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price'] * 100) / 100);
@@ -382,7 +382,6 @@ class Portfolio extends React.Component {
 
         let portfolioTable;
         let portfolioIndex = [];
-        debugger;
         let mainPortfolio = this.state.currentPortfolio;
         for (let i = 0; i < this.props.portfolio.length; i++) {
             if (this.props.portfolio[i].main === true && mainPortfolio === undefined) {
