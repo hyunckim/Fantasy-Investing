@@ -3,7 +3,7 @@ import { fetchStockPrice } from '../../util/stock_api_util';
 import {Link} from 'react-router';
 import PortfolioModal from './portfolio_modal.jsx';
 import PortfolioFormContainer from './portfolio_form_container';
-
+import { username, password } from '../../intrio_account';
 
 class Portfolio extends React.Component {
     constructor(props) {
@@ -38,7 +38,6 @@ class Portfolio extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-      debugger;
       if (nextProps.portfolio.length === this.props.portfolio.length) {
         for (let i = 0; i < nextProps.portfolio.length; i++) {
           if (nextProps.portfolio[i].stocks.length > this.props.portfolio[i].stocks.length) {
@@ -81,30 +80,6 @@ class Portfolio extends React.Component {
     }
 
     fetchData(tickers, items, index = 0) {
-      let username = [
-        "d6166222f6cd23d2214f20c0de1d4cc3", 
-        "0f51c94416c5a029ced069c9c445bcf4", 
-        "77a9accfe589ee1bde92b347cd7243bf", 
-        "00c96699cb9905e2e93939af22fd255d", 
-        "9543da974ae42ceb2724f4fc215bb83b",
-        "1b4f66213e0ee9c96e1298adaf093d99",
-        "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-        "db165ed10432182a47f5439432be10b6",
-        "9bbbdbda7c369c21969cdc108fef9a87",
-        "ef2c9c791fd32dcb138fc9ca511a651c",
-        ];
-      let password = [
-        "6fbb48d898d18930d6fc1e2d4e1bd54b",
-        "dfb23653432156bdbf868393255d9f3d",
-        "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-        "2ce4b7bb869b8c78e176ee210c20269d",
-        "1f91849f806fe320b31c550ebe39bae9",
-        "2e11b74611f8e7a5f52f68a8e04c88b7",
-        "286ce4fbedd72511eac4dd3e58831c67",
-        "5a59201505bf41ef2e52f5c15e123fd7",
-        "2fa44779f963571608242cfc9d216cd2",
-        "4a9214f9a7031f8870897deb8cbdd488"
-        ];
       $.ajax({
           type: "GET",
           url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
@@ -123,31 +98,6 @@ class Portfolio extends React.Component {
     }
 
     receiveNews(ticker, index = 0) {
-      let username = [
-        "d6166222f6cd23d2214f20c0de1d4cc3", 
-        "0f51c94416c5a029ced069c9c445bcf4", 
-        "77a9accfe589ee1bde92b347cd7243bf", 
-        "00c96699cb9905e2e93939af22fd255d", 
-        "9543da974ae42ceb2724f4fc215bb83b",
-        "1b4f66213e0ee9c96e1298adaf093d99",
-        "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-        "db165ed10432182a47f5439432be10b6",
-        "9bbbdbda7c369c21969cdc108fef9a87",
-        "ef2c9c791fd32dcb138fc9ca511a651c",
-        ];
-      let password = [
-        "6fbb48d898d18930d6fc1e2d4e1bd54b",
-        "dfb23653432156bdbf868393255d9f3d",
-        "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-        "2ce4b7bb869b8c78e176ee210c20269d",
-        "1f91849f806fe320b31c550ebe39bae9",
-        "2e11b74611f8e7a5f52f68a8e04c88b7",
-        "286ce4fbedd72511eac4dd3e58831c67",
-        "5a59201505bf41ef2e52f5c15e123fd7",
-        "2fa44779f963571608242cfc9d216cd2",
-        "4a9214f9a7031f8870897deb8cbdd488"
-        ];
-
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
@@ -157,7 +107,7 @@ class Portfolio extends React.Component {
       },
       success: (res) => {
         if (res.missing_access_codes) {
-          this.receiveNews(ticker, index + 1);  
+          this.receiveNews(ticker, index + 1);
         } else {
           this.setState({ news: res.data});
         }
@@ -373,29 +323,6 @@ class Portfolio extends React.Component {
     }
 
     render() {
-        // Loading Screen
-        // let pie = document.getElementById('piechart');
-        // let p = document.getElementById('positions-piechart');
-        
-        // if (this.props.portfolio.length === 0 && !pie) {
-        //   if (this.props.currentUser){
-        //     return (
-        //     <div className="loading">
-        //           <h1>Loading...</h1>
-        //           <i className="fa fa-spinner" aria-hidden="true"/>
-        //     </div>
-  
-        //     );
-        //   }else{
-        //     return (
-        //     <div className="loading">
-        //       <h1>Thank you for using Fantasy <Investing></Investing></h1>
-        //       <i className="fa fa-spinner" aria-hidden="true"/>
-        //     </div>
-        //     );
-        //   }
-          
-        //   }
         let portfolioTable;
         let portfolioIndex = [];
         let mainPortfolio = this.state.currentPortfolio;
@@ -444,7 +371,7 @@ class Portfolio extends React.Component {
                 </tr>);
             }
           });
-      
+
           if (this.props.currentUser) {
             var totalValue = this.props.currentUser.investor.balance;
 
@@ -611,7 +538,7 @@ class Portfolio extends React.Component {
               </tbody>
           </table>);
         }
-        
+
 
         let deleteButton = (<div></div>);
         if (mainPortfolio && !mainPortfolio.main) {
@@ -641,7 +568,7 @@ class Portfolio extends React.Component {
             }).slice(0, 10);
             let elements = $();
             this.state.news.forEach((news , idx) => {
-                elements = elements.add(`<a href=${ news.url } class='news' key=${idx}>${news.title} <div>${this.timeSince(news.publication_date)} ago</div></a>`); 
+                elements = elements.add(`<a href=${ news.url } class='news' key=${idx}>${news.title} <div>${this.timeSince(news.publication_date)} ago</div></a>`);
             });
             $('#news-scroll-header').append(elements);
             $('#news-scroll-header').marquee({duration: 15000, duplicate: true});
