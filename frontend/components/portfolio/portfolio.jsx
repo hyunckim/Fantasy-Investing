@@ -9,7 +9,7 @@ class Portfolio extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-          currentPortfolio: this.props.portfolio[0],
+          currentPortfolio: undefined,
           data: false,
           news: ""
       };
@@ -37,7 +37,7 @@ class Portfolio extends React.Component {
         let indexTickers = '$SPX,$DJI,$RUT';
         let etfTickers = "SPY,DIA,IWM";
         this.fetchData(indexTickers, 'close_price');
-        setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 500);
+        setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 1000);
       });
 
     }
@@ -53,6 +53,11 @@ class Portfolio extends React.Component {
               items += ',adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group';
             }
             this.fetchData(newStock, items);
+            // let newsStock = [];
+            // for (let j = 0; j < nextProps.portfolio[i].stocks.length; j++) {
+            //   newsStock.push(nextProps.portfolio[i].stocks[j].ticker);
+            // }
+            // setTimeout(() => this.receiveNews(newsStock.join(',')), 2000);
             break;
           }
         }
