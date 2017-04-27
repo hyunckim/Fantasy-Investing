@@ -8,19 +8,19 @@ import { username, password } from '../../intrio_account';
 class Portfolio extends React.Component {
     constructor(props) {
       super(props);
-        this.state = {
-            currentPortfolio: this.props.portfolio[0],
-            data: false,
-            news: ""
-        };
-        this.data = {};
-        this.handleClick = this.handleClick.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleData = this.handleData.bind(this);
-        this.handleCompanyData = this.handleCompanyData.bind(this);
-        this.positionsPieChart = this.positionsPieChart.bind(this);
-        this.receiveNews = this.receiveNews.bind(this);
-        this.timeSince = this.timeSince.bind(this);
+      this.state = {
+          currentPortfolio: undefined,
+          data: false,
+          news: ""
+      };
+      this.data = {};
+      this.handleClick = this.handleClick.bind(this);
+      this.handleDelete = this.handleDelete.bind(this);
+      this.handleData = this.handleData.bind(this);
+      this.handleCompanyData = this.handleCompanyData.bind(this);
+      this.positionsPieChart = this.positionsPieChart.bind(this);
+      this.receiveNews = this.receiveNews.bind(this);
+      this.timeSince = this.timeSince.bind(this);
     }
 
     componentDidMount() {
@@ -33,8 +33,15 @@ class Portfolio extends React.Component {
         }
         if (newsStock.length > 0) {
           this.receiveNews(newsStock.join(','));
+        } else {
+          this.receiveNews('AAPL,GOOGL,AMZN,NFLX');
         }
+        let indexTickers = '$SPX,$DJI,$RUT';
+        let etfTickers = "SPY,DIA,IWM";
+        this.fetchData(indexTickers, 'close_price');
+        setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 1000);
       });
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -69,6 +76,7 @@ class Portfolio extends React.Component {
       }
       mainTickers = mainTickers.slice(0,-1);
       watchlistTickers = watchlistTickers.slice(0,-1);
+
       let priceData = [];
 
       if (mainTickers.length > 0) {
@@ -80,6 +88,7 @@ class Portfolio extends React.Component {
     }
 
     fetchData(tickers, items, index = 0) {
+
       $.ajax({
           type: "GET",
           url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
@@ -98,25 +107,26 @@ class Portfolio extends React.Component {
     }
 
     receiveNews(ticker, index = 0) {
-    $.ajax({
-      type: "GET",
-      url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
-      dataType: 'json',
-      headers: {
-        "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
-      },
-      success: (res) => {
-        if (res.missing_access_codes) {
+
+      $.ajax({
+        type: "GET",
+        url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
+        dataType: 'json',
+        headers: {
+          "Authorization": "Basic " + btoa(username[index] + ":" + password[index])
+        },
+        success: (res) => {
+          if (res.missing_access_codes) {
+            this.receiveNews(ticker, index + 1);
+          } else {
+            this.setState({ news: res.data});
+          }
+        },
+        error: (res) => {
           this.receiveNews(ticker, index + 1);
-        } else {
-          this.setState({ news: res.data});
         }
-      },
-      error: (res) => {
-        this.receiveNews(ticker, index + 1);
-      }
-    });
-  }
+      });
+    }
 
     handleCompanyData(data) {
       for (let i = 0; i < data.data.length; i++) {
@@ -126,13 +136,12 @@ class Portfolio extends React.Component {
         }
         this.data[ticker][data.data[i].item] = data.data[i].value;
       }
-      this.setState({data:true});
+      this.setState({data: !this.state.data});
     }
 
     componentWillMount() {
       this.props.fetchPortfolios();
     }
-
 
     handleClick(event){
         this.setState({ currentPortfolio: event });
@@ -323,6 +332,57 @@ class Portfolio extends React.Component {
     }
 
     render() {
+
+      let indexHtml = (<div></div>);
+      if (this.data['$SPX'] && this.data["SPY"]) {
+        let spyPrev = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price'] * 100) / 100);
+        let djiPrev = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price'] * 100) / 100);
+        let rusPrev = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price'] * 100) / 100);
+        let spyPercent = (Math.round(this.data["SPY"]['percent_change']
+          * 10000) / 100).toFixed(2);
+        let djiPercent = (Math.round(this.data["DIA"]['percent_change']
+          * 10000) / 100).toFixed(2);
+        let rusPercent = (Math.round(this.data["IWM"]['percent_change']
+          * 10000) / 100).toFixed(2);
+        let spyLast = this.numberWithCommas(Math.round(this.data["$SPX"]['close_price']
+          * (1 + this.data["SPY"]['percent_change']) * 100) / 100);
+        let djiLast = this.numberWithCommas(Math.round(this.data["$DJI"]['close_price']
+          * (1 + this.data["DIA"]['percent_change']) * 100) / 100);
+        let rusLast = this.numberWithCommas(Math.round(this.data["$RUT"]['close_price']
+          * (1 + this.data["IWM"]['percent_change']) * 100) / 100);
+        let spyChange = Math.round(this.data["$SPX"]['close_price'] *
+          this.data["SPY"]['percent_change'] * 100) / 100;
+        let djiChange = Math.round(this.data["$DJI"]['close_price'] *
+          this.data["DIA"]['percent_change'] * 100) / 100;
+        let rusChange = Math.round(this.data["$RUT"]['close_price'] *
+          this.data["IWM"]['percent_change'] * 100) / 100;
+
+        let spyClass = spyPercent < 0 ? "red" : "green";
+        let djiClass = djiPercent < 0 ? "red" : "green";
+        let rusClass = rusPercent < 0 ? "red" : "green";
+
+        indexHtml = (
+          <div className="indices-container">
+            <div className="market-index">
+              <p>S&P 500</p>
+              <p>${spyLast}</p>
+              <p className={spyClass}>{spyChange} {spyPercent}%</p>
+            </div>
+            <div className="market-index">
+              <p>Dow Jones</p>
+                <p>${djiLast}</p>
+                <p className={djiClass}> {djiChange} {djiPercent}%</p>
+            </div>
+            <div className="market-index">
+              <p>Russell 2000</p>
+              <p>${rusLast}</p>
+              <p className={rusClass}>{rusChange} {rusPercent}%</p>
+            </div>
+          </div>
+        );
+      }
+
+
         let portfolioTable;
         let portfolioIndex = [];
         let mainPortfolio = this.state.currentPortfolio;
@@ -464,7 +524,7 @@ class Portfolio extends React.Component {
                 <p className={className} id="portfolio-change"  >  <span>${this.numberWithCommas(Math.round(unrealizedGain))}</span>   ({percentageChange.toFixed(1)}%)</p>
               </div>
               );
-          }else if((percentageChange || percentageChange === 0) && className === 'portfolio-green') {
+          } else if((percentageChange || percentageChange === 0) && className === 'portfolio-green') {
             value = (
               <div className='portfolio-performance'>
                 <p className='total-value'>${this.numberWithCommas(Math.round(totalValue))}</p>
@@ -605,6 +665,10 @@ class Portfolio extends React.Component {
                     <div className='current-portfolio-title'>
                       <span>{mainPortfolio.title}</span>
                     </div>
+                    <div>
+                      { indexHtml }
+                    </div>
+
                   </div>
                   <div className='portfolio-mid'>
                     <div className='mid-header'>

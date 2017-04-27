@@ -29,7 +29,7 @@ const WelcomePage = () => {
                 <hr className="section-heading-spacer"></hr>
                   <div className="clearfix"></div>
                   <h2 className="section-heading">Portfolio</h2>
-                  <p className="lead">Let the portfolio's content tell you a story. Take full advantage of our graphs and tables as well as current news for stocks in the portofolio.</p>
+                  <p className="lead">Keep track of your portfolio and follow the performance of your investments.</p>
                 </div>
                 <div className="col-lg-5 col-lg-offset-2 col-sm-6">
                   <img className="img-responsive" src="images/" alt="" />
@@ -48,7 +48,7 @@ const WelcomePage = () => {
                     <hr className="section-heading-spacer" />
                       <div className="clearfix"></div>
                       <h2 className="section-heading">Trade Shares</h2>
-                      <p className="lead">Fantasy Investing offers seamless realistic stock trading experience with up-to-date stock prices during market trading time.</p>
+                      <p className="lead">Fantasy Investing offers seamless realistic stock trading experience with up-to-date stock prices during market hours.</p>
                     </div>
                     <div className="col-lg-5 col-sm-pull-6  col-sm-6">
                       <img className="img-responsive" src="images/" alt="" />
@@ -68,7 +68,7 @@ const WelcomePage = () => {
                         <hr className="section-heading-spacer" />
                         <div className="clearfix"></div>
                         <h2 className="section-heading">Research Stock</h2>
-                        <p className="lead">Dive Deeper into the company before buying/selling shares! The acurate and variety data allows you to make sharp decisions to improve your portfolio.</p>
+                        <p className="lead">Dive deeper into the company before buying or selling shares. A wide variety of data allows you to make sharp decisions to improve your portfolio.</p>
                       </div>
                         <div className="col-lg-5 col-lg-offset-2 col-sm-6">
                           <img className="img-responsive" src="images/" alt="" />

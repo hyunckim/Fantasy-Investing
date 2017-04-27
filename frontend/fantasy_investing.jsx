@@ -6,7 +6,7 @@ import { persistStore, autoRehydrate } from 'redux-persist';
 
 document.addEventListener('DOMContentLoaded',() => {
   let store = configureStore();
-
+  window.store = store;
   persistStore(store);
 
   const root = document.getElementById('root');
