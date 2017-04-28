@@ -20,7 +20,6 @@ class NavBar extends React.Component {
    }
 
   componentWillReceiveProps(nextProps) {
-    debugger;
     if (nextProps.url !== this.props.url) {
       if (nextProps.url.includes("login") ||
         nextProps.url.includes("signup")) {
