@@ -372,8 +372,8 @@
 	width: 0;
 }
 .chart_container {
-	float: left;
 	position: relative;
+
 }
 
 .y_axis {
@@ -385,7 +385,7 @@
 
 #canvas-svg2 .y_axis {
 	position: absolute;
-	top: 50px;
+	top: 16px;
 	bottom: 0;
 	width: 40px;
 }
@@ -409,9 +409,21 @@
 #canvas-svg,
 #canvas-svg2 {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 	width: auto;
-	height: 300px;
-  margin: 10px;
+	height: 47%;
+	background: white;
+	color: #676a6c;
+	border-top: 2px solid #e7eaec;
+	border-bottom: 1px solid #e7eaec;
+}
+#canvas-svg2 {
+	border-top: 2%;
+	height: 44%;
+	padding-left: 1%;
+	margin-bottom: 3%;
 }
 
 .legend {
@@ -426,21 +438,23 @@
 
 .yAxisLabel {
   position: absolute;
+font-size: 12px;
   top: 0px;
   left: 50px;
 }
 
 .xAxisLabel {
+	font-size: 12px;
   position: absolute;
   text-align: right;
 }
 
 .title {
   float: left;
-  font-size: 16px;
+  margin-top: 1%;
+  font-size: 13px;
   width: 100%;
   text-align: center;
   display: none;
   font-weight: bold;
-	margin-bottom: 30px;
 }
