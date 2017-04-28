@@ -676,7 +676,7 @@ class Portfolio extends React.Component {
                           <span>Portfolio List</span>
                           <div className="dropdown-content">
                             {portfolioIndex}
-                            <PortfolioModal/>
+                            <PortfolioModal removeErrors={this.props.removeErrors}/>
                           </div>
                         </div>
                         {deleteButton}

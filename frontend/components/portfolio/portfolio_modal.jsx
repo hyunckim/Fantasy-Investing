@@ -33,6 +33,7 @@ class PortfolioModal extends React.Component {
   }
 
   openModal() {
+    this.props.removeErrors();
     this.setState({modalIsOpen: true});
   }
 
