@@ -165,10 +165,10 @@ class TradeForm extends React.Component {
       this.props.receiveStockErrors("Please enter a ticker");
     } else if (this.state.stock.number_of_shares === "") {
       this.props.receiveStockErrors("Please enter a the amount of shares you want to trade");
-    } else if (this.state.stock.number_of_shares < 1) {
-      this.props.receiveStockErrors("Please enter a positive integer for the number of shares you want to trade");
     } else if (this.state.stock.number_of_shares.includes(".")) {
       this.props.receiveStockErrors("You cannot trade partial shares");
+    } else if (!parseInt(this.state.stock.number_of_shares) || parseInt(this.state.stock.number_of_shares) < 1) {
+      this.props.receiveStockErrors("Please enter a positive integer for the number of shares you want to trade");
     } else {
       this.fetchData(this.state.stock.ticker);
     }
@@ -210,13 +210,15 @@ class TradeForm extends React.Component {
 
     if (this.state.formState === "confirm trade") {
 
+      let orderType = `${this.state.stock.action.toLowerCase()} `;
+
       formHtml = (
         <div>
           <div>
             <h3 className='trade-form-title'>Confirm your order</h3>
           </div>
           <div className='confirmation-message'>
-            You are about to {this.state.stock.action.toLowerCase()} {this.state.stock.number_of_shares} shares of {this.state.stock.name} at ${this.state.stock.current_price} / share
+            You are about to {orderType} {this.state.stock.number_of_shares} shares of {this.state.stock.name} at ${this.state.stock.current_price} / share
             <div className='trade-confirmation-buttons'>
               <button onClick={this.handleSubmit}>Confirm trade</button>
               <button onClick={() => this.setState({formState: "new form"})}>Go Back</button>

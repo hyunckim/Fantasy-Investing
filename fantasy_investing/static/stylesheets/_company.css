@@ -1,57 +1,79 @@
 .company-content {
-  color: #ce9e62;
+  color: #676a6c;
+  width: 100%;
   display: flex;
-  width: 92vw;
-  height: 700px;
+  height: auto;
   flex-direction: column;
-  margin-top: 100px;
-  margin-left: 4vw;;
-  background: #4F6E7C;
-  border: 1px solid white;
-}
-
-.company-header {
-  width: 70%;
-  display: flex;
+  height: calc(100vh - 46px);  
+  overflow-y: hidden;
+  margin-top: 46px;
 }
 
 .company-info {
+  width: 100%;
+  height: 13%;
+  display: flex;
+  flex-direction: row;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.company-header {
+  width: 100%;
+  margin: 2%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 30px;
-  padding: 20px 10px;
-  font-weight: bold;
-  background: #4F6E7C
 }
+
+
 
 .company-summary {
+  margin-top: 2%;
   display: flex;
   flex-direction: row;
-  height: 100%;
+  width: 100%;
   color: #F6F2F3;
-
+  height: calc(100% - 13% - 2% -2%);
 }
 
-.company-detail {
+.company-detail-tables{
+  width: 30%;
+  color: #676a6c;
+  margin-left: 2%;
+  margin-right: 1%;
   display: flex;
-  padding-left: 10px;
-  padding-top: 10px;
   flex-direction: column;
-  width: 200px;
-  background: #4F6E7C;
-  line-height: 3;
-  /*margin-right: 6%;*/
-  width: 50%;
+  margin-bottom: 10%;
+  height: 100%;
+}
+.company-detail {
+  border-top: 2px solid #e7eaec;
+  border-bottom: 1px solid #e7eaec;
+  background: white;
+  width: 100%;
+  height: 100%;
 }
 
+.company-detail p {
+  padding: 2% 0;
+}
+.company-nums-title{
+  width: 98%;
+  font-size: 13px;
+  padding-left: 2%;
+  display: inline-block;
+  max-width: 100%;
+  font-weight: 700;
+  border-bottom: 1px solid #e7eaec;
+}
 .company-nums {
   display: flex;
   justify-content: space-between;
-  padding-right: 15px;
+  width: 90%;
   font-size: 12px;
-  max-width: 300px;
-  min-width: 200px;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 .line {
@@ -71,41 +93,57 @@
 
 .company-news {
   display: flex;
-  text-align: center;
   flex-direction: column;
-  width: calc(100vw - 1000px);
-  background: #4F6E7C;
-  margin-top: -75.3px;
+  width: 30%;
+  margin-right: 2%;
+  margin-left: 1%;
+  height: 96%;
+  background: white;
+
+}
+.company-news .news-title a{
+  width: 98%;
+  margin-left: 2%;
+  display: inline-block;
+  color: #676a6c;
+
 }
 
 .news-header {
-  color: #ce9e62;
-  font-size: 24px;
-  font-weight: bold;
+  border-top: 2px solid #e7eaec;
+
+  color: #676a6c;
+  background: white;
+  width: 98%;
+  font-size: 13px;
+  padding: 2% 0;
+  padding-left: 2%;
+  display: inline-block;
+  max-width: 100%;
+  font-weight: 700;
 }
 
 .company-news-summary {
   font-size: 12px;
   color: #ce9e62;
   text-align: left;
-  width: 23vw;
+  width: 100%;
   align-self: center;
   max-height: 600px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.news-content {
-  padding-bottom: 10px;
-  padding: 0 15px 10px 15px;
+.company-news-summary .news-content {
+  width: 100%;
+  margin: 0;
 }
 
 .news-summary {
+  width: 100%;
   line-height: 1.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-size: 13px;
-  max-height: 80px;
+   max-height: 80px;
 }
 
 .news-summary:hover {
@@ -114,6 +152,7 @@
 }
 
 .news-date {
+  width: 96%;
   text-align: right;
   opacity: 0.8;
 }
@@ -121,7 +160,6 @@
 .watchlist-button{
   display: flex;
   flex-direction: row;
-  margin-left: 10%;
 }
 
 .watchlist-dropdown {
@@ -129,6 +167,7 @@
   display: inline-block;
   width: 50px;
   padding-right: 75px;
+
 }
 
 .watchlist-dropdown span{
@@ -153,6 +192,7 @@
 }
 
 .company-graph{
-  text-align: center;
-  width: 50%vh;
+  width: 34%;
 }
+
+
