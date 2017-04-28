@@ -660,16 +660,15 @@ class Portfolio extends React.Component {
                 <div className="portfolio-header">
                   <div className='portfolio-title'>
                     <div className='greeting'>Welcome {this.props.currentUser.username}</div>
-                    <div className='current-portfolio-title'>
-                      <span>{mainPortfolio.title}</span>
-                    </div>
                     <div>
                       { indexHtml }
                     </div>
-
                   </div>
                   <div className='portfolio-mid'>
                     <div className='mid-header'>
+                      <div className='current-portfolio-title'>
+                        <span>{mainPortfolio.title}</span>
+                      </div>
                       { value }
                       <div className='portfolio-buttons'>
                         <div className='dropdown'>
@@ -687,15 +686,6 @@ class Portfolio extends React.Component {
                       </div>
                   </div>
                   <div className='piechart-container'></div>
-
-
-                </div>
-
-                <div className='news-content'>
-                  <div className='news-content-title'>
-                    <span> Recent Fantasy Investing New </span>
-                  </div>
-                  {newsContent}
                 </div>
               </div>
             );

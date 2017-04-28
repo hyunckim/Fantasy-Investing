@@ -343,7 +343,7 @@ class Company extends React.Component {
             } else {
               return "";
             }
-          }
+          };
 
         let xAxis = new Rickshaw.Graph.Axis.X( {
           graph: graph,
@@ -370,8 +370,8 @@ class Company extends React.Component {
 
         d3.select("#canvas-svg").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
-        .style("left", (-10) + "px")
-        .style("top", (-15) + "px")
+        .style("left", (5) + "px")
+        .style("top", (-5) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -458,8 +458,8 @@ class Company extends React.Component {
 
         d3.select("#canvas-svg2").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
-        .style("left", (-10) + "px")
-        .style("top", (-30) + "px")
+        .style("left", (0) + "px")
+        .style("top", (-5) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -485,7 +485,7 @@ class Company extends React.Component {
         newsContent = this.state.news.map((news, idx) => {
           return (
             <div key={ idx } className="news-content">
-              <div className="news-summary">
+              <div className="news-title">
                 <a href={ news.url }>{ news.title }</a>
               </div>
               <div className="news-date">
@@ -497,11 +497,27 @@ class Company extends React.Component {
     }
 
     let change;
-    if (percentChange) {
+    let value;
+    if (percentChange || percentChange === 0) {
       if (percentChange < 0) {
         change = "portfolio-red";
       } else { change = "portfolio-green";}
+      if (change === 'portfolio-red') {
+        value = (
+          <span className="company-price">${ price } <span className={change}>${priceChange}  ({ percentChange })%</span></span>
+        );
+      } else {
+        value = (
+          <span className="company-price">${ price } <span className={change}>$+{priceChange}  ({ percentChange })%</span></span>
+        );
+      }
     }
+
+
+
+      
+
+    
     let watchlistDropdown = (<div></div>);
     if (watchlists && watchlists.length > 0) {
       watchlistDropdown = (
@@ -522,13 +538,17 @@ class Company extends React.Component {
           <div className="company-header">
             <div className="company-name-price">
               <span className="company-title">{ title } { ticker }</span>
-              <span className="company-price">${ price } <span className={change}>{priceChange}  ({ percentChange })%</span></span>
+              { value }
             </div>
             {watchlistDropdown}
           </div>
         </div>
         <div className="company-summary">
+        <div className="company-detail-tables">
           <div className="company-detail">
+            <div className='company-nums-title'>
+              <p>Company Financials</p>
+            </div>
             <div className="company-nums">
               <p >Open</p>
               <p className='value'>${ open }</p>
@@ -580,8 +600,12 @@ class Company extends React.Component {
             <div className="company-nums">
               <p>Revenue</p>
               <p className='value'>${ revenue }Bn</p>
+            </div>            
+          </div>
+          <div className="company-detail">
+            <div className='company-nums-title'>
+              <p>Financial Ratios</p>
             </div>
-            <br></br>
             <div className="company-nums">
               <p>Forward P/E</p>
               <p className='value'>{ forwardPE }x</p>
@@ -599,6 +623,7 @@ class Company extends React.Component {
               <p className='value'>{ pricePerBook }x</p>
             </div>
           </div>
+        </div>
           <div className = "company-graphs">
             <div id="canvas-svg2">
               <div className="title">Title</div>
@@ -612,7 +637,7 @@ class Company extends React.Component {
           <div className="company-news">
             <div className="news-header">
               Company News
-            </div><br/>
+            </div>
             <div className="company-news-summary">
               { newsContent }
             </div>
