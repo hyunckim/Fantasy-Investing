@@ -67,7 +67,7 @@ const WelcomePage = () => {
                       <div className="col-lg-5 col-sm-6">
                         <hr className="section-heading-spacer" />
                         <div className="clearfix"></div>
-                        <h2 className="section-heading">Research Stock</h2>
+                        <h2 className="section-heading">Research Companies</h2>
                         <p className="lead">Dive deeper into the company before buying or selling shares. A wide variety of data allows you to make sharp decisions to improve your portfolio.</p>
                       </div>
                         <div className="col-lg-5 col-lg-offset-2 col-sm-6">
