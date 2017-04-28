@@ -1,11 +1,13 @@
 .main-portfolio-index {
   margin-top: 3%;
   top: 46px;
+  height: calc(100vh - 46px - 2%);
   display: flex;
   flex-direction: column;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;  color: #676a6c;
   width: 100%;
   background: #F3F3F4;
+  overflow-y: hidden;
 }
 
 .main-portfolio-index .portfolio-title {
@@ -18,55 +20,53 @@
   width: 100%;
   background: white;
   border-top: 1px solid #e7eaec;
-  height: 425px;
   border-color: #e7eaec;
   border-style: solid solid none;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
   border-width: 2px 0 0;
   border-bottom: 1px solid #e7eaec;
-
-
+  height: 100%;
 }
 
 .greeting {
-    margin-top: 5%;
+    margin-top: 10%;
     margin-left: 10%;
-    font-size: 26px;
+    font-size: 20px;
     font-weight: 100;
     margin-bottom: 10px;
+    border-bottom: 1px solid #676a6c
 }
-
-.current-portfolio-title{
-  width: 80%;
-  margin-left: 10%;
-  border-bottom: 1px solid #676a6c; 
-
-
-}
-.current-portfolio-title span{
-  font-size: 20px;
-  line-height: 40px;
-  position: relative;
-  padding-bottom: 5px;
-  width: 80%;
-}
-
-
 
 .portfolio-mid{
   display: flex;
   flex-direction: column;
   width: 60%;
+  height: 100%;
 }
 .mid-header{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 46px;
-  margin-top: 1%;
+  margin-top: 3%;
+  margin-bottom: 1%;
+  vertical-align: text-bottom;
+}
+
+.current-portfolio-title{
+  width: auto;
+  display: flex;
+
+}
+.current-portfolio-title span{
+  display: inline-block;
+  width: 100%;
+  font-size: 30px;
+  height: 100%;
+
 }
 .portfolio-buttons {
-  display:flex;
+  align-content: center;
   align-items: center;
 }
 
@@ -80,18 +80,19 @@
   flex-direction: column;
   width: 20%;
   height: 100%;
-  margin-top: 15px;
-  align-items: center;
+  justify-content: flex-start;
+  justify-content: space-around;
 }
 
 .piechart-container div{
   display: flex;
   justify-content: center;
+
 }
 
 .dropdown {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   width: 100%;
 }
 
@@ -99,6 +100,7 @@
 .dropdown-modal {
   border-top: 1px solid #C1432E;
   padding: 7px 0;
+
 }
 
 .index-dropdown-title {
@@ -156,15 +158,15 @@
 }
 
 .portfolio-performance {
-  margin-left: 30%;
   display: flex;
   flex-direction: row;
-  align-items: center;
+
 }
 .portfolio-performance p{
   width: 100%;
   display: flex;
   flex-direction: row;
+
 }
 .portfolio-performance span{
   padding-right: 2px;
@@ -172,13 +174,19 @@
 .total-value{
   padding-right: 10px;
   font-size: 30px;
+
 }
 .portfolio-green {
+  height: 100%;
   color: green;
+  align-items: center;
+
 }
 
 .portfolio-red {
+  height: 100%;
   color: rgb(222, 15, 0);
+    align-items: center;
 
 }
 
@@ -196,8 +204,6 @@
   opacity: .5;
 }
 
-
-
 .loading {
   width: 80%;
   height: 80%;
@@ -209,7 +215,7 @@
   margin-right: 10%;
   margin-left: 10%;
   /*background-image: url(https://s3-us-west-1.amazonaws.com/fantasyinvesting-dev/loading+wallpaper.jpg);
-  background-size: cover;  
+  background-size: cover;
   opacity: 0.5;*/
   /*border: 1px solid white;*/
 }
@@ -288,7 +294,7 @@ ul#news-scroll-header a:hover {
   border-image: none;
   width: 100%;
   border-style: solid solid none;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
   border-width: 2px 0 0;
   padding: 0;
 }
@@ -299,7 +305,7 @@ ul#news-scroll-header a:hover {
   font-weight: 600;
   font-size: 14px;
   padding: 2%;
-  
+
 }
 
 .news-content-item{
@@ -327,5 +333,47 @@ ul#news-scroll-header a:hover {
 }
 
 .portfolio-table{
-  margin-top: 10px;
+  width: 100%;
+    vertical-align: top;
+
+}
+#portfolioTable{
+  width:100%;
+}
+
+
+.indices-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 38%;
+}
+
+.indices-container div {
+  margin-top: 10%;
+}
+
+.market-index p {
+  margin-top: 5%;
+}
+
+.market-index p:first-child{
+  font-weight: bold;
+}
+
+.market-index:first-child {
+  margin-top: 5%;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.portfolio-form-errors {
+  color: #C74837;
+  margin-top: 15px;
+  text-align: center;
 }

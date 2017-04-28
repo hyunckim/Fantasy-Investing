@@ -1,5 +1,6 @@
 import React from 'react';
 import { merge } from  'lodash';
+import { username, password } from '../../intrio_account';
 
 class Company extends React.Component {
 
@@ -23,33 +24,6 @@ class Company extends React.Component {
   }
 
   fetchData(ticker, index = 0) {
-    let username = [
-      "d6166222f6cd23d2214f20c0de1d4cc3",
-      "0f51c94416c5a029ced069c9c445bcf4",
-      "77a9accfe589ee1bde92b347cd7243bf",
-      "00c96699cb9905e2e93939af22fd255d",
-      "9543da974ae42ceb2724f4fc215bb83b",
-      "1b4f66213e0ee9c96e1298adaf093d99",
-      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-      "db165ed10432182a47f5439432be10b6",
-      "9bbbdbda7c369c21969cdc108fef9a87",
-      "ef2c9c791fd32dcb138fc9ca511a651c",
-      "cd25157222f897581b38dfa05a0dc94b",
-      ];
-    let password = [
-      "6fbb48d898d18930d6fc1e2d4e1bd54b",
-      "dfb23653432156bdbf868393255d9f3d",
-      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-      "2ce4b7bb869b8c78e176ee210c20269d",
-      "1f91849f806fe320b31c550ebe39bae9",
-      "2e11b74611f8e7a5f52f68a8e04c88b7",
-      "286ce4fbedd72511eac4dd3e58831c67",
-      "5a59201505bf41ef2e52f5c15e123fd7",
-      "2fa44779f963571608242cfc9d216cd2",
-      "4a9214f9a7031f8870897deb8cbdd488",
-      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
-
-      ];
     let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,forward_dividend_rate,forward_dividend_yield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
     let today = new Date();
     let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -126,32 +100,6 @@ class Company extends React.Component {
   }
 
   receiveNews(ticker, index = 0) {
-    let username = [
-      "d6166222f6cd23d2214f20c0de1d4cc3",
-      "0f51c94416c5a029ced069c9c445bcf4",
-      "77a9accfe589ee1bde92b347cd7243bf",
-      "00c96699cb9905e2e93939af22fd255d",
-      "9543da974ae42ceb2724f4fc215bb83b",
-      "1b4f66213e0ee9c96e1298adaf093d99",
-      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-      "db165ed10432182a47f5439432be10b6",
-      "9bbbdbda7c369c21969cdc108fef9a87",
-      "ef2c9c791fd32dcb138fc9ca511a651c",
-      "cd25157222f897581b38dfa05a0dc94b",
-      ];
-    let password = [
-      "6fbb48d898d18930d6fc1e2d4e1bd54b",
-      "dfb23653432156bdbf868393255d9f3d",
-      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-      "2ce4b7bb869b8c78e176ee210c20269d",
-      "1f91849f806fe320b31c550ebe39bae9",
-      "2e11b74611f8e7a5f52f68a8e04c88b7",
-      "286ce4fbedd72511eac4dd3e58831c67",
-      "5a59201505bf41ef2e52f5c15e123fd7",
-      "2fa44779f963571608242cfc9d216cd2",
-      "4a9214f9a7031f8870897deb8cbdd488",
-      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
-      ];
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}`,
@@ -395,7 +343,7 @@ class Company extends React.Component {
             } else {
               return "";
             }
-          }
+          };
 
         let xAxis = new Rickshaw.Graph.Axis.X( {
           graph: graph,
@@ -422,8 +370,8 @@ class Company extends React.Component {
 
         d3.select("#canvas-svg").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
-        .style("left", (-10) + "px")
-        .style("top", (-15) + "px")
+        .style("left", (5) + "px")
+        .style("top", (-5) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -510,8 +458,8 @@ class Company extends React.Component {
 
         d3.select("#canvas-svg2").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
-        .style("left", (-10) + "px")
-        .style("top", (-30) + "px")
+        .style("left", (0) + "px")
+        .style("top", (-5) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -537,7 +485,7 @@ class Company extends React.Component {
         newsContent = this.state.news.map((news, idx) => {
           return (
             <div key={ idx } className="news-content">
-              <div className="news-summary">
+              <div className="news-title">
                 <a href={ news.url }>{ news.title }</a>
               </div>
               <div className="news-date">
@@ -549,11 +497,27 @@ class Company extends React.Component {
     }
 
     let change;
-    if (percentChange) {
+    let value;
+    if (percentChange || percentChange === 0) {
       if (percentChange < 0) {
         change = "portfolio-red";
       } else { change = "portfolio-green";}
+      if (change === 'portfolio-red') {
+        value = (
+          <span className="company-price">${ price } <span className={change}>${priceChange}  ({ percentChange })%</span></span>
+        );
+      } else {
+        value = (
+          <span className="company-price">${ price } <span className={change}>$+{priceChange}  ({ percentChange })%</span></span>
+        );
+      }
     }
+
+
+
+      
+
+    
     let watchlistDropdown = (<div></div>);
     if (watchlists && watchlists.length > 0) {
       watchlistDropdown = (
@@ -574,13 +538,17 @@ class Company extends React.Component {
           <div className="company-header">
             <div className="company-name-price">
               <span className="company-title">{ title } { ticker }</span>
-              <span className="company-price">${ price } <span className={change}>{priceChange}  ({ percentChange })%</span></span>
+              { value }
             </div>
             {watchlistDropdown}
           </div>
         </div>
         <div className="company-summary">
+        <div className="company-detail-tables">
           <div className="company-detail">
+            <div className='company-nums-title'>
+              <p>Company Financials</p>
+            </div>
             <div className="company-nums">
               <p >Open</p>
               <p className='value'>${ open }</p>
@@ -632,8 +600,12 @@ class Company extends React.Component {
             <div className="company-nums">
               <p>Revenue</p>
               <p className='value'>${ revenue }Bn</p>
+            </div>            
+          </div>
+          <div className="company-detail">
+            <div className='company-nums-title'>
+              <p>Financial Ratios</p>
             </div>
-            <br></br>
             <div className="company-nums">
               <p>Forward P/E</p>
               <p className='value'>{ forwardPE }x</p>
@@ -651,6 +623,7 @@ class Company extends React.Component {
               <p className='value'>{ pricePerBook }x</p>
             </div>
           </div>
+        </div>
           <div className = "company-graphs">
             <div id="canvas-svg2">
               <div className="title">Title</div>
@@ -664,7 +637,7 @@ class Company extends React.Component {
           <div className="company-news">
             <div className="news-header">
               Company News
-            </div><br/>
+            </div>
             <div className="company-news-summary">
               { newsContent }
             </div>
