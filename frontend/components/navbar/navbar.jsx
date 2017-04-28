@@ -12,18 +12,35 @@ class NavBar extends React.Component {
     this.handleGuestClick = this.handleGuestClick.bind(this);
     this.handlePortfolioButton = this.handlePortfolioButton.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+    if (this.props.url.includes("login") || this.props.url.includes("signup")) {
+      $("html").css("background", "grey");
+    } else {
+      $("html").css("background", "#F3F3F4");
+    }
+   }
+
+  componentWillReceiveProps(nextProps) {
+    debugger;
+    if (nextProps.url !== this.props.url) {
+      if (nextProps.url.includes("login") ||
+        nextProps.url.includes("signup")) {
+          $("html").css("background", "grey");
+      } else {
+        $("html").css("background", "#F3F3F4");
+      }
+    }
   }
 
   handleSignUpClick(e) {
     e.preventDefault();
-    this.props.removeErrors();
     hashHistory.push('/signup');
+    this.props.removeErrors();
   }
 
   handleLogInClick(e) {
     e.preventDefault();
-    this.props.removeErrors();
     hashHistory.push('/login');
+    this.props.removeErrors();
   }
 
   handleLogOutClick(e) {

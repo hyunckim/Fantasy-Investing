@@ -4,10 +4,14 @@ import { removeStockErrors} from '../../actions/stock_actions';
 import { clearPortfolio } from '../../actions/portfolio_actions';
 import NavBar from './navbar';
 
-const mapStateToProps = state => ({
-  currentUser: state.currentUser,
-  filters: state.filters
-});
+const mapStateToProps = state => {
+  return {
+    currentUser: state.currentUser,
+    filters: state.filters,
+    url: location.hash
+  };
+
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
