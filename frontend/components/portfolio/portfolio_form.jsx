@@ -14,7 +14,7 @@ class PortfolioForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
     }
-    
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.createPortfolio(this.state)
@@ -31,16 +31,17 @@ class PortfolioForm extends React.Component {
         <div className='portfolio-form-title'>
             Create A New Portfolio
         </div>
-        <form onSubmit={ this.handleSubmit}>
+        <form onSubmit={ this.handleSubmit} className="new-portfolio-form">
           <input
             onChange={ this.updatePortfolio }
             type="text"
             placeholder="Portfolio Title"
+            className = "new-portfolio-input"
             value={ this.state.title } />
-         <input 
-            type="submit" 
-            id="submit-button" 
-            className="form-submit-button" 
+         <input
+            type="submit"
+            id="submit-button"
+            className="form-submit-button"
             value="Submit"
             />
         </form>

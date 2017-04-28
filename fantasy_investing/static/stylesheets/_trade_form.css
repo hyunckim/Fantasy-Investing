@@ -54,8 +54,15 @@
 }
 
 .portfolio-form-title{
-    text-align: center;
+  padding-top: 30px;
+}
 
+.new-portfolio-form {
+  height: 160px;
+}
+
+.new-portfolio-input {
+  margin-top: 20px !important;
 }
 
 .trade-form label, .trade-form input {
@@ -63,11 +70,12 @@
 }
 
 .form-symbol {
-    border: 1px solid black;
+  border: 1px solid black;
+  margin-bottom: 10px;
 }
 
 .form-submit-button {
-    text-align: center;
+  text-align: center;
 }
 
 .form-submit-button:hover {
@@ -75,8 +83,10 @@
 }
 
 #submit-button {
-  margin-left: 5px;
-  margin-top: 35px;
+  margin-left: 200px;
+  display: block;
+  border: 1px solid #4b6777;
+  width: 90px;
 }
 
 .trade-close-button, .portfolio-close-button{
