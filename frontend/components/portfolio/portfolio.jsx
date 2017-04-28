@@ -88,7 +88,6 @@ class Portfolio extends React.Component {
     }
 
     fetchData(tickers, items, index = 0) {
-
       $.ajax({
           type: "GET",
           url: `https://api.intrinio.com/data_point?identifier=${tickers}&item=${items}`,
@@ -107,7 +106,6 @@ class Portfolio extends React.Component {
     }
 
     receiveNews(ticker, index = 0) {
-
       $.ajax({
         type: "GET",
         url: `https://api.intrinio.com/news?ticker=${ticker}&page_size=20`,
@@ -678,7 +676,7 @@ class Portfolio extends React.Component {
                           <span>Portfolio List</span>
                           <div className="dropdown-content">
                             {portfolioIndex}
-                            <PortfolioModal/>
+                            <PortfolioModal removeErrors={this.props.removeErrors}/>
                           </div>
                         </div>
                         {deleteButton}
