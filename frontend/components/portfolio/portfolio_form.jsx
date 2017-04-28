@@ -15,17 +15,20 @@ class PortfolioForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.createPortfolio(this.state);
-        this.setState({formState: true});
+        if (this.state.title.length > 0) {
+          this.props.createPortfolio(this.state);
+          this.setState({formState: true});
 
-        setTimeout(() =>
-          closeModal(),
-          3000);
+          setTimeout(() =>
+            closeModal(),
+            3000);
 
-        const closeModal = () => {
-          this.setState({formState: false});
-          this.props.modal.closeModal();
-        };
+          const closeModal = () => {
+            this.setState({formState: false});
+            this.props.modal.closeModal();
+          };
+        }
+
     }
 
     updatePortfolio(event) {

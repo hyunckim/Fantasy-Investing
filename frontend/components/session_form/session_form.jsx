@@ -31,7 +31,7 @@ class SessionForm extends React.Component {
 		e.preventDefault();
 		const user = this.state;
 		this.props.removeErrors();
-		if (this.state.password.length > 5) {
+		if (this.state.password.length > 5 || this.props.formType === 'login') {
 			this.props.processForm(user);
 		} else {
 			this.props.receiveErrors("Your password should be at least 6 characters long");
