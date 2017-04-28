@@ -411,7 +411,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  
+  justify-content: center;
 	width: auto;
 	height: 47%;
 	background: white;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { merge } from  'lodash';
+import { username, password } from '../../intrio_account';
 
 class Company extends React.Component {
 
@@ -10,7 +11,6 @@ class Company extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.fetchCompany();
     this.props.fetchPortfolios();
     this.fetchData(this.props.ticker);
     this.receiveNews(this.props.ticker);
@@ -24,44 +24,6 @@ class Company extends React.Component {
   }
 
   fetchData(ticker, index = 0) {
-    let username = [
-      "d6166222f6cd23d2214f20c0de1d4cc3", 
-      "0f51c94416c5a029ced069c9c445bcf4", 
-      "77a9accfe589ee1bde92b347cd7243bf", 
-      "00c96699cb9905e2e93939af22fd255d", 
-      "9543da974ae42ceb2724f4fc215bb83b",
-      "1b4f66213e0ee9c96e1298adaf093d99",
-      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-      "db165ed10432182a47f5439432be10b6",
-      "9bbbdbda7c369c21969cdc108fef9a87",
-      "ef2c9c791fd32dcb138fc9ca511a651c",
-      "6b3f930579a063f2593bee515e0ce231",
-      "3ee4fd6b79113d9a021f8edc344cde15",
-      "cd25157222f897581b38dfa05a0dc94b",
-      "d13187d5caff1ea69967306d694c838d",
-      "56e0e212d9ea12eba8ea3b4c47d56a32",
-      "c2e81bd9cf630f14c9592a3b65b9cfd3",
-      "bb246d992af6f801ada6fdf6e4340fcf"
-      ];
-    let password = [
-      "6fbb48d898d18930d6fc1e2d4e1bd54b",
-      "dfb23653432156bdbf868393255d9f3d",
-      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-      "2ce4b7bb869b8c78e176ee210c20269d",
-      "1f91849f806fe320b31c550ebe39bae9",
-      "2e11b74611f8e7a5f52f68a8e04c88b7",
-      "286ce4fbedd72511eac4dd3e58831c67",
-      "5a59201505bf41ef2e52f5c15e123fd7",
-      "2fa44779f963571608242cfc9d216cd2",
-      "4a9214f9a7031f8870897deb8cbdd488",
-      "4c14c89a57db9522f6c8f460e3142d88",
-      "a5792311c4b1288b385afdb57b8378a8",
-      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
-      "06f05ee05920212cd5b28f41351429b0",
-      "c895978d603b69cb275b6ffb91b24388",
-      "15c487682d52323619698ebf3260ed60",
-      "f7fc945c6635f1a7ae810960e1c4b80a"
-      ];
     let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,forward_dividend_rate,forward_dividend_yield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
     let today = new Date();
     let endDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -138,44 +100,6 @@ class Company extends React.Component {
   }
 
   receiveNews(ticker, index = 0) {
-    let username = [
-      "d6166222f6cd23d2214f20c0de1d4cc3", 
-      "0f51c94416c5a029ced069c9c445bcf4", 
-      "77a9accfe589ee1bde92b347cd7243bf", 
-      "00c96699cb9905e2e93939af22fd255d", 
-      "9543da974ae42ceb2724f4fc215bb83b",
-      "1b4f66213e0ee9c96e1298adaf093d99",
-      "4d28e4bb9ba48a3e05e0f7d5e03fe130",
-      "db165ed10432182a47f5439432be10b6",
-      "9bbbdbda7c369c21969cdc108fef9a87",
-      "ef2c9c791fd32dcb138fc9ca511a651c",
-      "6b3f930579a063f2593bee515e0ce231",
-      "3ee4fd6b79113d9a021f8edc344cde15",
-      "cd25157222f897581b38dfa05a0dc94b",
-      "d13187d5caff1ea69967306d694c838d",
-      "56e0e212d9ea12eba8ea3b4c47d56a32",
-      "c2e81bd9cf630f14c9592a3b65b9cfd3",
-      "bb246d992af6f801ada6fdf6e4340fcf"
-      ];
-    let password = [
-      "6fbb48d898d18930d6fc1e2d4e1bd54b",
-      "dfb23653432156bdbf868393255d9f3d",
-      "6fabe9c15bd1e7ead66b7cc3cd6b3e44",
-      "2ce4b7bb869b8c78e176ee210c20269d",
-      "1f91849f806fe320b31c550ebe39bae9",
-      "2e11b74611f8e7a5f52f68a8e04c88b7",
-      "286ce4fbedd72511eac4dd3e58831c67",
-      "5a59201505bf41ef2e52f5c15e123fd7",
-      "2fa44779f963571608242cfc9d216cd2",
-      "4a9214f9a7031f8870897deb8cbdd488",
-      "4c14c89a57db9522f6c8f460e3142d88",
-      "a5792311c4b1288b385afdb57b8378a8",
-      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
-      "06f05ee05920212cd5b28f41351429b0",
-      "c895978d603b69cb275b6ffb91b24388",
-      "15c487682d52323619698ebf3260ed60",
-      "f7fc945c6635f1a7ae810960e1c4b80a"
-      ];
     $.ajax({
       type: "GET",
       url: `https://api.intrinio.com/news?ticker=${ticker}`,
@@ -187,7 +111,7 @@ class Company extends React.Component {
         if (res.missing_access_codes) {
           this.receiveNews(ticker, index + 1);
         } else {
-          this.setState({ news: res.data.slice(0, 5) });
+          this.setState({ news: res.data.slice(0, 10) });
         }
       },
       error: (res) => {
@@ -323,7 +247,7 @@ class Company extends React.Component {
       let count = 0;
       if (data) {
         for (let i = 0; i < data.length; i++) {
-          seriesDataMap.data.push({x: count, y: data[data.length-1-i].value });
+          seriesDataMap.data.push({x: count, y: (Math.round(data[data.length-1-i].value * 100) / 100) });
           seriesDataMap.date.push(data[data.length-1-i].date);
           count++;
         }
@@ -364,7 +288,11 @@ class Company extends React.Component {
         }
 
         function yFormat(n) {
-          return Rickshaw.Fixtures.Number.formatKMBT(n);
+          if (yAxisType === "$") {
+             return Rickshaw.Fixtures.Number.formatKMBT(n);
+           } else {
+             return Rickshaw.Fixtures.Number.formatKMBT(n);
+           }
         }
 
         $('<div class="chart"></div>').appendTo($(".chart_container"));
@@ -401,14 +329,6 @@ class Company extends React.Component {
           let axes = new Rickshaw.Graph.Axis.Time( {
             graph: graph
           } );
-
-          function yFormat(n) {
-            if (yAxisType === "$") {
-              return Rickshaw.Fixtures.Number.formatKMBT(n);
-            } else {
-              return Rickshaw.Fixtures.Number.formatKMBT(n);
-            }
-          }
 
           let yAxis = new Rickshaw.Graph.Axis.Y({
             graph: graph,
@@ -463,14 +383,12 @@ class Company extends React.Component {
 
         // second graph
 
-
         $('<div class="chart"></div>').appendTo($(".chart_container2"));
         $('<div class="y_axis"></div>').appendTo($(".chart_container2"));
         $('<div class="x_axis"></div>').appendTo($(".chart_container2"));
 
         $("#canvas-svg2 .title").show();
         $("#canvas-svg2 .title").html(config.title2);
-        height -= $("#canvas-svg2 .title").height();
 
         let seriesData2 = [];
         let darray2 = seriesDataMap.data.slice(seriesDataMap.data.length-7);
