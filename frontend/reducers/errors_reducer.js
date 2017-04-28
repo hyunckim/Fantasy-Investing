@@ -2,7 +2,8 @@ import { RECEIVE_SESSION_ERRORS, REMOVE_SESSION_ERRORS } from
   '../actions/session_actions';
 import { RECEIVE_STOCK_ERRORS, REMOVE_STOCK_ERRORS }
   from "../actions/stock_actions";
-import { RECEIVE_PORTFOLIO_ERRORS } from "../actions/portfolio-actions";
+import { RECEIVE_PORTFOLIO_ERRORS, REMOVE_PORTFOLIO_ERRORS }
+  from "../actions/portfolio_actions";
 import merge from 'lodash/merge';
 
 
@@ -54,6 +55,8 @@ const ErrorsReducer = (state = _nullErrors, action) => {
     case RECEIVE_PORTFOLIO_ERRORS:
       const portfolio = action.errors;
       return merge({}, _nullErrors, { portfolio });
+    case REMOVE_PORTFOLIO_ERRORS:
+      return _nullErrors;
     default:
       return state;
   }

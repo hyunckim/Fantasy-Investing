@@ -14,21 +14,23 @@ class PortfolioForm extends React.Component {
     }
 
     handleSubmit(e) {
-        e.preventDefault();
-        if (this.state.title.length > 0) {
-          this.props.createPortfolio(this.state);
-          this.setState({formState: true});
+      e.preventDefault();
+      this.props.removePortfolioErrors();
+      if (this.state.title.length > 0) {
+        this.props.createPortfolio(this.state);
+        this.setState({formState: true});
 
-          setTimeout(() =>
-            closeModal(),
-            3000);
+        setTimeout(() =>
+          closeModal(),
+          3000);
 
-          const closeModal = () => {
-            this.setState({formState: false});
-            this.props.modal.closeModal();
-          };
-        }
-
+        const closeModal = () => {
+          this.setState({formState: false});
+          this.props.modal.closeModal();
+        };
+      } else {
+        this.props.receivePortfolioErrors("Please enter name for watchlist");
+      }
     }
 
     updatePortfolio(event) {
@@ -39,13 +41,14 @@ class PortfolioForm extends React.Component {
     let formHtml = (
       <div className='portfolio-form'>
         <div className='portfolio-form-title'>
-            Create A New Portfolio
+            Create A New Watchlist
         </div>
+        <p className="portfolio-form-errors">{this.props.errors}</p>
         <form onSubmit={ this.handleSubmit}>
           <input
             onChange={ this.updatePortfolio }
             type="text"
-            placeholder="Portfolio Title"
+            placeholder="Watchlist Title"
             value={ this.state.title }
             className="portfolio-form-input"/>
           <input

@@ -6,7 +6,7 @@ const customStyles = {
     top                   : '50%',
     left                  : '50%',
     right                 : 'auto',
-    height                : '180px',
+    height                : '250px',
     width                 : '340px',
     bottom                : 'auto',
     marginRight           : '-50%',
@@ -46,7 +46,7 @@ class PortfolioModal extends React.Component {
   render() {
     return (
       <div>
-        <button className='dropdown-modal' onClick={this.openModal}>Add Portfolio</button>
+        <button className='dropdown-modal' onClick={this.openModal}>Add Watchlist</button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}

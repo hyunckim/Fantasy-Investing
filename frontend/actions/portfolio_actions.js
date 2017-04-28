@@ -6,6 +6,7 @@ export const CLEAR_PORTFOLIO = "CLEAR_PORTFOLIO";
 export const START_LOADING_PORTFOLIO = "START_LOADING_PORTFOLIO";
 export const START_LOADING_PORTFOLIOS = "START_LOADING_PORTFOLIOS";
 export const RECEIVE_PORTFOLIO_ERRORS = "RECEIVE_PORTFOLIO_ERRORS";
+export const REMOVE_PORTFOLIO_ERRORS = "REMOVE_PORTFOLIO_ERRORS";
 
 export const receivePortfolios = (portfolios) => ({
   type: RECEIVE_PORTFOLIOS,
@@ -18,8 +19,8 @@ export const receivePortfolio = (portfolio) => ({
 });
 
 export const removePortfolio = (portfolio) => ({
-    type: REMOVE_PORTFOLIO,
-    portfolio
+  type: REMOVE_PORTFOLIO,
+  portfolio
 });
 
 export const startLoadingPortfolio = () => ({
@@ -38,9 +39,12 @@ export const receivePortfolioErrors = (errors) => ({
   errors
 });
 
+export const removePortfolioErrors = () => ({
+  type: REMOVE_PORTFOLIO_ERRORS
+});
 
 export const createPortfolio = (portfolio) => (dispatch) => (
-    PortfolioAPIUtil.createPortfolio(portfolio).then(newPortfolio => dispatch(receivePortfolio(newPortfolio)))
+  PortfolioAPIUtil.createPortfolio(portfolio).then(newPortfolio => dispatch(receivePortfolio(newPortfolio)))
 );
 
 export const deletePortfolio = (portfolio) => (dispatch) => (

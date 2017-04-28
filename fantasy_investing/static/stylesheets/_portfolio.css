@@ -359,3 +359,9 @@ ul#news-scroll-header a:hover {
 .green {
   color: green;
 }
+
+.portfolio-form-errors {
+  color: #C74837;
+  margin-top: 15px;
+  text-align: center;
+}
