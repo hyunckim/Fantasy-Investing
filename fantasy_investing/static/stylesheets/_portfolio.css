@@ -87,7 +87,7 @@
 .piechart-container div{
   display: flex;
   justify-content: center;
-  
+
 }
 
 .dropdown {
@@ -100,7 +100,7 @@
 .dropdown-modal {
   border-top: 1px solid #C1432E;
   padding: 7px 0;
-  
+
 }
 
 .index-dropdown-title {
@@ -345,7 +345,7 @@ ul#news-scroll-header a:hover {
 .indices-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  margin-left: 38%;
 }
 
 .indices-container div {
