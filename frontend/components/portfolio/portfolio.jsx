@@ -26,20 +26,20 @@ class Portfolio extends React.Component {
     componentDidMount() {
       let stockTicker = [];
       this.props.fetchPortfolios().then(portfolios => {
-        // this.handleData(portfolios);
+        this.handleData(portfolios);
         let newsStock = [];
         for (let i = 0; i < portfolios.portfolios[0].stocks.length; i++) {
           newsStock.push(portfolios.portfolios[0].stocks[i].ticker);
         }
-        // if (newsStock.length > 0) {
-        //   this.receiveNews(newsStock.join(','));
-        // } else {
-        //   this.receiveNews('AAPL,GOOGL,AMZN,NFLX');
-        // }
+        if (newsStock.length > 0) {
+          this.receiveNews(newsStock.join(','));
+        } else {
+          this.receiveNews('AAPL,GOOGL,AMZN,NFLX');
+        }
         let indexTickers = '$SPX,$DJI,$RUT';
         let etfTickers = "SPY,DIA,IWM";
-        // this.fetchData(indexTickers, 'close_price');
-        // setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 1000);
+        this.fetchData(indexTickers, 'close_price');
+        setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 1000);
       });
 
     }

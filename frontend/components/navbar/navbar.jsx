@@ -118,7 +118,7 @@ class NavBar extends React.Component {
               <button
                 className="demo-button"
                 onClick={this.handleGuestClick}> Guest
-          </button>
+              </button>
             </div>
           </div>
         </nav>
