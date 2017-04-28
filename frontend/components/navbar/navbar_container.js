@@ -9,13 +9,15 @@ const mapStateToProps = state => ({
   filters: state.filters
 });
 
-const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(logout()),
-  removeErrors: () => dispatch(removeErrors()),
-  loginGuest: user => dispatch(login(user)),
-  removeStockErrors: () => dispatch(removeStockErrors()),
-  clearPortfolio: () => dispatch(clearPortfolio())
-});
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    logout: () => dispatch(logout()),
+    removeErrors: () => dispatch(removeErrors()),
+    loginGuest: user => dispatch(login(user)),
+    removeStockErrors: () => dispatch(removeStockErrors()),
+    clearPortfolio: () => dispatch(clearPortfolio())
+  };
+};
 
 export default connect(
   mapStateToProps,
