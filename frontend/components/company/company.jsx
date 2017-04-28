@@ -459,7 +459,7 @@ class Company extends React.Component {
         d3.select("#canvas-svg2").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
         .style("left", (0) + "px")
-        .style("top", (-5) + "px")
+        .style("top", (0) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -515,9 +515,9 @@ class Company extends React.Component {
 
 
 
-      
 
-    
+
+
     let watchlistDropdown = (<div></div>);
     if (watchlists && watchlists.length > 0) {
       watchlistDropdown = (
@@ -600,7 +600,7 @@ class Company extends React.Component {
             <div className="company-nums">
               <p>Revenue</p>
               <p className='value'>${ revenue }Bn</p>
-            </div>            
+            </div>
           </div>
           <div className="company-detail">
             <div className='company-nums-title'>
