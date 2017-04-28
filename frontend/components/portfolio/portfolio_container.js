@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { fetchPortfolios, deletePortfolio } from '../../actions/portfolio_actions';
+import { fetchPortfolios, deletePortfolio, removePortfolioErrors }
+  from '../../actions/portfolio_actions';
 import Portfolio from './portfolio';
 
 const mapStateToProps = state => {
@@ -13,7 +14,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return ({
         fetchPortfolios: () => dispatch(fetchPortfolios()),
-        deletePortfolio: (portfolioId) => dispatch(deletePortfolio(portfolioId))
+        deletePortfolio: (portfolioId) => dispatch(deletePortfolio(portfolioId)),
+        removeErrors: () => dispatch(removePortfolioErrors())
     });
 };
 

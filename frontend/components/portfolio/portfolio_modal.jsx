@@ -6,6 +6,8 @@ const customStyles = {
     top                   : '50%',
     left                  : '50%',
     right                 : 'auto',
+    height                : '250px',
+    width                 : '340px',
     bottom                : 'auto',
     marginRight           : '-50%',
     transform             : 'translate(-50%, -50%)'
@@ -23,6 +25,7 @@ class PortfolioModal extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.this = this;
   }
 
   componentWillMount() {
@@ -30,6 +33,7 @@ class PortfolioModal extends React.Component {
   }
 
   openModal() {
+    this.props.removeErrors();
     this.setState({modalIsOpen: true});
   }
 
@@ -43,7 +47,7 @@ class PortfolioModal extends React.Component {
   render() {
     return (
       <div>
-        <button className='dropdown-modal' onClick={this.openModal}>Add Portfolio</button>
+        <button className='dropdown-modal' onClick={this.openModal}>Add Watchlist</button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
@@ -52,7 +56,7 @@ class PortfolioModal extends React.Component {
           contentLabel="Portfolio Modal"
         >
         <button className='portfolio-close-button' onClick={this.closeModal}>✖</button>
-        <PortfolioFormContainer closeModal={this.closeModal}/> 
+        <PortfolioFormContainer modal={this.this}/>
         </Modal>
       </div>
     );
