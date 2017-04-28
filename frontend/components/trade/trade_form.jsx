@@ -28,7 +28,7 @@ class TradeForm extends React.Component {
   }
 
   fetchData(ticker, index = 0) {
-    let username = [
+        let username = [
       "d6166222f6cd23d2214f20c0de1d4cc3", 
       "0f51c94416c5a029ced069c9c445bcf4", 
       "77a9accfe589ee1bde92b347cd7243bf", 
@@ -39,6 +39,13 @@ class TradeForm extends React.Component {
       "db165ed10432182a47f5439432be10b6",
       "9bbbdbda7c369c21969cdc108fef9a87",
       "ef2c9c791fd32dcb138fc9ca511a651c",
+      "6b3f930579a063f2593bee515e0ce231",
+      "3ee4fd6b79113d9a021f8edc344cde15",
+      "cd25157222f897581b38dfa05a0dc94b",
+      "d13187d5caff1ea69967306d694c838d",
+      "56e0e212d9ea12eba8ea3b4c47d56a32",
+      "c2e81bd9cf630f14c9592a3b65b9cfd3",
+      "bb246d992af6f801ada6fdf6e4340fcf"
       ];
     let password = [
       "6fbb48d898d18930d6fc1e2d4e1bd54b",
@@ -50,7 +57,14 @@ class TradeForm extends React.Component {
       "286ce4fbedd72511eac4dd3e58831c67",
       "5a59201505bf41ef2e52f5c15e123fd7",
       "2fa44779f963571608242cfc9d216cd2",
-      "4a9214f9a7031f8870897deb8cbdd488"
+      "4a9214f9a7031f8870897deb8cbdd488",
+      "4c14c89a57db9522f6c8f460e3142d88",
+      "a5792311c4b1288b385afdb57b8378a8",
+      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
+      "06f05ee05920212cd5b28f41351429b0",
+      "c895978d603b69cb275b6ffb91b24388",
+      "15c487682d52323619698ebf3260ed60",
+      "f7fc945c6635f1a7ae810960e1c4b80a"
       ];
     $.ajax({
         type: "GET",

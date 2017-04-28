@@ -35,6 +35,13 @@ class Company extends React.Component {
       "db165ed10432182a47f5439432be10b6",
       "9bbbdbda7c369c21969cdc108fef9a87",
       "ef2c9c791fd32dcb138fc9ca511a651c",
+      "6b3f930579a063f2593bee515e0ce231",
+      "3ee4fd6b79113d9a021f8edc344cde15",
+      "cd25157222f897581b38dfa05a0dc94b",
+      "d13187d5caff1ea69967306d694c838d",
+      "56e0e212d9ea12eba8ea3b4c47d56a32",
+      "c2e81bd9cf630f14c9592a3b65b9cfd3",
+      "bb246d992af6f801ada6fdf6e4340fcf"
       ];
     let password = [
       "6fbb48d898d18930d6fc1e2d4e1bd54b",
@@ -46,7 +53,14 @@ class Company extends React.Component {
       "286ce4fbedd72511eac4dd3e58831c67",
       "5a59201505bf41ef2e52f5c15e123fd7",
       "2fa44779f963571608242cfc9d216cd2",
-      "4a9214f9a7031f8870897deb8cbdd488"
+      "4a9214f9a7031f8870897deb8cbdd488",
+      "4c14c89a57db9522f6c8f460e3142d88",
+      "a5792311c4b1288b385afdb57b8378a8",
+      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
+      "06f05ee05920212cd5b28f41351429b0",
+      "c895978d603b69cb275b6ffb91b24388",
+      "15c487682d52323619698ebf3260ed60",
+      "f7fc945c6635f1a7ae810960e1c4b80a"
       ];
     let items = "name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,adj_open_price,forward_dividend_rate,forward_dividend_yield,ebitda,totalrevenue,dilutedeps,pricetonextyearearnings,pricetonextyearrevenue,evtoebitda,pricetobook";
     let today = new Date();
@@ -135,6 +149,13 @@ class Company extends React.Component {
       "db165ed10432182a47f5439432be10b6",
       "9bbbdbda7c369c21969cdc108fef9a87",
       "ef2c9c791fd32dcb138fc9ca511a651c",
+      "6b3f930579a063f2593bee515e0ce231",
+      "3ee4fd6b79113d9a021f8edc344cde15",
+      "cd25157222f897581b38dfa05a0dc94b",
+      "d13187d5caff1ea69967306d694c838d",
+      "56e0e212d9ea12eba8ea3b4c47d56a32",
+      "c2e81bd9cf630f14c9592a3b65b9cfd3",
+      "bb246d992af6f801ada6fdf6e4340fcf"
       ];
     let password = [
       "6fbb48d898d18930d6fc1e2d4e1bd54b",
@@ -146,7 +167,14 @@ class Company extends React.Component {
       "286ce4fbedd72511eac4dd3e58831c67",
       "5a59201505bf41ef2e52f5c15e123fd7",
       "2fa44779f963571608242cfc9d216cd2",
-      "4a9214f9a7031f8870897deb8cbdd488"
+      "4a9214f9a7031f8870897deb8cbdd488",
+      "4c14c89a57db9522f6c8f460e3142d88",
+      "a5792311c4b1288b385afdb57b8378a8",
+      "fe24c4e4e4196c7ddd1fd7bfb0bd8f8e",
+      "06f05ee05920212cd5b28f41351429b0",
+      "c895978d603b69cb275b6ffb91b24388",
+      "15c487682d52323619698ebf3260ed60",
+      "f7fc945c6635f1a7ae810960e1c4b80a"
       ];
     $.ajax({
       type: "GET",
@@ -159,7 +187,7 @@ class Company extends React.Component {
         if (res.missing_access_codes) {
           this.receiveNews(ticker, index + 1);
         } else {
-          this.setState({ news: res.data.slice(0, 7) });
+          this.setState({ news: res.data.slice(0, 5) });
         }
       },
       error: (res) => {
@@ -395,7 +423,7 @@ class Company extends React.Component {
             } else {
               return "";
             }
-          }
+          };
 
         let xAxis = new Rickshaw.Graph.Axis.X( {
           graph: graph,
@@ -422,8 +450,8 @@ class Company extends React.Component {
 
         d3.select("#canvas-svg").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
-        .style("left", (-10) + "px")
-        .style("top", (-15) + "px")
+        .style("left", (5) + "px")
+        .style("top", (-5) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -512,8 +540,8 @@ class Company extends React.Component {
 
         d3.select("#canvas-svg2").select(".y_axis").append("div")
         .attr("class", "yAxisLabel")
-        .style("left", (-10) + "px")
-        .style("top", (-30) + "px")
+        .style("left", (0) + "px")
+        .style("top", (-5) + "px")
         .html(config.yAxisLabel);
 
         // fix x_axis svg width
@@ -539,8 +567,8 @@ class Company extends React.Component {
         newsContent = this.state.news.map((news, idx) => {
           return (
             <div key={ idx } className="news-content">
-              <div className="news-summary">
-                <a href={ news.url }>{ news.summary }</a>
+              <div className="news-title">
+                <a href={ news.url }>{ news.title }</a>
               </div>
               <div className="news-date">
                 { this.timeSince(news.publication_date) } ago
@@ -551,11 +579,27 @@ class Company extends React.Component {
     }
 
     let change;
-    if (percentChange) {
+    let value;
+    if (percentChange || percentChange === 0) {
       if (percentChange < 0) {
         change = "portfolio-red";
       } else { change = "portfolio-green";}
+      if (change === 'portfolio-red') {
+        value = (
+          <span className="company-price">${ price } <span className={change}>${priceChange}  ({ percentChange })%</span></span>
+        );
+      } else {
+        value = (
+          <span className="company-price">${ price } <span className={change}>$+{priceChange}  ({ percentChange })%</span></span>
+        );
+      }
     }
+
+
+
+      
+
+    
     let watchlistDropdown = (<div></div>);
     if (watchlists && watchlists.length > 0) {
       watchlistDropdown = (
@@ -576,13 +620,17 @@ class Company extends React.Component {
           <div className="company-header">
             <div className="company-name-price">
               <span className="company-title">{ title } { ticker }</span>
-              <span className="company-price">${ price } <span className={change}>{priceChange}  ({ percentChange })%</span></span>
+              { value }
             </div>
             {watchlistDropdown}
           </div>
         </div>
         <div className="company-summary">
+        <div className="company-detail-tables">
           <div className="company-detail">
+            <div className='company-nums-title'>
+              <p>Company Financials</p>
+            </div>
             <div className="company-nums">
               <p >Open</p>
               <p className='value'>${ open }</p>
@@ -634,8 +682,12 @@ class Company extends React.Component {
             <div className="company-nums">
               <p>Revenue</p>
               <p className='value'>${ revenue }Bn</p>
+            </div>            
+          </div>
+          <div className="company-detail">
+            <div className='company-nums-title'>
+              <p>Financial Ratios</p>
             </div>
-            <br></br>
             <div className="company-nums">
               <p>Forward P/E</p>
               <p className='value'>{ forwardPE }x</p>
@@ -653,6 +705,7 @@ class Company extends React.Component {
               <p className='value'>{ pricePerBook }x</p>
             </div>
           </div>
+        </div>
           <div className = "company-graphs">
             <div id="canvas-svg2">
               <div className="title">Title</div>
@@ -666,7 +719,7 @@ class Company extends React.Component {
           <div className="company-news">
             <div className="news-header">
               Company News
-            </div><br/>
+            </div>
             <div className="company-news-summary">
               { newsContent }
             </div>
