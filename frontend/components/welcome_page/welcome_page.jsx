@@ -32,7 +32,7 @@ const WelcomePage = () => {
                   <p className="lead">Keep track of your portfolio and follow the performance of your investments.</p>
                 </div>
                 <div className="col-lg-5 col-lg-offset-2 col-sm-6">
-                  <img className="img-responsive" src="images/" alt="" />
+                  <img className="img-responsive" src="https://res.cloudinary.com/dh7hv7kkd/image/upload/v1493405205/portfolio.png" alt="" />
                   </div>
                 </div>
 
@@ -51,7 +51,7 @@ const WelcomePage = () => {
                       <p className="lead">Fantasy Investing offers seamless realistic stock trading experience with up-to-date stock prices during market hours.</p>
                     </div>
                     <div className="col-lg-5 col-sm-pull-6  col-sm-6">
-                      <img className="img-responsive" src="images/" alt="" />
+                      <img className="img-responsive" src="https://res.cloudinary.com/dh7hv7kkd/image/upload/v1493405397/trade.png" alt="" />
                       </div>
                     </div>
 
@@ -67,11 +67,11 @@ const WelcomePage = () => {
                       <div className="col-lg-5 col-sm-6">
                         <hr className="section-heading-spacer" />
                         <div className="clearfix"></div>
-                        <h2 className="section-heading">Research Stock</h2>
+                        <h2 className="section-heading">Research Companies</h2>
                         <p className="lead">Dive deeper into the company before buying or selling shares. A wide variety of data allows you to make sharp decisions to improve your portfolio.</p>
                       </div>
                         <div className="col-lg-5 col-lg-offset-2 col-sm-6">
-                          <img className="img-responsive" src="images/" alt="" />
+                          <img className="img-responsive" src="https://res.cloudinary.com/dh7hv7kkd/image/upload/v1493405400/company.png" alt="" />
                         </div>
                     </div>
 

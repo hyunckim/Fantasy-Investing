@@ -423,7 +423,7 @@ class Portfolio extends React.Component {
                 <td>{ percentChange }% </td>
                 <td>${ this.numberWithCommas(Math.round(this.data[stock.ticker]['last_price'] * stock.number_of_shares))}</td>
                 <td>${ stock.purchase_price.toFixed(2) }</td>
-                <td>${ this.numberWithCommas(stock.purchase_price * stock.number_of_shares.toFixed(2)) }</td>
+                <td>${ this.numberWithCommas((stock.purchase_price * stock.number_of_shares).toFixed(2)) }</td>
                 <td>${ this.numberWithCommas(Math.round((this.data[stock.ticker]['last_price'] - stock.purchase_price) * stock.number_of_shares))}</td>
                 <td>{ totalPercentChange }% </td>
                 </tr>);
