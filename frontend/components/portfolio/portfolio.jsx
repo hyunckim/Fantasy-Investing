@@ -31,15 +31,15 @@ class Portfolio extends React.Component {
         for (let i = 0; i < portfolios.portfolios[0].stocks.length; i++) {
           newsStock.push(portfolios.portfolios[0].stocks[i].ticker);
         }
-        if (newsStock.length > 0) {
-          this.receiveNews(newsStock.join(','));
-        } else {
-          this.receiveNews('AAPL,GOOGL,AMZN,NFLX');
-        }
+        // if (newsStock.length > 0) {
+        //   this.receiveNews(newsStock.join(','));
+        // } else {
+        //   this.receiveNews('AAPL,GOOGL,AMZN,NFLX');
+        // }
         let indexTickers = '$SPX,$DJI,$RUT';
         let etfTickers = "SPY,DIA,IWM";
-        this.fetchData(indexTickers, 'close_price');
-        setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 1000);
+        // this.fetchData(indexTickers, 'close_price');
+        // setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 1000);
       });
 
     }
@@ -82,9 +82,9 @@ class Portfolio extends React.Component {
       if (mainTickers.length > 0) {
         this.fetchData(mainTickers, 'name,last_price,change');
       }
-      if (watchlistTickers.length > 0) {
-        this.fetchData(watchlistTickers, 'name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group');
-      }
+      // if (watchlistTickers.length > 0) {
+      //   this.fetchData(watchlistTickers, 'name,last_price,change,adj_high_price,adj_low_price,52_week_high,52_week_low,adj_volume,average_daily_volume,marketcap,industry_group');
+      // }
     }
 
     fetchData(tickers, items, index = 0) {
