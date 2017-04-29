@@ -66,7 +66,7 @@ class TradeForm extends React.Component {
 
     if (today.getDay() > 5 ||
       today.getHours() + (today.getTimezoneOffset() / 60) < 13 ||
-      today.getHours() + (today.getTimezoneOffset() / 60) > 30) {
+      today.getHours() + (today.getTimezoneOffset() / 60) > 23) {
       this.props.receiveStockErrors("The stock market is currently closed. You can trade shares between 6am and 5pm PT");
     } else if (this.state.stock.name === 'na') {
       this.props.receiveStockErrors("You have entered an incorrect ticker. Please look up the ticker again.");
