@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+{"status":"done","chunks":{"main":[{"name":"bundle.js","path":"/Users/James/Desktop/appacademy/Fantasy-Investing/bundle.js"},{"name":"bundle.js.map","path":"/Users/James/Desktop/appacademy/Fantasy-Investing/bundle.js.map"}]}}
+=======
 {"status":"done","chunks":{"main":[{"name":"bundle.js","path":"/home/bokats/app_academy/projects/fantasy_investing/bundle.js"},{"name":"bundle.js.map","path":"/home/bokats/app_academy/projects/fantasy_investing/bundle.js.map"}]},"error":"ModuleBuildError","message":"Module build failed: SyntaxError: Unexpected token, expected , (39:8)\n\n  37 |         //   this.receiveNews('AAPL,GOOGL,AMZN,NFLX');\n  38 |         }\n> 39 |         let indexTickers = '$SPX,$DJI,$RUT';\n     |         ^\n  40 |         let etfTickers = \"SPY,DIA,IWM\";\n  41 |         // this.fetchData(indexTickers, 'close_price');\n  42 |         // setTimeout(() => this.fetchData(etfTickers, 'percent_change'), 1000);\n"}
+>>>>>>> master
