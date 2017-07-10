@@ -371,9 +371,9 @@
 	bottom: 26px;
 	width: 0;
 }
-.chart_container {
+.chart_container,
+.chart_container2 {
 	position: relative;
-
 }
 
 .y_axis {
@@ -385,7 +385,7 @@
 
 #canvas-svg2 .y_axis {
 	position: absolute;
-	top: 16px;
+	top: 15px;
 	bottom: 0;
 	width: 40px;
 }
@@ -454,6 +454,7 @@ font-size: 12px;
   margin-top: 1%;
   font-size: 13px;
   width: 100%;
+	padding-bottom: 20px;
   text-align: center;
   display: none;
   font-weight: bold;

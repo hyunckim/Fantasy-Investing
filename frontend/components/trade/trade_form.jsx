@@ -66,7 +66,7 @@ class TradeForm extends React.Component {
 
     if (today.getDay() > 5 ||
       today.getHours() + (today.getTimezoneOffset() / 60) < 13 ||
-      today.getHours() + (today.getTimezoneOffset() / 60) > 30) {
+      today.getHours() + (today.getTimezoneOffset() / 60) > 23) {
       this.props.receiveStockErrors("The stock market is currently closed. You can trade shares between 6am and 5pm PT");
     } else if (this.state.stock.name === 'na') {
       this.props.receiveStockErrors("You have entered an incorrect ticker. Please look up the ticker again.");
@@ -189,22 +189,20 @@ class TradeForm extends React.Component {
           </div>
           <p className="trade-form-errors">{this.props.error}</p>
           <form className="trade-form" onSubmit={this.handleForm}>
-            <label id="action-label"> Action
+            <label id="symbol-label">Symbol* <input className="form-symbol" onChange={this.update("ticker")}
+              placeholder='Ex:MSFT' value={this.state.stock.ticker}/>
+            </label>
+            <label id="action-label"> Action*
               <select className="trade-action" onChange={this.update('action')} value={this.state.stock.action}>
                 <option value=""></option>
                 <option value="Buy">Buy</option>
                 <option value="Sell">Sell</option>
               </select>
             </label>
-            <label id="symbol-label"> Symbol
-              <input className="form-symbol" onChange={this.update("ticker")}
-                placeholder='Ex:MSFT' value={this.state.stock.ticker}/>
-            </label>
-            <label id='quantity-label'> Quantity
+            <label id='quantity-label'> Quantity*
               <input className="form-shares" onChange={this.update('number_of_shares')}
                 placeholder='# Of Shares' value={this.state.stock.number_of_shares}/>
             </label>
-
             <input type="submit" id="submit-button" className="form-submit-button" value="Submit"/>
           </form>
         </div>
